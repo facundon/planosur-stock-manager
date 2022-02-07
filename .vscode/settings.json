@@ -1,0 +1,82 @@
+{
+   "typescript.tsdk": "node_modules/typescript/lib",
+   "typescript.enablePromptUseWorkspaceTsdk": false,
+   "typescript.preferences.importModuleSpecifier": "non-relative",
+   "javascript.preferences.importModuleSpecifier": "non-relative",
+
+   "editor.tabSize": 3,
+   "editor.rulers": [100],
+   "editor.detectIndentation": false,
+
+   "files.eol": "\n",
+   "files.insertFinalNewline": true,
+   "files.trimFinalNewlines": true,
+   "files.trimTrailingWhitespace": true,
+
+   // ESLint and Prettier VS Code extensions.
+   "eslint.run": "onSave",
+   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+   "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true,
+      "source.fixAll.markdownlint": true
+   },
+   "[html]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+      "editor.formatOnType": true
+   },
+   "[scss]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+      "editor.formatOnType": true
+   },
+   "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+      "editor.formatOnType": true
+   },
+   "[jsonc]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+      "editor.formatOnType": true
+   },
+   "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+      "editor.formatOnType": true
+   },
+   "[javascriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+      "editor.formatOnType": true
+   },
+   "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+      "editor.formatOnType": true
+   },
+   "[typescriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+      "editor.formatOnType": true
+   },
+
+   // Markdown extension settings.
+   "[markdown]": {
+      "editor.defaultFormatter": "vscode.markdown-language-features",
+      "editor.formatOnSave": true,
+      "editor.formatOnType": true,
+      "editor.tabSize": 4
+   },
+   "markdown.extension.toc.updateOnSave": true,
+   "markdown.extension.list.indentationSize": "inherit",
+   "markdown.extension.toc.levels": "2..6",
+   "markdownlint.config": {
+      "MD007": {
+         "indent": 4
+      },
+      "MD024": {
+         "siblings_only": true
+      }
+   }
+}
