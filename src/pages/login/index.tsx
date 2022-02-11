@@ -1,11 +1,14 @@
-import { useLoginQuery } from "./query"
+import { useAuth } from "../../auth"
 
-export const LoginPage: React.FC = () => {
-   const loginQuery = useLoginQuery()
+const LoginPage: React.FC = () => {
+   const { login, isAuth } = useAuth()
+
    return (
       <div>
-         <h1>Login</h1>
-         <button onClick={() => loginQuery.mutate({ password: "admin1234" })}>send</button>
+         <h1>Is Logged in? {isAuth ? "yes" : "no"}</h1>
+         <button onClick={() => login("admin1234")}>send</button>
       </div>
    )
 }
+
+export default LoginPage

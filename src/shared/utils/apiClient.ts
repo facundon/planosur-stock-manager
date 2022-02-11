@@ -1,4 +1,5 @@
 import axios from "axios"
+import { navigate } from "hookrouter"
 
 export const JWT_KEY = "PS_JWT"
 
@@ -22,8 +23,16 @@ function createapiClient() {
          }
          return config
       },
-      error => {
-         Promise.reject(error)
+      error => error
+   )
+
+   axiosClient.interceptors.response.use(
+      res => res,
+      rejection => {
+         if (rejection.message.includes("401")) {
+            navigate("/login")
+         }
+         return rejection
       }
    )
 
