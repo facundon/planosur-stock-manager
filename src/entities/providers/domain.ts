@@ -6,6 +6,6 @@ export type Provider = {
    email: string | null
 }
 
-export type AddProviderForm = Omit<Provider, "id">
+export type AddProviderFormDto = Omit<Provider, "id">
 
-export type UpdateProviderForm = Partial<AddProviderForm>
+export type UpdateProviderFormDto = Partial<AddProviderFormDto>

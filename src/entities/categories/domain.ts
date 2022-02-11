@@ -3,6 +3,6 @@ export type Category = {
    name: string
 }
 
-export type AddCategoryForm = Omit<Category, "id">
+export type AddCategoryFormDto = Omit<Category, "id">
 
-export type UpdateCategoryForm = Partial<AddCategoryForm>
+export type UpdateCategoryFormDto = Partial<AddCategoryFormDto>

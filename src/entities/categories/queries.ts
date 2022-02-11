@@ -1,6 +1,6 @@
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from "react-query"
 import { apiClient } from "../../shared/utils/apiClient"
-import { AddCategoryForm, Category, UpdateCategoryForm } from "./domain"
+import { AddCategoryFormDto, Category, UpdateCategoryFormDto } from "./domain"
 import { CATEGORIES_KEYS } from "./queryKeys"
 
 export function useCategoryQuery(id: number): UseQueryResult<Category> {
@@ -19,7 +19,7 @@ export function useCategoriesQuery(): UseQueryResult<Category[]> {
 
 export function useUpdateCategoryQuery(
    id: number,
-   form: UpdateCategoryForm
+   form: UpdateCategoryFormDto
 ): UseMutationResult<Category> {
    return useMutation(async () => {
       const response = await apiClient.patch<Category>(`/categories/${id}`, form)
@@ -34,9 +34,10 @@ export function useDeleteCategoryQuery(id: number): UseMutationResult<Category> 
    })
 }
 
-export function useAddCategoryQuery(): UseMutationResult<Category, Error, AddCategoryForm> {
+export function useAddCategoryQuery(): UseMutationResult<Category, Error, AddCategoryFormDto> {
    return useMutation(async form => {
       const response = await apiClient.post<Category>("/categories", form)
+      if (response instanceof Error) throw Error(response.message)
       return response.data
    })
 }

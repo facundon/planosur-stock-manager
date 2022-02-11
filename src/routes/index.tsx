@@ -1,17 +1,17 @@
-import { Spinner } from "@chakra-ui/react"
 import React, { Suspense } from "react"
+import { FullPageSpinner } from "../shared/components"
 
 const HomePage = React.lazy(() => import("../pages/home"))
 const LoginPage = React.lazy(() => import("../pages/login"))
 
 export const routes = {
    "/": () => (
-      <Suspense fallback={<Spinner />}>
+      <Suspense fallback={<FullPageSpinner />}>
          <HomePage />
       </Suspense>
    ),
    "/login": () => (
-      <Suspense fallback={<Spinner />}>
+      <Suspense fallback={<FullPageSpinner />}>
          <LoginPage />
       </Suspense>
    ),

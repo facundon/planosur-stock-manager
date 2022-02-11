@@ -1,10 +1,10 @@
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from "react-query"
 import { apiClient } from "../../shared/utils/apiClient"
 import {
-   AddProductForm,
+   AddProductFormDto,
    Product,
    ProductWithProviderAndCategory,
-   UpdateProductForm,
+   UpdateProductFormDto,
 } from "./domain"
 import { PRODUCTS_KEYS } from "./queryKeys"
 
@@ -24,7 +24,7 @@ export function useCategoriesQuery(): UseQueryResult<ProductWithProviderAndCateg
 
 export function useUpdateProductQuery(
    code: string,
-   form: UpdateProductForm
+   form: UpdateProductFormDto
 ): UseMutationResult<Product> {
    return useMutation(async () => {
       const response = await apiClient.patch<Product>(`/products/${code}`, form)
@@ -39,7 +39,7 @@ export function useDeleteProductQuery(code: string): UseMutationResult<Product> 
    })
 }
 
-export function useAddProductQuery(form: AddProductForm): UseMutationResult<Product> {
+export function useAddProductQuery(form: AddProductFormDto): UseMutationResult<Product> {
    return useMutation(async () => {
       const response = await apiClient.post<Product>("/products", form)
       return response.data
