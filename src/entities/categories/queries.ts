@@ -1,3 +1,4 @@
+import { AxiosError, AxiosResponse } from "axios"
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from "react-query"
 import { apiClient } from "../../shared/utils/apiClient"
 import { AddCategoryFormDto, Category, UpdateCategoryFormDto } from "./domain"
@@ -34,10 +35,16 @@ export function useDeleteCategoryQuery(id: number): UseMutationResult<Category> 
    })
 }
 
-export function useAddCategoryQuery(): UseMutationResult<Category, Error, AddCategoryFormDto> {
-   return useMutation(async form => {
-      const response = await apiClient.post<Category>("/categories", form)
-      if (response instanceof Error) throw Error(response.message)
-      return response.data
-   })
+export function useAddCategoryQuery(
+   closeModal: () => void
+): UseMutationResult<Category, AxiosError, AddCategoryFormDto> {
+   return useMutation(
+      async form => {
+         const response = await apiClient.post<Category>("/categories", form)
+         return response.data
+      },
+      {
+         onSuccess: closeModal,
+      }
+   )
 }

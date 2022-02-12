@@ -4,73 +4,70 @@ import {
    FormErrorMessage,
    FormLabel,
    Input,
-   Modal,
-   ModalBody,
-   ModalCloseButton,
-   ModalContent,
-   ModalFooter,
-   ModalHeader,
-   ModalOverlay,
+   useBoolean,
 } from "@chakra-ui/react"
-import { useEffect } from "react"
-import { SubmitHandler, useForm } from "react-hook-form"
+import { useRef } from "react"
+import { useForm } from "react-hook-form"
 import { AddCategoryFormDto } from "../../entities/categories/domain"
 import { useAddCategoryQuery } from "../../entities/categories/queries"
+import { BaseForm } from "../../shared/components"
+import { addCategoryRules } from "./formRules"
 
-type AddCategoryFormProps = { isOpen: boolean; onClose: () => void }
+type AddCategoryFormProps = unknown
 
-export const AddCategoryForm: React.FC<AddCategoryFormProps> = ({ isOpen, onClose }) => {
-   const { mutate: sendToServer, isLoading, error: serverError, isSuccess } = useAddCategoryQuery()
+export const AddCategoryForm: React.FC<AddCategoryFormProps> = () => {
+   const [isOpen, setIsOpen] = useBoolean(false)
+   const firstInput = useRef<HTMLInputElement | null>(null)
 
-   const defaultValues: AddCategoryFormDto = { name: "" }
+   const {
+      mutate: sendToServer,
+      isLoading,
+      error: serverError,
+      reset: resetQuery,
+   } = useAddCategoryQuery(setIsOpen.off)
 
    const {
       register,
       handleSubmit,
       formState: { errors },
-      setError,
-   } = useForm({ defaultValues })
+      reset: resetForm,
+   } = useForm<AddCategoryFormDto>({ defaultValues: { name: "" } })
 
-   const onSubmit: SubmitHandler<AddCategoryFormDto> = data => {
-      sendToServer(data)
+   const { ref, ...firstInputRegistration } = register("name", addCategoryRules.name)
+
+   const handleCancel = () => {
+      setIsOpen.off()
+      resetForm()
+      resetQuery()
    }
-   /*
-   useEffect(() => {
-      isSuccess && onClose()
-   }, [isSuccess, onClose]) */
 
-   useEffect(() => {
-      serverError && setError("name", { message: serverError.message })
-   }, [serverError, setError])
-   console.log(serverError)
    return (
-      <Modal isOpen={isOpen} onClose={onClose} autoFocus closeOnEsc>
-         <ModalOverlay />
-         <ModalContent>
-            <ModalHeader>Agregar Categoria</ModalHeader>
-            <ModalCloseButton />
-
-            <form onSubmit={handleSubmit(onSubmit)}>
-               <ModalBody>
-                  <FormControl isInvalid={!!errors.name?.message}>
-                     <FormLabel>Nombre</FormLabel>
-                     <Input
-                        {...register("name", {
-                           maxLength: { value: 25, message: "Máximo 25 caracteres" },
-                           required: { value: true, message: "Este campo es requerido" },
-                        })}
-                     />
-                     <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
-                  </FormControl>
-               </ModalBody>
-
-               <ModalFooter>
-                  <Button type="submit" isLoading={isLoading}>
-                     Agregar
-                  </Button>
-               </ModalFooter>
-            </form>
-         </ModalContent>
-      </Modal>
+      <>
+         <Button onClick={setIsOpen.on}>Agregar Categoria</Button>
+         <BaseForm
+            isOpen={isOpen}
+            onClose={setIsOpen.off}
+            onSubmit={handleSubmit(data => sendToServer(data))}
+            onCancel={handleCancel}
+            error={serverError?.message}
+            submitProps={{ isLoading }}
+            submitText="Agregar"
+            title="Agregar Categoria"
+            initialFocusRef={firstInput}
+         >
+            <FormControl isInvalid={!!errors.name?.message} isRequired isDisabled={isLoading}>
+               <FormLabel>Nombre</FormLabel>
+               <Input
+                  {...firstInputRegistration}
+                  name="name"
+                  ref={e => {
+                     ref(e)
+                     firstInput.current = e
+                  }}
+               />
+               <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
+            </FormControl>
+         </BaseForm>
+      </>
    )
 }
