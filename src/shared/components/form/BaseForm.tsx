@@ -10,7 +10,7 @@ import {
    ModalProps,
    ButtonProps,
    Text,
-   Flex,
+   VStack,
 } from "@chakra-ui/react"
 
 type BaseFormProps = {
@@ -52,9 +52,9 @@ const BaseForm: React.FC<BaseFormProps> = ({
 
             <form onSubmit={onSubmit}>
                <ModalBody>
-                  <Flex gap={6} direction="column">
+                  <VStack spacing={5} align="stretch">
                      {children}
-                  </Flex>
+                  </VStack>
                   {error && (
                      <Text mt={5} color="error">
                         {error}

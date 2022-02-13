@@ -36,7 +36,7 @@ const AddProviderForm: React.FC = () => {
                label: "Teléfono",
                initialValue: "",
                required: false,
-               type: "number",
+               type: "tel",
             },
          ]}
       />

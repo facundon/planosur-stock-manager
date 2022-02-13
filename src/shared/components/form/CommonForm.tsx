@@ -1,46 +1,9 @@
-import {
-   Button,
-   Flex,
-   FormControl,
-   FormErrorMessage,
-   FormLabel,
-   Input,
-   useBoolean,
-} from "@chakra-ui/react"
-import React from "react"
-import AsyncSelect from "./AsyncSelect"
+import { Button, Flex, useBoolean } from "@chakra-ui/react"
 import { useRef } from "react"
 import { DeepPartial, FieldError, Path, UnpackNestedValue, useForm } from "react-hook-form"
 import { BaseForm } from ".."
-import { FormFieldProps, CommonFormProps } from "./types"
-
-const FormField = React.forwardRef<HTMLInputElement | HTMLSelectElement, FormFieldProps>(
-   (
-      { error, isLoading, data: { label, type, required, options, isLoadingOptions }, ...rest },
-      ref
-   ) => (
-      <FormControl isInvalid={!!error} isRequired={required} isDisabled={isLoading}>
-         <FormLabel>{label}</FormLabel>
-         {type === "select" ? (
-            <AsyncSelect
-               {...rest}
-               ref={ref as React.ForwardedRef<HTMLSelectElement>}
-               withEmptyOption
-               isLoading={isLoadingOptions}
-            >
-               {options?.map(option => (
-                  <option key={option.value} value={option.value}>
-                     {option.label}
-                  </option>
-               ))}
-            </AsyncSelect>
-         ) : (
-            <Input type={type} {...rest} ref={ref as React.ForwardedRef<HTMLInputElement>} />
-         )}
-         <FormErrorMessage>{error}</FormErrorMessage>
-      </FormControl>
-   )
-)
+import { CommonFormProps } from "./types"
+import { FormField } from "./FormField"
 
 export function CommonForm<T extends Record<string, unknown>>({
    fields,

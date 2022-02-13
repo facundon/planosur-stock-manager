@@ -6,11 +6,12 @@ export type SelectOption = { label: string; value: string }
 export type CommonFormField<T> = {
    name: keyof T
    label: string
-   required: boolean
+   required?: boolean
    initialValue: T[keyof T] | undefined
    type: React.HTMLInputTypeAttribute | "select"
    options?: SelectOption[]
    isLoadingOptions?: boolean
+   withEmptyOption?: boolean
 }
 
 export type CommonFormProps<T> = {
