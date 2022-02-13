@@ -1,8 +1,9 @@
-import { Box, Grid, GridItem, Switch, useColorMode } from "@chakra-ui/react"
+import { Box, Grid, GridItem, Switch, useColorMode, VStack } from "@chakra-ui/react"
 import { navigate } from "hookrouter"
 import { useEffect } from "react"
 import { useAuth } from "../../auth"
 import { AddCategoryForm } from "../../entities/categories/components/AddCategoryForm"
+import UpdateCategoryForm from "../../entities/categories/components/UpdateCategoryForm"
 import AddProductForm from "../../entities/products/components/AddProductForm"
 import AddProviderForm from "../../entities/providers/components/AddProviderForm"
 
@@ -30,9 +31,14 @@ const HomePage: React.FC = () => {
          </Switch>
          <Grid h="100vh" templateRows="repeat(1, 1fr)" templateColumns="repeat(6, 1fr)" gap={4}>
             <GridItem colSpan={1}>
-               <AddCategoryForm />
-               <AddProductForm />
-               <AddProviderForm />
+               <VStack>
+                  <AddCategoryForm />
+                  <AddProductForm />
+                  <AddProviderForm />
+               </VStack>
+               <VStack mt={10}>
+                  <UpdateCategoryForm />
+               </VStack>
             </GridItem>
             <GridItem colSpan={5}>tabla</GridItem>
          </Grid>

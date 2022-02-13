@@ -17,12 +17,10 @@ export function useProvidersQuery(): UseQueryResult<Provider[]> {
    })
 }
 
-export function useUpdateProviderQuery(): UseMutationResult<
-   Provider,
-   Error,
-   { id: number; form: UpdateProviderFormDto }
-> {
-   return useMutation(async ({ id, form }) => {
+export function useUpdateProviderQuery(
+   id: number
+): UseMutationResult<Provider, Error, UpdateProviderFormDto> {
+   return useMutation(async form => {
       const response = await apiClient.patch<Provider>(`/providers/${id}`, form)
       return response.data
    })

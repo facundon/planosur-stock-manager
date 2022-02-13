@@ -22,12 +22,10 @@ export function useCategoriesQuery(): UseQueryResult<ProductWithProviderAndCateg
    })
 }
 
-export function useUpdateProductQuery(): UseMutationResult<
-   Product,
-   Error,
-   { code: string; form: UpdateProductFormDto }
-> {
-   return useMutation(async ({ code, form }) => {
+export function useUpdateProductQuery(
+   code: string
+): UseMutationResult<Product, Error, UpdateProductFormDto> {
+   return useMutation(async form => {
       const response = await apiClient.patch<Product>(`/products/${code}`, form)
       return response.data
    })

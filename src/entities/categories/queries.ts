@@ -18,12 +18,10 @@ export function useCategoriesQuery(): UseQueryResult<Category[]> {
    })
 }
 
-export function useUpdateCategoryQuery(): UseMutationResult<
-   Category,
-   Error,
-   { id: number; form: UpdateCategoryFormDto }
-> {
-   return useMutation(async ({ id, form }) => {
+export function useUpdateCategoryQuery(
+   id: number
+): UseMutationResult<Category, Error, UpdateCategoryFormDto> {
+   return useMutation(async form => {
       const response = await apiClient.patch<Category>(`/categories/${id}`, form)
       return response.data
    })

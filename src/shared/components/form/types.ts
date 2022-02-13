@@ -14,12 +14,13 @@ export type CommonFormField<T> = {
    withEmptyOption?: boolean
 }
 
-export type CommonFormProps<T> = {
+export type CommonFormProps<T, K> = {
    fields: (CommonFormField<T> | CommonFormField<T>[])[]
    title: string
    submitText: string
    rules?: Partial<Record<keyof T, RegisterOptions>>
-   query: (param?: unknown) => UseMutationResult<unknown, Error, UnpackNestedValue<T>>
+   query: (param: K) => UseMutationResult<unknown, Error, UnpackNestedValue<T>>
+   queryParams?: K
 }
 
 export type FormFieldProps = {

@@ -5,17 +5,23 @@ import { BaseForm } from ".."
 import { CommonFormProps } from "./types"
 import { FormField } from "./FormField"
 
-export function CommonForm<T extends Record<string, unknown>>({
+export function CommonForm<T extends Record<string, unknown>, K>({
    fields,
    title,
    submitText,
    rules,
    query,
-}: CommonFormProps<T>) {
+   queryParams,
+}: CommonFormProps<T, K>) {
    const [isOpen, setIsOpen] = useBoolean(false)
    const firstInput = useRef<HTMLInputElement | HTMLSelectElement | null>(null)
 
-   const { mutate: sendToServer, isLoading, error: serverError, reset: resetQuery } = query()
+   const {
+      mutate: sendToServer,
+      isLoading,
+      error: serverError,
+      reset: resetQuery,
+   } = query(queryParams as K)
 
    const defaultValues = fields
       .flatMap(val => val)
