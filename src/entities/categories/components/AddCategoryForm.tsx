@@ -8,14 +8,12 @@ import {
 } from "@chakra-ui/react"
 import { useRef } from "react"
 import { useForm } from "react-hook-form"
-import { AddCategoryFormDto } from "../../entities/categories/domain"
-import { useAddCategoryQuery } from "../../entities/categories/queries"
-import { BaseForm } from "../../shared/components"
+import { AddCategoryFormDto } from "../domain"
+import { useAddCategoryQuery } from "../queries"
+import { BaseForm } from "../../../shared/components"
 import { addCategoryRules } from "./formRules"
 
-type AddCategoryFormProps = unknown
-
-export const AddCategoryForm: React.FC<AddCategoryFormProps> = () => {
+export const AddCategoryForm: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean(false)
    const firstInput = useRef<HTMLInputElement | null>(null)
 

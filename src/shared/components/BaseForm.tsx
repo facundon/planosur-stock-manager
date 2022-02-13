@@ -10,6 +10,7 @@ import {
    ModalProps,
    ButtonProps,
    Text,
+   Flex,
 } from "@chakra-ui/react"
 
 type BaseFormProps = {
@@ -42,6 +43,7 @@ const BaseForm: React.FC<BaseFormProps> = ({
          closeOnEsc
          closeOnOverlayClick={false}
          onEsc={onCancel}
+         size={"xl"}
       >
          <ModalOverlay />
          <ModalContent>
@@ -50,7 +52,9 @@ const BaseForm: React.FC<BaseFormProps> = ({
 
             <form onSubmit={onSubmit}>
                <ModalBody>
-                  {children}
+                  <Flex gap={6} direction="column">
+                     {children}
+                  </Flex>
                   {error && (
                      <Text mt={5} color="error">
                         {error}
@@ -58,7 +62,7 @@ const BaseForm: React.FC<BaseFormProps> = ({
                   )}
                </ModalBody>
 
-               <ModalFooter>
+               <ModalFooter mt={4}>
                   <Button mr={4} colorScheme="grey" variant="outline" onClick={onCancel}>
                      Cancelar
                   </Button>
