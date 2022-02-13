@@ -3,7 +3,7 @@ import { navigate } from "hookrouter"
 import { useEffect } from "react"
 import { useAuth } from "../../auth"
 import { AddCategoryForm } from "../../entities/categories/components/AddCategoryForm"
-import AddProductForm from "../../entities/products/components/AddProductForm copy"
+import AddProductForm from "../../entities/products/components/AddProductForm"
 
 const HomePage: React.FC = () => {
    const { isAuth } = useAuth()

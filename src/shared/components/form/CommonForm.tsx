@@ -5,59 +5,35 @@ import {
    FormErrorMessage,
    FormLabel,
    Input,
-   Select,
    useBoolean,
 } from "@chakra-ui/react"
 import React from "react"
+import AsyncSelect from "./AsyncSelect"
 import { useRef } from "react"
-import {
-   DeepPartial,
-   FieldError,
-   Path,
-   RegisterOptions,
-   UnpackNestedValue,
-   useForm,
-   UseFormRegisterReturn,
-} from "react-hook-form"
-import { UseMutationResult } from "react-query"
-import { BaseForm } from "."
-
-type CommonFormField<T> = {
-   name: keyof T
-   label: string
-   required: boolean
-   initialValue: T[keyof T]
-   type: React.HTMLInputTypeAttribute | "select"
-   options?: { label: string; value: string }[]
-}
-
-type CommonFormProps<T> = {
-   fields: (CommonFormField<T> | CommonFormField<T>[])[]
-   title: string
-   submitText: string
-   rules?: Partial<Record<keyof T, RegisterOptions>>
-   query: (param?: unknown) => UseMutationResult<unknown, Error, UnpackNestedValue<T>>
-}
-
-type FormFieldProps = {
-   error: string | undefined
-   isLoading: boolean
-   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   data: CommonFormField<any>
-} & UseFormRegisterReturn
+import { DeepPartial, FieldError, Path, UnpackNestedValue, useForm } from "react-hook-form"
+import { BaseForm } from ".."
+import { FormFieldProps, CommonFormProps } from "./types"
 
 const FormField = React.forwardRef<HTMLInputElement | HTMLSelectElement, FormFieldProps>(
-   ({ error, isLoading, data: { label, type, required, options }, ...rest }, ref) => (
+   (
+      { error, isLoading, data: { label, type, required, options, isLoadingOptions }, ...rest },
+      ref
+   ) => (
       <FormControl isInvalid={!!error} isRequired={required} isDisabled={isLoading}>
          <FormLabel>{label}</FormLabel>
          {type === "select" ? (
-            <Select {...rest} ref={ref as React.ForwardedRef<HTMLSelectElement>}>
+            <AsyncSelect
+               {...rest}
+               ref={ref as React.ForwardedRef<HTMLSelectElement>}
+               withEmptyOption
+               isLoading={isLoadingOptions}
+            >
                {options?.map(option => (
                   <option key={option.value} value={option.value}>
                      {option.label}
                   </option>
                ))}
-            </Select>
+            </AsyncSelect>
          ) : (
             <Input type={type} {...rest} ref={ref as React.ForwardedRef<HTMLInputElement>} />
          )}
@@ -97,7 +73,7 @@ export function CommonForm<T extends Record<string, unknown>>({
       rules?.name
    )
 
-   const handleCancel = () => {
+   const resetModal = () => {
       setIsOpen.off()
       resetForm()
       resetQuery()
@@ -109,8 +85,8 @@ export function CommonForm<T extends Record<string, unknown>>({
          <BaseForm
             isOpen={isOpen}
             onClose={setIsOpen.off}
-            onSubmit={handleSubmit(data => sendToServer(data, { onSuccess: setIsOpen.off }))}
-            onCancel={handleCancel}
+            onSubmit={handleSubmit(data => sendToServer(data, { onSuccess: resetModal }))}
+            onCancel={resetModal}
             error={serverError?.message}
             submitProps={{ isLoading }}
             submitText={submitText}

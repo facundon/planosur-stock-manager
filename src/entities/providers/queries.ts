@@ -10,7 +10,7 @@ export function useProviderQuery(id: number): UseQueryResult<Provider> {
    })
 }
 
-export function useCategoriesQuery(): UseQueryResult<Provider[]> {
+export function useProvidersQuery(): UseQueryResult<Provider[]> {
    return useQuery(PROVIDERS_KEYS.base, async () => {
       const response = await apiClient.get<Provider[]>("/providers")
       return response.data
