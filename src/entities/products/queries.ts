@@ -22,25 +22,26 @@ export function useCategoriesQuery(): UseQueryResult<ProductWithProviderAndCateg
    })
 }
 
-export function useUpdateProductQuery(
-   code: string,
-   form: UpdateProductFormDto
-): UseMutationResult<Product> {
-   return useMutation(async () => {
+export function useUpdateProductQuery(): UseMutationResult<
+   Product,
+   Error,
+   { code: string; form: UpdateProductFormDto }
+> {
+   return useMutation(async ({ code, form }) => {
       const response = await apiClient.patch<Product>(`/products/${code}`, form)
       return response.data
    })
 }
 
-export function useDeleteProductQuery(code: string): UseMutationResult<Product> {
-   return useMutation(async () => {
+export function useDeleteProductQuery(): UseMutationResult<Product, Error, string> {
+   return useMutation(async code => {
       const response = await apiClient.delete<Product>(`/products/${code}`)
       return response.data
    })
 }
 
-export function useAddProductQuery(form: AddProductFormDto): UseMutationResult<Product> {
-   return useMutation(async () => {
+export function useAddProductQuery(): UseMutationResult<Product, Error, AddProductFormDto> {
+   return useMutation(async form => {
       const response = await apiClient.post<Product>("/products", form)
       return response.data
    })

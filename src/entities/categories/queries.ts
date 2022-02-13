@@ -1,4 +1,4 @@
-import { AxiosError, AxiosResponse } from "axios"
+import { AxiosError } from "axios"
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from "react-query"
 import { apiClient } from "../../shared/utils/apiClient"
 import { AddCategoryFormDto, Category, UpdateCategoryFormDto } from "./domain"
@@ -18,33 +18,27 @@ export function useCategoriesQuery(): UseQueryResult<Category[]> {
    })
 }
 
-export function useUpdateCategoryQuery(
-   id: number,
-   form: UpdateCategoryFormDto
-): UseMutationResult<Category> {
-   return useMutation(async () => {
+export function useUpdateCategoryQuery(): UseMutationResult<
+   Category,
+   Error,
+   { id: number; form: UpdateCategoryFormDto }
+> {
+   return useMutation(async ({ id, form }) => {
       const response = await apiClient.patch<Category>(`/categories/${id}`, form)
       return response.data
    })
 }
 
-export function useDeleteCategoryQuery(id: number): UseMutationResult<Category> {
-   return useMutation(async () => {
+export function useDeleteCategoryQuery(): UseMutationResult<Category, Error, number> {
+   return useMutation(async id => {
       const response = await apiClient.delete<Category>(`/categories/${id}`)
       return response.data
    })
 }
 
-export function useAddCategoryQuery(
-   closeModal: () => void
-): UseMutationResult<Category, AxiosError, AddCategoryFormDto> {
-   return useMutation(
-      async form => {
-         const response = await apiClient.post<Category>("/categories", form)
-         return response.data
-      },
-      {
-         onSuccess: closeModal,
-      }
-   )
+export function useAddCategoryQuery(): UseMutationResult<Category, AxiosError, AddCategoryFormDto> {
+   return useMutation(async form => {
+      const response = await apiClient.post<Category>("/categories", form)
+      return response.data
+   })
 }

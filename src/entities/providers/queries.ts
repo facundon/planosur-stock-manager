@@ -17,25 +17,26 @@ export function useCategoriesQuery(): UseQueryResult<Provider[]> {
    })
 }
 
-export function useUpdateProviderQuery(
-   id: number,
-   form: UpdateProviderFormDto
-): UseMutationResult<Provider> {
-   return useMutation(async () => {
+export function useUpdateProviderQuery(): UseMutationResult<
+   Provider,
+   Error,
+   { id: number; form: UpdateProviderFormDto }
+> {
+   return useMutation(async ({ id, form }) => {
       const response = await apiClient.patch<Provider>(`/providers/${id}`, form)
       return response.data
    })
 }
 
-export function useDeleteProviderQuery(id: number): UseMutationResult<Provider> {
-   return useMutation(async () => {
+export function useDeleteProviderQuery(): UseMutationResult<Provider, Error, number> {
+   return useMutation(async id => {
       const response = await apiClient.delete<Provider>(`/providers/${id}`)
       return response.data
    })
 }
 
-export function useAddProviderQuery(form: AddProviderFormDto): UseMutationResult<Provider> {
-   return useMutation(async () => {
+export function useAddProviderQuery(): UseMutationResult<Provider, Error, AddProviderFormDto> {
+   return useMutation(async form => {
       const response = await apiClient.post<Provider>("/providers", form)
       return response.data
    })

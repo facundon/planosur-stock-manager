@@ -14,6 +14,8 @@ export type Product = {
    currentStock: number
    minStock: number
    maxStock: number
+   didOrder: boolean
+   orderedAt: Date | null
    updatedAt: Date
    createdAt: Date
 }
