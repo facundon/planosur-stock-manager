@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import { useAuth } from "../../auth"
 import { AddCategoryForm } from "../../entities/categories/components/AddCategoryForm"
 import AddProductForm from "../../entities/products/components/AddProductForm"
+import AddProviderForm from "../../entities/providers/components/AddProviderForm"
 
 const HomePage: React.FC = () => {
    const { isAuth } = useAuth()
@@ -31,6 +32,7 @@ const HomePage: React.FC = () => {
             <GridItem colSpan={1}>
                <AddCategoryForm />
                <AddProductForm />
+               <AddProviderForm />
             </GridItem>
             <GridItem colSpan={5}>tabla</GridItem>
          </Grid>

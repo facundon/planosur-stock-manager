@@ -5,6 +5,10 @@ export const addProductRules: Partial<Record<keyof AddProductFormDto, RegisterOp
    name: {
       maxLength: { value: 25, message: "Máximo 25 caracteres" },
       required: { value: true, message: "Ingrese un nombre" },
+      setValueAs: (value: string) =>
+         value.replace(/\w\S*/g, txt => {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+         }),
    },
    code: {
       maxLength: { value: 25, message: "Máximo 25 caracteres" },
@@ -14,16 +18,19 @@ export const addProductRules: Partial<Record<keyof AddProductFormDto, RegisterOp
       min: { value: 0, message: "Mínimo 0" },
       max: { value: 1000, message: "Máximo 1000" },
       required: { value: true, message: "Ingrese el stock actual" },
+      valueAsNumber: true,
    },
    maxStock: {
       min: { value: 1, message: "Mínimo 1" },
       max: { value: 1000, message: "Máximo 1000" },
       required: { value: true, message: "Ingrese el stock máximo" },
+      valueAsNumber: true,
    },
    minStock: {
       min: { value: 0, message: "Mínimo 0" },
       max: { value: 800, message: "Máximo 800" },
       required: { value: true, message: "Ingrese el stock mínimo" },
+      valueAsNumber: true,
    },
    price: {
       min: { value: 1, message: "Mínimo 1" },
@@ -34,5 +41,6 @@ export const addProductRules: Partial<Record<keyof AddProductFormDto, RegisterOp
       min: { value: 0.1, message: "Mínimo 1" },
       max: { value: 10000, message: "Máximo 10000" },
       required: { value: true, message: "Ingrese cantidad" },
+      valueAsNumber: true,
    },
 }
