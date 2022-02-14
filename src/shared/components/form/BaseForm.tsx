@@ -11,6 +11,8 @@ import {
    ButtonProps,
    Text,
    VStack,
+   Divider,
+   Box,
 } from "@chakra-ui/react"
 import { FormEvent } from "react"
 
@@ -43,7 +45,6 @@ const BaseForm: React.FC<BaseFormProps> = ({
          autoFocus
          closeOnEsc
          closeOnOverlayClick={false}
-         onEsc={onClose}
          size={"xl"}
       >
          <ModalOverlay />
@@ -57,13 +58,14 @@ const BaseForm: React.FC<BaseFormProps> = ({
                      {children}
                   </VStack>
                   {error && (
-                     <Text mt={5} color="error">
-                        {error}
-                     </Text>
+                     <Box mt={8} color="error">
+                        <Divider />
+                        <Text mt={3}>{error}</Text>
+                     </Box>
                   )}
                </ModalBody>
 
-               <ModalFooter mt={4}>
+               <ModalFooter mt={2}>
                   <Button
                      mr={4}
                      colorScheme="grey"

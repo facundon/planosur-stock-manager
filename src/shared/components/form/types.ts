@@ -21,6 +21,8 @@ export type CommonFormProps<T, K> = {
    rules?: Partial<Record<keyof T, RegisterOptions>>
    query: (param: K) => UseMutationResult<unknown, Error, UnpackNestedValue<T>>
    queryParams?: K
+   disabled?: boolean
+   onSuccess?: () => void
 }
 
 export type FormFieldProps = {

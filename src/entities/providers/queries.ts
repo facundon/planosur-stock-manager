@@ -1,7 +1,7 @@
 import { AxiosError } from "axios"
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from "react-query"
 import { apiClient } from "../../shared/utils/apiClient"
-import { AddProviderFormDto, Provider, UpdateProviderFormDto } from "./domain"
+import { ProviderFormDto, Provider } from "./domain"
 import { PROVIDERS_KEYS } from "./queryKeys"
 
 export function useProviderQuery(id: number): UseQueryResult<Provider, AxiosError> {
@@ -20,7 +20,7 @@ export function useProvidersQuery(): UseQueryResult<Provider[], AxiosError> {
 
 export function useUpdateProviderQuery(
    id: number
-): UseMutationResult<Provider, AxiosError, UpdateProviderFormDto> {
+): UseMutationResult<Provider, AxiosError, ProviderFormDto> {
    return useMutation(async form => {
       const response = await apiClient.patch<Provider>(`/providers/${id}`, form)
       return response.data
@@ -34,7 +34,7 @@ export function useDeleteProviderQuery(): UseMutationResult<Provider, AxiosError
    })
 }
 
-export function useAddProviderQuery(): UseMutationResult<Provider, AxiosError, AddProviderFormDto> {
+export function useAddProviderQuery(): UseMutationResult<Provider, AxiosError, ProviderFormDto> {
    return useMutation(async form => {
       const response = await apiClient.post<Provider>("/providers", form)
       return response.data

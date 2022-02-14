@@ -5,7 +5,9 @@ import { useAuth } from "../../auth"
 import { AddCategoryForm } from "../../entities/categories/components/AddCategoryForm"
 import UpdateCategoryForm from "../../entities/categories/components/UpdateCategoryForm"
 import AddProductForm from "../../entities/products/components/AddProductForm"
+import UpdateProductForm from "../../entities/products/components/UpdateProductForm"
 import AddProviderForm from "../../entities/providers/components/AddProviderForm"
+import UpdateProviderForm from "../../entities/providers/components/UpdateProviderForm"
 import DeleteModal from "../../features/DeleteModal"
 
 const HomePage: React.FC = () => {
@@ -39,6 +41,8 @@ const HomePage: React.FC = () => {
                </VStack>
                <VStack mt={10}>
                   <UpdateCategoryForm />
+                  <UpdateProviderForm />
+                  <UpdateProductForm />
                </VStack>
                <VStack mt={10}>
                   <DeleteModal />

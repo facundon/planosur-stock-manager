@@ -29,6 +29,4 @@ export type ProductWithProviderAndCategory = Product & {
    }
 }
 
-export type AddProductFormDto = Omit<Product, "updatedAt" | "createdAt">
-
-export type UpdateProductFormDto = Partial<AddProductFormDto>
+export type ProductFormDto = Omit<Product, "updatedAt" | "createdAt">

@@ -1,7 +1,7 @@
 import { RegisterOptions } from "react-hook-form"
-import { AddProviderFormDto } from "../domain"
+import { ProviderFormDto } from "../domain"
 
-export const addProviderRules: Partial<Record<keyof AddProviderFormDto, RegisterOptions>> = {
+export const providerFormRules: Partial<Record<keyof ProviderFormDto, RegisterOptions>> = {
    name: {
       maxLength: { value: 25, message: "Máximo 25 caracteres" },
       required: { value: true, message: "Ingrese un nombre" },
@@ -11,12 +11,9 @@ export const addProviderRules: Partial<Record<keyof AddProviderFormDto, Register
          }),
    },
    email: {
-      validate: (value: string) =>
-         value
-            .toLowerCase()
-            .match(
-               /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            ) || "Ingrese un Email válido",
+      pattern:
+         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ||
+         "Ingrese un Email válido",
    },
    phone: {
       min: { value: 8, message: "Ingrese un teléfono válido" },

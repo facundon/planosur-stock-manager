@@ -1,12 +1,7 @@
 import { AxiosError } from "axios"
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from "react-query"
 import { apiClient } from "../../shared/utils/apiClient"
-import {
-   AddProductFormDto,
-   Product,
-   ProductWithProviderAndCategory,
-   UpdateProductFormDto,
-} from "./domain"
+import { ProductFormDto, Product, ProductWithProviderAndCategory } from "./domain"
 import { PRODUCTS_KEYS } from "./queryKeys"
 
 export function useProductQuery(
@@ -27,7 +22,7 @@ export function useProductsQuery(): UseQueryResult<ProductWithProviderAndCategor
 
 export function useUpdateProductQuery(
    code: string
-): UseMutationResult<Product, AxiosError, UpdateProductFormDto> {
+): UseMutationResult<Product, AxiosError, ProductFormDto> {
    return useMutation(async form => {
       const response = await apiClient.patch<Product>(`/products/${code}`, form)
       return response.data
@@ -41,7 +36,7 @@ export function useDeleteProductQuery(): UseMutationResult<Product, AxiosError, 
    })
 }
 
-export function useAddProductQuery(): UseMutationResult<Product, AxiosError, AddProductFormDto> {
+export function useAddProductQuery(): UseMutationResult<Product, AxiosError, ProductFormDto> {
    return useMutation(async form => {
       const response = await apiClient.post<Product>("/products", form)
       return response.data

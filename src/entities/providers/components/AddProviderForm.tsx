@@ -1,44 +1,21 @@
+import { useQueryClient } from "react-query"
 import { CommonForm } from "../../../shared/components/form"
 import { useAddProviderQuery } from "../queries"
-import { addProviderRules } from "./formRules"
+import { PROVIDERS_KEYS } from "../queryKeys"
+import { getProviderFormFields } from "./formFields"
+import { providerFormRules } from "./formRules"
 
 const AddProviderForm: React.FC = () => {
+   const queryClient = useQueryClient()
+
    return (
       <CommonForm
          title="Agregar Proveedor"
          submitText="Agregar"
          query={useAddProviderQuery}
-         rules={addProviderRules}
-         fields={[
-            {
-               name: "name",
-               label: "Nombre",
-               initialValue: "",
-               required: true,
-               type: "text",
-            },
-            {
-               name: "email",
-               label: "Email",
-               initialValue: "",
-               required: false,
-               type: "email",
-            },
-            {
-               name: "address",
-               label: "Dirección",
-               initialValue: "",
-               required: false,
-               type: "text",
-            },
-            {
-               name: "phone",
-               label: "Teléfono",
-               initialValue: "",
-               required: false,
-               type: "tel",
-            },
-         ]}
+         rules={providerFormRules}
+         onSuccess={() => queryClient.invalidateQueries(PROVIDERS_KEYS.base)}
+         fields={getProviderFormFields()}
       />
    )
 }

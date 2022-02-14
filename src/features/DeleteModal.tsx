@@ -1,15 +1,19 @@
 import { Button, Tab, TabList, TabPanel, TabPanels, Tabs, useBoolean } from "@chakra-ui/react"
 import { FormEvent, useState } from "react"
+import { useQueryClient } from "react-query"
 import { useCategoriesQuery, useDeleteCategoryQuery } from "../entities/categories/queries"
+import { CATEGORIES_KEYS } from "../entities/categories/queryKeys"
 import { useDeleteProductQuery, useProductsQuery } from "../entities/products/queries"
 import { useDeleteProviderQuery, useProvidersQuery } from "../entities/providers/queries"
-import { BaseForm } from "../shared/components"
-import SelectWithQuery from "../shared/components/SelectWithQuery"
+import { PROVIDERS_KEYS } from "../entities/providers/queryKeys"
+import { BaseForm, SelectWithQuery } from "../shared/components"
 
 const DeleteModal: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean()
    const [recordToDelete, setRecordToDelete] = useState("")
    const [tabIndex, setTabIndex] = useState(0)
+
+   const queryClient = useQueryClient()
 
    const {
       mutate: deleteCategory,
@@ -38,11 +42,21 @@ const DeleteModal: React.FC = () => {
             break
 
          case 1:
-            deleteProvider(+recordToDelete, { onSuccess: setIsOpen.off })
+            deleteProvider(+recordToDelete, {
+               onSuccess: () => {
+                  queryClient.invalidateQueries(PROVIDERS_KEYS.base)
+                  setIsOpen.off()
+               },
+            })
             break
 
          case 2:
-            deleteCategory(+recordToDelete, { onSuccess: setIsOpen.off })
+            deleteCategory(+recordToDelete, {
+               onSuccess: () => {
+                  queryClient.invalidateQueries(CATEGORIES_KEYS.base)
+                  setIsOpen.off()
+               },
+            })
             break
 
          default:

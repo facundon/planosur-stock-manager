@@ -1,7 +1,7 @@
 import { RegisterOptions } from "react-hook-form"
-import { AddCategoryFormDto } from "../domain"
+import { CategoryFormDto } from "../domain"
 
-export const addCategoryRules: Partial<Record<keyof AddCategoryFormDto, RegisterOptions>> = {
+export const categoryFormRules: Partial<Record<keyof CategoryFormDto, RegisterOptions>> = {
    name: {
       maxLength: { value: 25, message: "Máximo 25 caracteres" },
       required: { value: true, message: "Este campo es requerido" },
