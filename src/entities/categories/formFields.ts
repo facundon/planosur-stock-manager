@@ -1,5 +1,5 @@
-import { CommonFormProps, SelectOption } from "../../../shared/components/form/types"
-import { Category, CategoryFormDto } from "../domain"
+import { CommonFormProps, SelectOption } from "../../shared/components/form/types"
+import { Category, CategoryFormDto } from "./domain"
 
 export function getCategoryFormFields(props?: {
    initialValues?: Category

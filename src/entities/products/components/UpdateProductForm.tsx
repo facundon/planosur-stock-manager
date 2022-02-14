@@ -2,10 +2,10 @@ import { useState } from "react"
 import { CommonForm, SelectOption } from "../../../shared/components/form"
 import { SelectWithQuery } from "../../../shared/components"
 import { useProductsQuery, useUpdateProductQuery } from "../queries"
-import { getProductFormFields } from "./formFields"
+import { getProductFormFields } from "../formFields"
 import { useCategoriesQuery } from "../../categories/queries"
 import { useProvidersQuery } from "../../providers/queries"
-import { productFormRules } from "./formRules"
+import { productFormRules } from "../formRules"
 
 const UpdateProductForm: React.FC = () => {
    const [productId, setProductId] = useState("")
@@ -45,6 +45,9 @@ const UpdateProductForm: React.FC = () => {
             query={useProductsQuery}
             mapOptionsTo={{ label: "name", value: "code" }}
             onChange={setProductId}
+            bgColor="secondary"
+            color="text"
+            fontWeight={600}
          />
       </CommonForm>
    )

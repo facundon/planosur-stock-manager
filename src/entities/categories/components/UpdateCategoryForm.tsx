@@ -4,8 +4,8 @@ import { CommonForm } from "../../../shared/components/form"
 import { SelectWithQuery } from "../../../shared/components"
 import { useCategoriesQuery, useUpdateCategoryQuery } from "../queries"
 import { CATEGORIES_KEYS } from "../queryKeys"
-import { getCategoryFormFields } from "./formFields"
-import { categoryFormRules } from "./formRules"
+import { getCategoryFormFields } from "../formFields"
+import { categoryFormRules } from "../formRules"
 
 const UpdateCategoryForm: React.FC = () => {
    const [categoryId, setCategoryId] = useState("")
@@ -17,7 +17,7 @@ const UpdateCategoryForm: React.FC = () => {
 
    return (
       <CommonForm
-         title={"Modificar Categoría"}
+         title="Modificar Categoría"
          submitText="Modificar"
          query={useUpdateCategoryQuery}
          queryParams={+categoryId}
@@ -30,6 +30,9 @@ const UpdateCategoryForm: React.FC = () => {
             query={useCategoriesQuery}
             mapOptionsTo={{ label: "name", value: "id" }}
             onChange={setCategoryId}
+            bgColor="secondary"
+            color="text"
+            fontWeight={600}
          />
       </CommonForm>
    )

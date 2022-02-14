@@ -1,5 +1,5 @@
-import { CommonFormProps, SelectOption } from "../../../shared/components/form/types"
-import { Provider, ProviderFormDto } from "../domain"
+import { CommonFormProps, SelectOption } from "../../shared/components/form/types"
+import { Provider, ProviderFormDto } from "./domain"
 
 export function getProviderFormFields(props?: {
    initialValues?: Provider
@@ -23,18 +23,18 @@ export function getProviderFormFields(props?: {
          type: "email",
       },
       {
-         name: "address",
-         label: "Dirección",
-         initialValue: props?.initialValues?.address || "",
-         required: false,
-         type: "text",
-      },
-      {
          name: "phone",
          label: "Teléfono",
          initialValue: props?.initialValues?.phone || "",
          required: false,
          type: "tel",
+      },
+      {
+         name: "address",
+         label: "Dirección",
+         initialValue: props?.initialValues?.address || "",
+         required: false,
+         type: "text",
       },
    ]
 }

@@ -16,12 +16,16 @@ const theme = extendTheme(withDefaultColorScheme({ colorScheme: "red" }), {
             _dark: "orange.300",
          },
          primary: {
-            default: "pink.500",
-            _dark: "pink.400",
+            default: "red.500",
+            _dark: "red.400",
          },
          secondary: {
             default: "yellow.500",
             _dark: "yellow.400",
+         },
+         text: {
+            default: "whiteAlpha.900",
+            _dark: "blackAlpha.900",
          },
       },
    },

@@ -2,8 +2,8 @@ import { CommonForm, SelectOption } from "../../../shared/components/form"
 import { useCategoriesQuery } from "../../categories/queries"
 import { useProvidersQuery } from "../../providers/queries"
 import { useAddProductQuery } from "../queries"
-import { getProductFormFields } from "./formFields"
-import { productFormRules } from "./formRules"
+import { getProductFormFields } from "../formFields"
+import { productFormRules } from "../formRules"
 
 const AddProductForm: React.FC = () => {
    const { data: categoriesData, isLoading: isLoadingCategories } = useCategoriesQuery()

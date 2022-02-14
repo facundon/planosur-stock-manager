@@ -2,8 +2,8 @@ import { useQueryClient } from "react-query"
 import { CommonForm } from "../../../shared/components/form"
 import { useAddProviderQuery } from "../queries"
 import { PROVIDERS_KEYS } from "../queryKeys"
-import { getProviderFormFields } from "./formFields"
-import { providerFormRules } from "./formRules"
+import { getProviderFormFields } from "../formFields"
+import { providerFormRules } from "../formRules"
 
 const AddProviderForm: React.FC = () => {
    const queryClient = useQueryClient()

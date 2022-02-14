@@ -16,16 +16,14 @@ const AsyncSelect = React.forwardRef<HTMLSelectElement, AsyncSelectProps>(
             ref={ref}
             isDisabled={isLoading || isDisabled || isError}
             icon={isLoading ? <Spinner /> : isError ? <X /> : undefined}
+            placeholder={withEmptyOption ? "Seleccionar" : undefined}
          >
             {isLoading ? (
                <option>Cargando...</option>
             ) : isError ? (
                <option>Error al cargar opciones</option>
             ) : (
-               <>
-                  {withEmptyOption && <option value="">-</option>}
-                  {children}
-               </>
+               children
             )}
          </Select>
       )

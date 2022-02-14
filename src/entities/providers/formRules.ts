@@ -1,5 +1,5 @@
 import { RegisterOptions } from "react-hook-form"
-import { ProviderFormDto } from "../domain"
+import { ProviderFormDto } from "./domain"
 
 export const providerFormRules: Partial<Record<keyof ProviderFormDto, RegisterOptions>> = {
    name: {

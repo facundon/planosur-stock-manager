@@ -82,7 +82,6 @@ export default function CommonForm<T extends Record<string, unknown>, K>({
             isLoading={isLoading}
          >
             {children}
-            {children && <Divider pt="3" />}
             {fields.map((field, i) => {
                if (Array.isArray(field)) {
                   return (

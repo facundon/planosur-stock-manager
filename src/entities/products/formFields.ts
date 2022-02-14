@@ -1,5 +1,5 @@
-import { CommonFormProps, SelectOption } from "../../../shared/components/form/types"
-import { Product, ProductFormDto } from "../domain"
+import { CommonFormProps, SelectOption } from "../../shared/components/form/types"
+import { Product, ProductFormDto } from "./domain"
 
 export function getProductFormFields(props?: {
    initialValues?: Product

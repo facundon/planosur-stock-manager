@@ -4,8 +4,8 @@ import { CommonForm } from "../../../shared/components/form"
 import { SelectWithQuery } from "../../../shared/components"
 import { useProvidersQuery, useUpdateProviderQuery } from "../queries"
 import { PROVIDERS_KEYS } from "../queryKeys"
-import { getProviderFormFields } from "./formFields"
-import { providerFormRules } from "./formRules"
+import { getProviderFormFields } from "../formFields"
+import { providerFormRules } from "../formRules"
 
 const UpdateProviderForm: React.FC = () => {
    const [providerId, setProviderId] = useState("")
@@ -30,6 +30,9 @@ const UpdateProviderForm: React.FC = () => {
             query={useProvidersQuery}
             mapOptionsTo={{ label: "name", value: "id" }}
             onChange={setProviderId}
+            bgColor="secondary"
+            color="text"
+            fontWeight={600}
          />
       </CommonForm>
    )

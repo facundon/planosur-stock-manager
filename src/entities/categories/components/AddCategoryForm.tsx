@@ -1,9 +1,9 @@
 import { useAddCategoryQuery } from "../queries"
-import { categoryFormRules } from "./formRules"
+import { categoryFormRules } from "../formRules"
 import { CommonForm } from "../../../shared/components/form"
 import { CATEGORIES_KEYS } from "../queryKeys"
 import { useQueryClient } from "react-query"
-import { getCategoryFormFields } from "./formFields"
+import { getCategoryFormFields } from "../formFields"
 
 export const AddCategoryForm: React.FC = () => {
    const queryClient = useQueryClient()

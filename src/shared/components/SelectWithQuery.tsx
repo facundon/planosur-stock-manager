@@ -22,7 +22,6 @@ function SelectWithQuery<T extends Record<keyof ExtractArray<T>, any>[]>({
       <AsyncSelect
          isLoading={isLoading}
          isError={isError}
-         withEmptyOption
          onChange={e => onChange(e.target.value)}
          {...rest}
       >

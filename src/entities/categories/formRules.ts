@@ -1,5 +1,5 @@
 import { RegisterOptions } from "react-hook-form"
-import { CategoryFormDto } from "../domain"
+import { CategoryFormDto } from "./domain"
 
 export const categoryFormRules: Partial<Record<keyof CategoryFormDto, RegisterOptions>> = {
    name: {
