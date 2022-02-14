@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, useBoolean, useConst } from "@chakra-ui/react"
+import { Flex, useConst } from "@chakra-ui/react"
 import { PropsWithChildren, useEffect, useRef } from "react"
 import { DeepPartial, FieldError, Path, UnpackNestedValue, useForm } from "react-hook-form"
 import { BaseForm } from ".."
@@ -13,10 +13,11 @@ export default function CommonForm<T extends Record<string, unknown>, K>({
    query,
    queryParams,
    onSuccess,
+   onClose,
+   isOpen,
    disabled,
    children,
 }: PropsWithChildren<CommonFormProps<T, K>>) {
-   const [isOpen, setIsOpen] = useBoolean(false)
    const firstInput = useRef<HTMLInputElement | HTMLSelectElement | null>(null)
 
    const {
@@ -50,91 +51,88 @@ export default function CommonForm<T extends Record<string, unknown>, K>({
    }, [defaultValues, fields, resetField])
 
    const { ref: firstInputRef, ...firstInputRegistration } = register(
-      Array.isArray(fields[0]) ? (fields[0][0].name as Path<T>) : (fields[0].name as Path<T>),
+      Array.isArray(fields[0]) ? (fields[0][0]?.name as Path<T>) : (fields[0]?.name as Path<T>),
       rules?.name
    )
 
    function resetModal() {
-      setIsOpen.off()
+      onClose()
       resetForm()
       resetQuery()
    }
 
    return (
-      <>
-         <Button onClick={setIsOpen.on}>{title}</Button>
-         <BaseForm
-            isOpen={isOpen}
-            onClose={resetModal}
-            onSubmit={handleSubmit(data =>
-               sendToServer(data, {
-                  onSuccess: () => {
-                     resetModal()
-                     onSuccess && onSuccess()
-                  },
-               })
-            )}
-            error={serverError?.message}
-            submitText={submitText}
-            submitProps={{ disabled: disabled || !Object.values(dirtyFields).some(v => v) }}
-            title={title}
-            initialFocusRef={firstInput}
-            isLoading={isLoading}
-         >
-            {children}
-            {fields.map((field, i) => {
-               if (Array.isArray(field)) {
-                  return (
-                     <Flex key={field.reduce((p, c) => p + c.name, "")} gap={4}>
-                        {field.map(subField => {
-                           const registerData =
-                              i !== 0
-                                 ? register(subField.name as Path<T>, rules?.[subField.name])
-                                 : firstInputRegistration
-                           return (
-                              <FormField
-                                 key={subField.name as Path<T>}
-                                 isLoading={isLoading}
-                                 error={
-                                    (errors[subField.name as Path<T>] as unknown as FieldError)
-                                       ?.message
-                                 }
-                                 data={subField}
-                                 ref={e => {
-                                    if (i === 0) {
-                                       firstInputRef(e)
-                                       firstInput.current = e
-                                    }
-                                 }}
-                                 {...registerData}
-                              />
-                           )
-                        })}
-                     </Flex>
-                  )
-               }
-
-               const registerData =
-                  i !== 0
-                     ? register(field.name as Path<T>, rules?.[field.name])
-                     : firstInputRegistration
+      <BaseForm
+         isOpen={isOpen}
+         onClose={resetModal}
+         onSubmit={handleSubmit(data =>
+            sendToServer(data, {
+               onSuccess: () => {
+                  resetModal()
+                  onSuccess && onSuccess()
+               },
+            })
+         )}
+         error={serverError?.message}
+         submitText={submitText}
+         submitProps={{ disabled: disabled || !Object.values(dirtyFields).some(v => v) }}
+         title={title}
+         initialFocusRef={firstInput}
+         isLoading={isLoading}
+      >
+         {children}
+         {fields.map((field, i) => {
+            if (Array.isArray(field)) {
                return (
-                  <FormField
-                     key={field.name as Path<T>}
-                     isLoading={isLoading}
-                     error={(errors[field.name as Path<T>] as unknown as FieldError)?.message}
-                     data={field}
-                     ref={e => {
-                        if (i === 0) {
-                           firstInputRef(e)
-                           firstInput.current = e
-                        }
-                     }}
-                     {...registerData}
-                  />
+                  <Flex key={field.reduce((p, c) => p + c.name, "")} gap={4}>
+                     {field.map(subField => {
+                        const registerData =
+                           i !== 0
+                              ? register(subField.name as Path<T>, rules?.[subField.name])
+                              : firstInputRegistration
+                        return (
+                           <FormField
+                              key={subField.name as Path<T>}
+                              isLoading={isLoading}
+                              error={
+                                 (errors[subField.name as Path<T>] as unknown as FieldError)
+                                    ?.message
+                              }
+                              data={subField}
+                              ref={e => {
+                                 if (i === 0) {
+                                    firstInputRef(e)
+                                    firstInput.current = e
+                                 }
+                              }}
+                              {...registerData}
+                           />
+                        )
+                     })}
+                  </Flex>
                )
-            })}
-         </BaseForm>
-      </>
+            }
+
+            const registerData =
+               i !== 0
+                  ? register(field.name as Path<T>, rules?.[field.name])
+                  : firstInputRegistration
+            return (
+               <FormField
+                  key={field.name as Path<T>}
+                  isLoading={isLoading}
+                  error={(errors[field.name as Path<T>] as unknown as FieldError)?.message}
+                  data={field}
+                  ref={e => {
+                     if (i === 0) {
+                        firstInputRef(e)
+                        firstInput.current = e
+                     }
+                  }}
+                  {...registerData}
+               />
+            )
+         })}
+      </BaseForm>
    )
 }

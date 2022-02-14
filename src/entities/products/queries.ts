@@ -13,11 +13,17 @@ export function useProductQuery(
    })
 }
 
-export function useProductsQuery(): UseQueryResult<ProductWithProviderAndCategory[], AxiosError> {
-   return useQuery(PRODUCTS_KEYS.base, async () => {
-      const response = await apiClient.get<ProductWithProviderAndCategory[]>("/products")
-      return response.data
-   })
+export function useProductsQuery(
+   enabled = true
+): UseQueryResult<ProductWithProviderAndCategory[], AxiosError> {
+   return useQuery(
+      PRODUCTS_KEYS.base,
+      async () => {
+         const response = await apiClient.get<ProductWithProviderAndCategory[]>("/products")
+         return response.data
+      },
+      { enabled }
+   )
 }
 
 export function useUpdateProductQuery(

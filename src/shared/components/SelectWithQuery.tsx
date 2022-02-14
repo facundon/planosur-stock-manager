@@ -8,6 +8,7 @@ type SelectWithQueryProps<T> = {
    query: () => UseQueryResult<T, AxiosError>
    mapOptionsTo: { value: keyof ExtractArray<T>; label: keyof ExtractArray<T> }
    onChange: (value: string) => void
+   value?: string
 } & Omit<AsyncSelectProps, "onChange">
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -15,19 +16,22 @@ function SelectWithQuery<T extends Record<keyof ExtractArray<T>, any>[]>({
    query,
    mapOptionsTo,
    onChange,
+   value,
    ...rest
 }: SelectWithQueryProps<T>) {
    const { data, isLoading, isError } = query()
+
    return (
       <AsyncSelect
          isLoading={isLoading}
          isError={isError}
          onChange={e => onChange(e.target.value)}
+         value={value}
          {...rest}
       >
-         {data?.map(value => (
-            <option key={value[mapOptionsTo.value]} value={value[mapOptionsTo.value]}>
-               {value[mapOptionsTo.label]}
+         {data?.map(val => (
+            <option key={val[mapOptionsTo.value]} value={val[mapOptionsTo.value]}>
+               {val[mapOptionsTo.label]}
             </option>
          ))}
       </AsyncSelect>

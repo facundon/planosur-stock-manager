@@ -4,10 +4,12 @@ import { useProvidersQuery } from "../../providers/queries"
 import { useAddProductQuery } from "../queries"
 import { getProductFormFields } from "../formFields"
 import { productFormRules } from "../formRules"
+import { Button, useBoolean } from "@chakra-ui/react"
 
 const AddProductForm: React.FC = () => {
-   const { data: categoriesData, isLoading: isLoadingCategories } = useCategoriesQuery()
-   const { data: providersData, isLoading: isLoadingProviders } = useProvidersQuery()
+   const [isOpen, setIsOpen] = useBoolean(false)
+   const { data: categoriesData, isLoading: isLoadingCategories } = useCategoriesQuery(isOpen)
+   const { data: providersData, isLoading: isLoadingProviders } = useProvidersQuery(isOpen)
 
    const categories = categoriesData?.map<SelectOption>(category => ({
       label: category.name,
@@ -20,18 +22,23 @@ const AddProductForm: React.FC = () => {
    }))
 
    return (
-      <CommonForm
-         title="Agregar Producto"
-         submitText="Agregar"
-         query={useAddProductQuery}
-         rules={productFormRules}
-         fields={getProductFormFields({
-            optionFields: {
-               providerId: { options: providers, isLoading: isLoadingProviders },
-               categoryId: { options: categories, isLoading: isLoadingCategories },
-            },
-         })}
-      />
+      <>
+         <Button onClick={setIsOpen.on}>Agregar Producto</Button>
+         <CommonForm
+            title="Agregar Producto"
+            submitText="Agregar"
+            query={useAddProductQuery}
+            rules={productFormRules}
+            onClose={setIsOpen.off}
+            isOpen={isOpen}
+            fields={getProductFormFields({
+               optionFields: {
+                  providerId: { options: providers, isLoading: isLoadingProviders },
+                  categoryId: { options: categories, isLoading: isLoadingCategories },
+               },
+            })}
+         />
+      </>
    )
 }
 

@@ -23,6 +23,8 @@ export type CommonFormProps<T, K> = {
    queryParams?: K
    disabled?: boolean
    onSuccess?: () => void
+   onClose: () => void
+   isOpen: boolean
 }
 
 export type FormFieldProps = {

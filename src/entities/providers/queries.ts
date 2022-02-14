@@ -11,11 +11,15 @@ export function useProviderQuery(id: number): UseQueryResult<Provider, AxiosErro
    })
 }
 
-export function useProvidersQuery(): UseQueryResult<Provider[], AxiosError> {
-   return useQuery(PROVIDERS_KEYS.base, async () => {
-      const response = await apiClient.get<Provider[]>("/providers")
-      return response.data
-   })
+export function useProvidersQuery(enabled = true): UseQueryResult<Provider[], AxiosError> {
+   return useQuery(
+      PROVIDERS_KEYS.base,
+      async () => {
+         const response = await apiClient.get<Provider[]>("/providers")
+         return response.data
+      },
+      { enabled }
+   )
 }
 
 export function useUpdateProviderQuery(

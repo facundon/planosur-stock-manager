@@ -11,11 +11,15 @@ export function useCategoryQuery(id: number): UseQueryResult<Category, AxiosErro
    })
 }
 
-export function useCategoriesQuery(): UseQueryResult<Category[], AxiosError> {
-   return useQuery(CATEGORIES_KEYS.base, async () => {
-      const response = await apiClient.get<Category[]>("/categories")
-      return response.data
-   })
+export function useCategoriesQuery(enabled = true): UseQueryResult<Category[], AxiosError> {
+   return useQuery(
+      CATEGORIES_KEYS.base,
+      async () => {
+         const response = await apiClient.get<Category[]>("/categories")
+         return response.data
+      },
+      { enabled }
+   )
 }
 
 export function useUpdateCategoryQuery(
