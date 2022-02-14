@@ -14,10 +14,9 @@ import {
 } from "@chakra-ui/react"
 
 type BaseFormProps = {
-   submitProps: ButtonProps
+   submitProps?: ButtonProps
    submitText: string
    onSubmit: () => void
-   onCancel: () => void
    title: string
    error?: string
 } & ModalProps
@@ -29,7 +28,6 @@ const BaseForm: React.FC<BaseFormProps> = ({
    title,
    submitText,
    submitProps,
-   onCancel,
    onSubmit,
    children,
    ...rest
@@ -42,13 +40,13 @@ const BaseForm: React.FC<BaseFormProps> = ({
          autoFocus
          closeOnEsc
          closeOnOverlayClick={false}
-         onEsc={onCancel}
+         onEsc={onClose}
          size={"xl"}
       >
          <ModalOverlay />
          <ModalContent>
             <ModalHeader>{title}</ModalHeader>
-            <ModalCloseButton onClick={onCancel} />
+            <ModalCloseButton onClick={onClose} />
 
             <form onSubmit={onSubmit}>
                <ModalBody>
@@ -63,7 +61,7 @@ const BaseForm: React.FC<BaseFormProps> = ({
                </ModalBody>
 
                <ModalFooter mt={4}>
-                  <Button mr={4} colorScheme="grey" variant="outline" onClick={onCancel}>
+                  <Button mr={4} colorScheme="grey" variant="outline" onClick={onClose}>
                      Cancelar
                   </Button>
                   <Button type="submit" {...submitProps}>

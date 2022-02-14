@@ -6,6 +6,7 @@ import { AddCategoryForm } from "../../entities/categories/components/AddCategor
 import UpdateCategoryForm from "../../entities/categories/components/UpdateCategoryForm"
 import AddProductForm from "../../entities/products/components/AddProductForm"
 import AddProviderForm from "../../entities/providers/components/AddProviderForm"
+import DeleteModal from "../../features/DeleteModal"
 
 const HomePage: React.FC = () => {
    const { isAuth } = useAuth()
@@ -38,6 +39,9 @@ const HomePage: React.FC = () => {
                </VStack>
                <VStack mt={10}>
                   <UpdateCategoryForm />
+               </VStack>
+               <VStack mt={10}>
+                  <DeleteModal />
                </VStack>
             </GridItem>
             <GridItem colSpan={5}>tabla</GridItem>

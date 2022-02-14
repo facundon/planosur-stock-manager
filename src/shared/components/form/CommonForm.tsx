@@ -53,9 +53,8 @@ export function CommonForm<T extends Record<string, unknown>, K>({
          <Button onClick={setIsOpen.on}>{title}</Button>
          <BaseForm
             isOpen={isOpen}
-            onClose={setIsOpen.off}
+            onClose={resetModal}
             onSubmit={handleSubmit(data => sendToServer(data, { onSuccess: resetModal }))}
-            onCancel={resetModal}
             error={serverError?.message}
             submitProps={{ isLoading }}
             submitText={submitText}

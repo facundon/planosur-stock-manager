@@ -1,7 +1,7 @@
 import { Select, SelectProps, Spinner } from "@chakra-ui/react"
 import React from "react"
 
-type AsyncSelectProps = {
+export type AsyncSelectProps = {
    isLoading?: boolean
    withEmptyOption?: boolean
 } & SelectProps
