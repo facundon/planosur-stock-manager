@@ -56,10 +56,10 @@ export function CommonForm<T extends Record<string, unknown>, K>({
             onClose={resetModal}
             onSubmit={handleSubmit(data => sendToServer(data, { onSuccess: resetModal }))}
             error={serverError?.message}
-            submitProps={{ isLoading }}
             submitText={submitText}
             title={title}
             initialFocusRef={firstInput}
+            isLoading={isLoading}
          >
             {fields.map((field, i) => {
                if (Array.isArray(field)) {

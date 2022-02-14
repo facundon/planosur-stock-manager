@@ -12,17 +12,20 @@ import {
    Text,
    VStack,
 } from "@chakra-ui/react"
+import { FormEvent } from "react"
 
 type BaseFormProps = {
    submitProps?: ButtonProps
    submitText: string
-   onSubmit: () => void
+   onSubmit: (e: FormEvent) => void
    title: string
    error?: string
+   isLoading?: boolean
 } & ModalProps
 
 const BaseForm: React.FC<BaseFormProps> = ({
    isOpen,
+   isLoading,
    error,
    onClose,
    title,
@@ -46,7 +49,7 @@ const BaseForm: React.FC<BaseFormProps> = ({
          <ModalOverlay />
          <ModalContent>
             <ModalHeader>{title}</ModalHeader>
-            <ModalCloseButton onClick={onClose} />
+            <ModalCloseButton onClick={onClose} disabled={isLoading} />
 
             <form onSubmit={onSubmit}>
                <ModalBody>
@@ -61,10 +64,16 @@ const BaseForm: React.FC<BaseFormProps> = ({
                </ModalBody>
 
                <ModalFooter mt={4}>
-                  <Button mr={4} colorScheme="grey" variant="outline" onClick={onClose}>
+                  <Button
+                     mr={4}
+                     colorScheme="grey"
+                     variant="outline"
+                     onClick={onClose}
+                     disabled={isLoading}
+                  >
                      Cancelar
                   </Button>
-                  <Button type="submit" {...submitProps}>
+                  <Button type="submit" {...submitProps} isLoading={isLoading}>
                      {submitText}
                   </Button>
                </ModalFooter>
