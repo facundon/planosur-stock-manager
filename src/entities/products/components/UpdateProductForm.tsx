@@ -6,7 +6,8 @@ import { getProductFormFields } from "../formFields"
 import { useCategoriesQuery } from "../../categories/queries"
 import { useProvidersQuery } from "../../providers/queries"
 import { productFormRules } from "../formRules"
-import { Button, useBoolean } from "@chakra-ui/react"
+import { useBoolean } from "@chakra-ui/react"
+import { ModifyButton } from "../../../shared/components/buttons"
 
 const UpdateProductForm: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean(false)
@@ -34,7 +35,7 @@ const UpdateProductForm: React.FC = () => {
 
    return (
       <>
-         <Button onClick={setIsOpen.on}>Modificar Producto</Button>
+         <ModifyButton onClick={setIsOpen.on} />
          <CommonForm
             title="Modificar Producto"
             submitText="Modificar"

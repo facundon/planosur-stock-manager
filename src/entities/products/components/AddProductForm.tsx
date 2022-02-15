@@ -4,7 +4,8 @@ import { useProvidersQuery } from "../../providers/queries"
 import { useAddProductQuery } from "../queries"
 import { getProductFormFields } from "../formFields"
 import { productFormRules } from "../formRules"
-import { Button, useBoolean } from "@chakra-ui/react"
+import { useBoolean } from "@chakra-ui/react"
+import { AddButton } from "../../../shared/components/buttons"
 
 const AddProductForm: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean(false)
@@ -23,7 +24,7 @@ const AddProductForm: React.FC = () => {
 
    return (
       <>
-         <Button onClick={setIsOpen.on}>Agregar Producto</Button>
+         <AddButton onClick={setIsOpen.on} />
          <CommonForm
             title="Agregar Producto"
             submitText="Agregar"

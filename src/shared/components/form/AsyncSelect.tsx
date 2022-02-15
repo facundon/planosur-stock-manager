@@ -1,4 +1,4 @@
-import { Select, SelectProps, Spinner } from "@chakra-ui/react"
+import { Input, Select, SelectProps, Spinner } from "@chakra-ui/react"
 import React from "react"
 import { X } from "react-feather"
 
@@ -18,6 +18,7 @@ const AsyncSelect = React.forwardRef<HTMLSelectElement, AsyncSelectProps>(
             icon={isLoading ? <Spinner /> : isError ? <X /> : undefined}
             placeholder={withEmptyOption ? "Seleccionar" : undefined}
          >
+            <Input />
             {isLoading ? (
                <option>Cargando...</option>
             ) : isError ? (

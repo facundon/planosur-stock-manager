@@ -1,6 +1,6 @@
 import { extendTheme, withDefaultColorScheme } from "@chakra-ui/react"
 
-const theme = extendTheme(withDefaultColorScheme({ colorScheme: "red" }), {
+const theme = extendTheme(withDefaultColorScheme({ colorScheme: "yellow" }), {
    semanticTokens: {
       colors: {
          error: {

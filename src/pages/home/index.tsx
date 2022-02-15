@@ -1,18 +1,11 @@
-import { Box, Grid, GridItem, Switch, useColorMode, VStack } from "@chakra-ui/react"
+import { Box, Flex, useColorMode } from "@chakra-ui/react"
 import { navigate } from "hookrouter"
 import { useEffect } from "react"
 import { useAuth } from "../../auth"
-import { AddCategoryForm } from "../../entities/categories/components/AddCategoryForm"
-import UpdateCategoryForm from "../../entities/categories/components/UpdateCategoryForm"
-import AddProductForm from "../../entities/products/components/AddProductForm"
-import UpdateProductForm from "../../entities/products/components/UpdateProductForm"
-import AddProviderForm from "../../entities/providers/components/AddProviderForm"
-import UpdateProviderForm from "../../entities/providers/components/UpdateProviderForm"
-import DeleteModal from "../../features/DeleteModal"
+import SideMenu from "../../features/sideMenu"
 
 const HomePage: React.FC = () => {
    const { isAuth } = useAuth()
-   const { toggleColorMode, colorMode } = useColorMode()
 
    useEffect(() => {
       if (isAuth !== undefined && !isAuth) navigate("/login")
@@ -20,36 +13,10 @@ const HomePage: React.FC = () => {
 
    return (
       <Box minH="100vh" position="relative">
-         <Switch
-            position="absolute"
-            right={2}
-            top={2}
-            id="dark-mode"
-            colorScheme="teal"
-            onChange={toggleColorMode}
-            defaultChecked
-            checked={colorMode === "dark"}
-         >
-            Modo Oscuro
-         </Switch>
-         <Grid h="100vh" templateRows="repeat(1, 1fr)" templateColumns="repeat(6, 1fr)" gap={4}>
-            <GridItem colSpan={1}>
-               <VStack>
-                  <AddCategoryForm />
-                  <AddProductForm />
-                  <AddProviderForm />
-               </VStack>
-               <VStack mt={10}>
-                  <UpdateCategoryForm />
-                  <UpdateProviderForm />
-                  <UpdateProductForm />
-               </VStack>
-               <VStack mt={10}>
-                  <DeleteModal />
-               </VStack>
-            </GridItem>
-            <GridItem colSpan={5}>tabla</GridItem>
-         </Grid>
+         <Flex h="100vh" gap={4}>
+            <SideMenu />
+            <Box>tabla</Box>
+         </Flex>
       </Box>
    )
 }

@@ -1,5 +1,6 @@
 import { Button, Tab, TabList, TabPanel, TabPanels, Tabs, useBoolean } from "@chakra-ui/react"
 import { FormEvent, useState } from "react"
+import { Delete } from "react-feather"
 import { useQueryClient } from "react-query"
 import { useCategoriesQuery, useDeleteCategoryQuery } from "../entities/categories/queries"
 import { CATEGORIES_KEYS } from "../entities/categories/queryKeys"
@@ -66,7 +67,17 @@ const DeleteModal: React.FC = () => {
 
    return (
       <>
-         <Button onClick={setIsOpen.on}>Bajas</Button>
+         <Button
+            variant="ghost"
+            w="100%"
+            onClick={setIsOpen.on}
+            leftIcon={<Delete />}
+            iconSpacing={3}
+            justifyContent="space-between"
+            colorScheme="red"
+         >
+            Bajas
+         </Button>
          <BaseForm
             submitText="Eliminar"
             title="Bajas"

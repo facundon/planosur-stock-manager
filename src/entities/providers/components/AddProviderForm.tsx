@@ -4,7 +4,8 @@ import { useAddProviderQuery } from "../queries"
 import { PROVIDERS_KEYS } from "../queryKeys"
 import { getProviderFormFields } from "../formFields"
 import { providerFormRules } from "../formRules"
-import { Button, useBoolean } from "@chakra-ui/react"
+import { useBoolean } from "@chakra-ui/react"
+import { AddButton } from "../../../shared/components/buttons"
 
 const AddProviderForm: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean(false)
@@ -12,7 +13,7 @@ const AddProviderForm: React.FC = () => {
 
    return (
       <>
-         <Button onClick={setIsOpen.on}>Agregar Proveedor</Button>
+         <AddButton onClick={setIsOpen.on} />
          <CommonForm
             title="Agregar Proveedor"
             submitText="Agregar"

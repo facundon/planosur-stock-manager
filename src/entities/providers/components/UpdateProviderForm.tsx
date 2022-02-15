@@ -6,7 +6,8 @@ import { useProvidersQuery, useUpdateProviderQuery } from "../queries"
 import { PROVIDERS_KEYS } from "../queryKeys"
 import { getProviderFormFields } from "../formFields"
 import { providerFormRules } from "../formRules"
-import { Button, useBoolean } from "@chakra-ui/react"
+import { useBoolean } from "@chakra-ui/react"
+import { ModifyButton } from "../../../shared/components/buttons"
 
 const UpdateProviderForm: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean(false)
@@ -23,7 +24,7 @@ const UpdateProviderForm: React.FC = () => {
 
    return (
       <>
-         <Button onClick={setIsOpen.on}>Modificar Proveedor</Button>
+         <ModifyButton onClick={setIsOpen.on} />
          <CommonForm
             title="Modificar Proveedor"
             submitText="Modificar"

@@ -21,7 +21,7 @@ export const FormField = React.forwardRef<HTMLInputElement | HTMLSelectElement, 
       },
       ref
    ) => {
-      const shouldRenderIcon = type === "tel" || type === "email" || name === "price"
+      const shouldRenderIcon = name === "phone" || type === "email" || name === "price"
 
       return (
          <FormControl isInvalid={!!error} isRequired={required} isDisabled={isLoading}>
@@ -43,7 +43,7 @@ export const FormField = React.forwardRef<HTMLInputElement | HTMLSelectElement, 
                <InputGroup>
                   {shouldRenderIcon && (
                      <InputLeftElement pointerEvents="none" color="gray.300">
-                        {type === "tel" && <Phone strokeWidth={1} size={18} />}
+                        {name === "phone" && <Phone strokeWidth={1} size={18} />}
                         {name === "price" && <DollarSign strokeWidth={1} size={18} />}
                         {type === "email" && <AtSign strokeWidth={1} size={18} />}
                      </InputLeftElement>

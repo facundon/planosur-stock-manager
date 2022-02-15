@@ -13,6 +13,7 @@ import {
    VStack,
    Divider,
    Box,
+   ButtonGroup,
 } from "@chakra-ui/react"
 import { FormEvent } from "react"
 
@@ -66,18 +67,26 @@ const BaseForm: React.FC<BaseFormProps> = ({
                </ModalBody>
 
                <ModalFooter mt={2}>
-                  <Button
-                     mr={4}
-                     colorScheme="grey"
-                     variant="outline"
-                     onClick={onClose}
-                     disabled={isLoading}
-                  >
-                     Cancelar
-                  </Button>
-                  <Button type="submit" {...submitProps} isLoading={isLoading}>
-                     {submitText}
-                  </Button>
+                  <ButtonGroup spacing={4}>
+                     <Button
+                        colorScheme="grey"
+                        variant="outline"
+                        onClick={onClose}
+                        disabled={isLoading}
+                     >
+                        Cancelar
+                     </Button>
+                     <Button
+                        type="submit"
+                        {...submitProps}
+                        isLoading={isLoading}
+                        iconSpacing={3}
+                        spinnerPlacement="end"
+                        loadingText="Solicitando"
+                     >
+                        {submitText}
+                     </Button>
+                  </ButtonGroup>
                </ModalFooter>
             </form>
          </ModalContent>

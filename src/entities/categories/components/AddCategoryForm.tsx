@@ -4,7 +4,8 @@ import { CommonForm } from "../../../shared/components/form"
 import { CATEGORIES_KEYS } from "../queryKeys"
 import { useQueryClient } from "react-query"
 import { getCategoryFormFields } from "../formFields"
-import { Button, useBoolean } from "@chakra-ui/react"
+import { useBoolean } from "@chakra-ui/react"
+import { AddButton } from "../../../shared/components/buttons"
 
 export const AddCategoryForm: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean(false)
@@ -12,7 +13,7 @@ export const AddCategoryForm: React.FC = () => {
 
    return (
       <>
-         <Button onClick={setIsOpen.on}>Agregar Categoría</Button>
+         <AddButton onClick={setIsOpen.on} />
          <CommonForm
             title="Agregar Categoría"
             submitText="Agregar"

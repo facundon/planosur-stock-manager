@@ -6,7 +6,8 @@ import { useCategoriesQuery, useUpdateCategoryQuery } from "../queries"
 import { CATEGORIES_KEYS } from "../queryKeys"
 import { getCategoryFormFields } from "../formFields"
 import { categoryFormRules } from "../formRules"
-import { Button, useBoolean } from "@chakra-ui/react"
+import { useBoolean } from "@chakra-ui/react"
+import { ModifyButton } from "../../../shared/components/buttons"
 
 const UpdateCategoryForm: React.FC = () => {
    const [categoryId, setCategoryId] = useState("")
@@ -23,7 +24,7 @@ const UpdateCategoryForm: React.FC = () => {
 
    return (
       <>
-         <Button onClick={setIsOpen.on}>Modificar Categoría</Button>
+         <ModifyButton onClick={setIsOpen.on} />
          <CommonForm
             title="Modificar Categoría"
             submitText="Modificar"

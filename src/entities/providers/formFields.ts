@@ -25,7 +25,7 @@ export function getProviderFormFields(props?: {
       {
          name: "phone",
          label: "Teléfono",
-         initialValue: props?.initialValues?.phone || undefined,
+         initialValue: props?.initialValues?.phone || "",
          required: false,
          type: "number",
       },
