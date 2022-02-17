@@ -52,7 +52,7 @@ export default function CommonForm<T extends Record<string, unknown>, K>({
 
    const { ref: firstInputRef, ...firstInputRegistration } = register(
       Array.isArray(fields[0]) ? (fields[0][0]?.name as Path<T>) : (fields[0]?.name as Path<T>),
-      rules?.name
+      Array.isArray(fields[0]) ? rules?.[fields[0][0].name] : rules?.[fields[0].name]
    )
 
    function resetModal() {
@@ -84,10 +84,10 @@ export default function CommonForm<T extends Record<string, unknown>, K>({
          {fields.map((field, i) => {
             if (Array.isArray(field)) {
                return (
-                  <Flex key={field.reduce((p, c) => p + c.name, "")} gap={4}>
-                     {field.map(subField => {
+                  <Flex key={field.reduce((p, c) => p + c.name, "")} gap={4} alignItems="flex-end">
+                     {field.map((subField, subI) => {
                         const registerData =
-                           i !== 0
+                           i !== 0 || subI !== 0
                               ? register(subField.name as Path<T>, rules?.[subField.name])
                               : firstInputRegistration
                         return (
@@ -100,7 +100,7 @@ export default function CommonForm<T extends Record<string, unknown>, K>({
                               }
                               data={subField}
                               ref={e => {
-                                 if (i === 0) {
+                                 if (i === 0 || subI === 0) {
                                     firstInputRef(e)
                                     firstInput.current = e
                                  }

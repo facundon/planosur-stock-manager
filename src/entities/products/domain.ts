@@ -11,9 +11,12 @@ export type Product = {
    providerId: number | null
    categoryId: number | null
    price: number
-   currentStock: number
-   minStock: number
-   maxStock: number
+   blankStock: number
+   blankMinStock: number
+   blankMaxStock: number
+   unregisteredStock: number
+   unregisteredMinStock: number
+   unregisteredMaxStock: number
    didOrder: boolean
    orderedAt: Date | null
    updatedAt: Date
