@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { CommonForm, SelectOption } from "../../../shared/components/form"
-import { SelectWithQuery } from "../../../shared/components"
+import { DropdownQuery } from "../../../shared/components"
 import { useProductsQuery, useUpdateProductQuery } from "../queries"
 import { getProductFormFields } from "../formFields"
 import { useCategoriesQuery } from "../../categories/queries"
@@ -48,7 +48,7 @@ const UpdateProductForm: React.FC = () => {
                },
             })}
          >
-            <SelectWithQuery
+            <DropdownQuery
                query={useProductsQuery}
                mapOptionsTo={{ label: "name", value: "code" }}
                onChange={setCurrentProduct}

@@ -7,7 +7,7 @@ import { CATEGORIES_KEYS } from "../entities/categories/queryKeys"
 import { useDeleteProductQuery, useProductsQuery } from "../entities/products/queries"
 import { useDeleteProviderQuery, useProvidersQuery } from "../entities/providers/queries"
 import { PROVIDERS_KEYS } from "../entities/providers/queryKeys"
-import { BaseForm, SelectWithQuery } from "../shared/components"
+import { BaseForm, DropdownQuery } from "../shared/components"
 import AsyncSelect from "../shared/components/form/AsyncSelect"
 
 const DeleteModal: React.FC = () => {
@@ -110,7 +110,7 @@ const DeleteModal: React.FC = () => {
                </TabList>
                <TabPanels>
                   <TabPanel>
-                     <SelectWithQuery
+                     <DropdownQuery
                         query={useProductsQuery}
                         mapOptionsTo={{ label: "name", value: "code" }}
                         onChange={setRecordToDelete}

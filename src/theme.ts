@@ -35,6 +35,11 @@ const theme = extendTheme(withDefaultColorScheme({ colorScheme: "yellow" }), {
             focusBorderColor: "pink.400",
          },
       },
+      Select: {
+         defaultProps: {
+            focusBorderColor: "pink.400",
+         },
+      },
       /* Button: {
          baseStyle: {
             _focus: {
