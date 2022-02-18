@@ -8,6 +8,7 @@ import { useDeleteProductQuery, useProductsQuery } from "../entities/products/qu
 import { useDeleteProviderQuery, useProvidersQuery } from "../entities/providers/queries"
 import { PROVIDERS_KEYS } from "../entities/providers/queryKeys"
 import { BaseForm, SelectWithQuery } from "../shared/components"
+import AsyncSelect from "../shared/components/form/AsyncSelect"
 
 const DeleteModal: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean()
@@ -15,6 +16,9 @@ const DeleteModal: React.FC = () => {
    const [tabIndex, setTabIndex] = useState(0)
 
    const queryClient = useQueryClient()
+
+   const { data: providers } = useProvidersQuery()
+   const { data: categories } = useCategoriesQuery()
 
    const {
       mutate: deleteCategory,
@@ -113,18 +117,22 @@ const DeleteModal: React.FC = () => {
                      />
                   </TabPanel>
                   <TabPanel>
-                     <SelectWithQuery
-                        query={useProvidersQuery}
-                        mapOptionsTo={{ label: "name", value: "id" }}
-                        onChange={setRecordToDelete}
-                     />
+                     <AsyncSelect onChange={e => setRecordToDelete(e.target.value)}>
+                        {providers?.map(provider => (
+                           <option key={provider.id} value={provider.id}>
+                              {provider.name}
+                           </option>
+                        ))}
+                     </AsyncSelect>
                   </TabPanel>
                   <TabPanel>
-                     <SelectWithQuery
-                        query={useCategoriesQuery}
-                        mapOptionsTo={{ label: "name", value: "id" }}
-                        onChange={setRecordToDelete}
-                     />
+                     <AsyncSelect onChange={e => setRecordToDelete(e.target.value)}>
+                        {categories?.map(category => (
+                           <option key={category.id} value={category.id}>
+                              {category.name}
+                           </option>
+                        ))}
+                     </AsyncSelect>
                   </TabPanel>
                </TabPanels>
             </Tabs>

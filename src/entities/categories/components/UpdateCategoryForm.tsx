@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
 import { useQueryClient } from "react-query"
 import { CommonForm } from "../../../shared/components/form"
-import { SelectWithQuery } from "../../../shared/components"
 import { useCategoriesQuery, useUpdateCategoryQuery } from "../queries"
 import { CATEGORIES_KEYS } from "../queryKeys"
 import { getCategoryFormFields } from "../formFields"
 import { categoryFormRules } from "../formRules"
 import { useBoolean } from "@chakra-ui/react"
 import { ModifyButton } from "../../../shared/components/buttons"
+import AsyncSelect from "../../../shared/components/form/AsyncSelect"
 
 const UpdateCategoryForm: React.FC = () => {
    const [categoryId, setCategoryId] = useState("")
@@ -15,12 +15,12 @@ const UpdateCategoryForm: React.FC = () => {
 
    const queryClient = useQueryClient()
 
-   const { data } = useCategoriesQuery(isOpen)
-   const currentCategory = data?.find(category => category.id === +categoryId)
+   const { data: categories } = useCategoriesQuery(isOpen)
+   const currentCategory = categories?.find(category => category.id === +categoryId)
 
    useEffect(() => {
-      if (data) setCategoryId(data[0].id.toString())
-   }, [data])
+      if (categories) setCategoryId(categories[0].id.toString())
+   }, [categories])
 
    return (
       <>
@@ -40,15 +40,19 @@ const UpdateCategoryForm: React.FC = () => {
             isOpen={isOpen}
             fields={getCategoryFormFields({ initialValues: currentCategory })}
          >
-            <SelectWithQuery
-               query={useCategoriesQuery}
-               mapOptionsTo={{ label: "name", value: "id" }}
-               onChange={setCategoryId}
+            <AsyncSelect
+               onChange={e => setCategoryId(e.target.value)}
                value={categoryId}
                bgColor="secondary"
                color="text"
                fontWeight={600}
-            />
+            >
+               {categories?.map(category => (
+                  <option key={category.id} value={category.id}>
+                     {category.name}
+                  </option>
+               ))}
+            </AsyncSelect>
          </CommonForm>
       </>
    )

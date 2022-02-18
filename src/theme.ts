@@ -29,6 +29,20 @@ const theme = extendTheme(withDefaultColorScheme({ colorScheme: "yellow" }), {
          },
       },
    },
+   components: {
+      Input: {
+         defaultProps: {
+            focusBorderColor: "pink.400",
+         },
+      },
+      /* Button: {
+         baseStyle: {
+            _focus: {
+               boxShadow: "outline",
+            },
+         },
+      }, */
+   },
 })
 
 export default theme

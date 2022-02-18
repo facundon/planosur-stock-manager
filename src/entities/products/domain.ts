@@ -23,6 +23,19 @@ export type Product = {
    createdAt: Date
 }
 
+export type ProductFilters = {
+   providerId?: number
+   categoryId?: number
+   priceMax?: string
+   priceMin?: string
+   searchVal?: string
+   unregisteredStockMax?: number
+   unregisteredStockMin?: number
+   blankStockMax?: number
+   blankStockMin?: number
+   limit?: number
+}
+
 export type ProductWithProviderAndCategory = Product & {
    provider: {
       name: Provider["name"]

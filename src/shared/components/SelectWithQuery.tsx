@@ -1,40 +1,138 @@
+import {
+   Box,
+   Button,
+   Icon,
+   Input,
+   InputGroup,
+   InputRightElement,
+   Popover,
+   PopoverContent,
+   PopoverTrigger,
+   Spinner,
+   useBoolean,
+} from "@chakra-ui/react"
 import { AxiosError } from "axios"
+import { useEffect, useRef, useState } from "react"
+import { AlertTriangle, X } from "react-feather"
 import { UseQueryResult } from "react-query"
-import AsyncSelect, { AsyncSelectProps } from "./form/AsyncSelect"
+import { useDebounce } from "../hooks/useDebounce"
 
 type ExtractArray<T> = T extends (infer U)[] ? U : T
 
 type SelectWithQueryProps<T> = {
-   query: () => UseQueryResult<T, AxiosError>
+   query: (props: Record<string, unknown>) => UseQueryResult<T, AxiosError>
    mapOptionsTo: { value: keyof ExtractArray<T>; label: keyof ExtractArray<T> }
-   onChange: (value: string) => void
+   onChange: (data: ExtractArray<T>) => void
    value?: string
-} & Omit<AsyncSelectProps, "onChange">
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function SelectWithQuery<T extends Record<keyof ExtractArray<T>, any>[]>({
+function SelectWithQuery<T extends Record<string, any>>({
    query,
    mapOptionsTo,
    onChange,
    value,
-   ...rest
 }: SelectWithQueryProps<T>) {
-   const { data, isLoading, isError } = query()
+   const [menuOpen, setMenuOpen] = useBoolean(false)
+   const [didSelect, setDidSelect] = useBoolean(false)
+   const [searchValue, setSearchValue] = useState("")
+   const debouncedSearchValue = useDebounce(searchValue, 500)
+   const firstButtonRef = useRef(null)
+
+   const { data, isLoading, isError, isRefetching } = query({
+      searchVal: debouncedSearchValue,
+      enabled: !!debouncedSearchValue,
+   })
+
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   function handleClick(selectVal: ExtractArray<T>) {
+      setSearchValue(selectVal[mapOptionsTo.label])
+      onChange(selectVal)
+      setMenuOpen.off()
+      setDidSelect.on()
+   }
+
+   useEffect(() => {
+      if (!didSelect && (!isLoading || !isRefetching) && !!debouncedSearchValue) {
+         setMenuOpen.on()
+      }
+   }, [debouncedSearchValue, didSelect, isLoading, isRefetching, setMenuOpen])
 
    return (
-      <AsyncSelect
-         isLoading={isLoading}
-         isError={isError}
-         onChange={e => onChange(e.target.value)}
-         value={value}
-         {...rest}
-      >
-         {data?.map(val => (
-            <option key={val[mapOptionsTo.value]} value={val[mapOptionsTo.value]}>
-               {val[mapOptionsTo.label]}
-            </option>
-         ))}
-      </AsyncSelect>
+      <Box>
+         <Popover
+            isOpen={menuOpen}
+            onClose={setMenuOpen.off}
+            gutter={5}
+            initialFocusRef={firstButtonRef}
+            autoFocus
+            matchWidth
+            closeOnEsc
+         >
+            <PopoverTrigger>
+               <InputGroup>
+                  <Input
+                     isInvalid={isError}
+                     _placeholder={{ color: "gray.500" }}
+                     placeholder="Buscar"
+                     bgColor="secondary"
+                     color="text"
+                     fontWeight="600"
+                     value={searchValue}
+                     onClick={e => e.currentTarget.select()}
+                     onChange={e => {
+                        setSearchValue(e.target.value)
+                        setDidSelect.off()
+                     }}
+                  />
+                  {(isLoading || isRefetching) && (
+                     <InputRightElement color="text" mr={3}>
+                        <Spinner />
+                     </InputRightElement>
+                  )}
+                  {isError && (
+                     <InputRightElement color="red.500" mr={3}>
+                        <AlertTriangle />
+                     </InputRightElement>
+                  )}
+               </InputGroup>
+            </PopoverTrigger>
+            <PopoverContent width="100%">
+               {data?.length ? (
+                  data.map((d: ExtractArray<T>, i: number) => (
+                     <Button
+                        ref={
+                           i === 0 && value !== d[mapOptionsTo.value] ? firstButtonRef : undefined
+                        }
+                        key={i}
+                        isFullWidth
+                        colorScheme={value === d[mapOptionsTo.value] ? "yellow" : "gray"}
+                        fontStyle={value === d[mapOptionsTo.value] ? "italic" : "normal"}
+                        disabled={value === d[mapOptionsTo.value]}
+                        fontWeight={value === d[mapOptionsTo.value] ? "600" : "400"}
+                        variant="ghost"
+                        justifyContent="flex-start"
+                        onClick={() => handleClick(d)}
+                     >
+                        {d[mapOptionsTo.label]}
+                     </Button>
+                  ))
+               ) : (
+                  <Button
+                     leftIcon={<Icon as={X} />}
+                     colorScheme="gray"
+                     disabled
+                     isFullWidth
+                     variant="ghost"
+                     justifyContent="flex-start"
+                     fontStyle="italic"
+                  >
+                     No se encontraron resultados
+                  </Button>
+               )}
+            </PopoverContent>
+         </Popover>
+      </Box>
    )
 }
 

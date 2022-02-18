@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { CommonForm, SelectOption } from "../../../shared/components/form"
 import { SelectWithQuery } from "../../../shared/components"
 import { useProductsQuery, useUpdateProductQuery } from "../queries"
@@ -8,10 +8,11 @@ import { useProvidersQuery } from "../../providers/queries"
 import { productFormRules } from "../formRules"
 import { useBoolean } from "@chakra-ui/react"
 import { ModifyButton } from "../../../shared/components/buttons"
+import { ProductWithProviderAndCategory } from "../domain"
 
 const UpdateProductForm: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean(false)
-   const [productId, setProductId] = useState("")
+   const [currentProduct, setCurrentProduct] = useState<ProductWithProviderAndCategory>()
 
    const { data: categoriesData, isLoading: isLoadingCategories } = useCategoriesQuery(isOpen)
    const { data: providersData, isLoading: isLoadingProviders } = useProvidersQuery(isOpen)
@@ -26,13 +27,6 @@ const UpdateProductForm: React.FC = () => {
       value: provider.id.toString(),
    }))
 
-   const { data } = useProductsQuery(isOpen)
-   const currentProduct = data?.find(product => product.code === productId)
-
-   useEffect(() => {
-      if (data) setProductId(data[0].code)
-   }, [data])
-
    return (
       <>
          <ModifyButton onClick={setIsOpen.on} />
@@ -40,8 +34,8 @@ const UpdateProductForm: React.FC = () => {
             title="Modificar Producto"
             submitText="Modificar"
             query={useUpdateProductQuery}
-            queryParams={productId}
-            disabled={!productId}
+            queryParams={currentProduct?.code}
+            disabled={!currentProduct}
             rules={productFormRules}
             isOpen={isOpen}
             onClose={setIsOpen.off}
@@ -57,11 +51,8 @@ const UpdateProductForm: React.FC = () => {
             <SelectWithQuery
                query={useProductsQuery}
                mapOptionsTo={{ label: "name", value: "code" }}
-               onChange={setProductId}
-               value={productId}
-               bgColor="secondary"
-               color="text"
-               fontWeight={600}
+               onChange={setCurrentProduct}
+               value={currentProduct?.code}
             />
          </CommonForm>
       </>

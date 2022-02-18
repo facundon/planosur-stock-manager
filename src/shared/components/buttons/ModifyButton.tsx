@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from "@chakra-ui/react"
-import { Upload } from "react-feather"
+import { Edit2 } from "react-feather"
 
 type ModifyButtonProps = ButtonProps
 
@@ -9,13 +9,13 @@ const ModifyButton: React.FC<ModifyButtonProps> = ({ onClick, ...rest }) => {
          variant="ghost"
          w="100%"
          onClick={onClick}
-         leftIcon={<Upload />}
+         leftIcon={<Edit2 />}
          iconSpacing={3}
          justifyContent="space-between"
          colorScheme="orange"
          {...rest}
       >
-         Actualizar
+         Editar
       </Button>
    )
 }

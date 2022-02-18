@@ -1,7 +1,7 @@
 import { AxiosError } from "axios"
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from "react-query"
 import { apiClient } from "../../shared/utils/apiClient"
-import { ProductFormDto, Product, ProductWithProviderAndCategory } from "./domain"
+import { ProductFormDto, Product, ProductWithProviderAndCategory, ProductFilters } from "./domain"
 import { PRODUCTS_KEYS } from "./queryKeys"
 
 export function useProductQuery(
@@ -13,13 +13,25 @@ export function useProductQuery(
    })
 }
 
-export function useProductsQuery(
-   enabled = true
-): UseQueryResult<ProductWithProviderAndCategory[], AxiosError> {
+export function useProductsQuery({
+   enabled = true,
+   ...filters
+}: ProductFilters & { enabled?: boolean }): UseQueryResult<
+   ProductWithProviderAndCategory[],
+   AxiosError
+> {
+   const filterList = Object.values(filters)
+
+   const query = Object.entries(filters)
+      .map(filter => `${filter[0]}=${filter[1]}`)
+      .join("&")
+
    return useQuery(
-      PRODUCTS_KEYS.base,
+      PRODUCTS_KEYS.filtered(filterList),
       async () => {
-         const response = await apiClient.get<ProductWithProviderAndCategory[]>("/products")
+         const response = await apiClient.get<ProductWithProviderAndCategory[]>(
+            `/products${query ? `?${query}` : ""}`
+         )
          return response.data
       },
       { enabled }

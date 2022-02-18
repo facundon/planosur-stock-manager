@@ -12,10 +12,10 @@ const AddButton: React.FC<AddButtonProps> = ({ onClick, ...rest }) => {
          leftIcon={<Plus />}
          iconSpacing={3}
          justifyContent="space-between"
-         {...rest}
          colorScheme="green"
+         {...rest}
       >
-         Agregar
+         Alta
       </Button>
    )
 }
