@@ -12,7 +12,7 @@ import {
    useBoolean,
 } from "@chakra-ui/react"
 import { AxiosError } from "axios"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { AlertTriangle, X } from "react-feather"
 import { UseQueryResult } from "react-query"
 import { useDebounce } from "../hooks/useDebounce"
@@ -37,19 +37,17 @@ function SelectWithQuery<T extends Record<string, any>>({
    const [didSelect, setDidSelect] = useBoolean(false)
    const [searchValue, setSearchValue] = useState("")
    const debouncedSearchValue = useDebounce(searchValue, 500)
-   const firstButtonRef = useRef(null)
 
    const { data, isLoading, isError, isRefetching } = query({
       searchVal: debouncedSearchValue,
-      enabled: !!debouncedSearchValue,
+      enabled: !didSelect && !!debouncedSearchValue,
    })
 
-   // eslint-disable-next-line @typescript-eslint/no-explicit-any
    function handleClick(selectVal: ExtractArray<T>) {
-      setSearchValue(selectVal[mapOptionsTo.label])
       onChange(selectVal)
       setMenuOpen.off()
       setDidSelect.on()
+      setSearchValue(selectVal[mapOptionsTo.label])
    }
 
    useEffect(() => {
@@ -64,8 +62,7 @@ function SelectWithQuery<T extends Record<string, any>>({
             isOpen={menuOpen}
             onClose={setMenuOpen.off}
             gutter={5}
-            initialFocusRef={firstButtonRef}
-            autoFocus
+            autoFocus={false}
             matchWidth
             closeOnEsc
          >
@@ -101,9 +98,6 @@ function SelectWithQuery<T extends Record<string, any>>({
                {data?.length ? (
                   data.map((d: ExtractArray<T>, i: number) => (
                      <Button
-                        ref={
-                           i === 0 && value !== d[mapOptionsTo.value] ? firstButtonRef : undefined
-                        }
                         key={i}
                         isFullWidth
                         colorScheme={value === d[mapOptionsTo.value] ? "yellow" : "gray"}

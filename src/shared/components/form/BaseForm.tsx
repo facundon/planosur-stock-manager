@@ -51,7 +51,7 @@ const BaseForm: React.FC<BaseFormProps> = ({
          <ModalOverlay />
          <ModalContent>
             <ModalHeader>{title}</ModalHeader>
-            <ModalCloseButton onClick={onClose} disabled={isLoading} />
+            <ModalCloseButton disabled={isLoading} tabIndex={-1} />
 
             <form onSubmit={onSubmit}>
                <ModalBody>
