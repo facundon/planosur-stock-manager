@@ -25,6 +25,7 @@
       "@emotion/react": "^11",
       "@emotion/styled": "^11",
       "axios": "^0.25.0",
+      "focus-visible": "^5.2.0",
       "framer-motion": "^5",
       "hookrouter": "^1.2.5",
       "react": "^17.0.2",

@@ -1,7 +1,34 @@
-import { extendTheme, ThemeConfig, withDefaultColorScheme } from "@chakra-ui/react"
+import { extendTheme, ThemeComponents, ThemeConfig, withDefaultColorScheme } from "@chakra-ui/react"
 
 const config: ThemeConfig = {
    initialColorMode: "dark",
+}
+
+const components: ThemeComponents = {
+   Input: {
+      defaultProps: {
+         focusBorderColor: "pink.400",
+      },
+   },
+   Select: {
+      defaultProps: {
+         focusBorderColor: "pink.400",
+      },
+   },
+   Button: {
+      baseStyle: {
+         _focus: {
+            boxShadow: "0 0 3px var(--chakra-colors-pink-400)",
+         },
+      },
+   },
+   AccordionButton: {
+      baseStyle: {
+         _focus: {
+            boxShadow: "0 0 3px var(--chakra-colors-pink-400)",
+         },
+      },
+   },
 }
 
 const theme = extendTheme(withDefaultColorScheme({ colorScheme: "yellow" }), {
@@ -34,25 +61,7 @@ const theme = extendTheme(withDefaultColorScheme({ colorScheme: "yellow" }), {
          },
       },
    },
-   components: {
-      Input: {
-         defaultProps: {
-            focusBorderColor: "pink.400",
-         },
-      },
-      Select: {
-         defaultProps: {
-            focusBorderColor: "pink.400",
-         },
-      },
-      /* Button: {
-         baseStyle: {
-            _focus: {
-               boxShadow: "outline",
-            },
-         },
-      }, */
-   },
+   components,
 })
 
 export default theme
