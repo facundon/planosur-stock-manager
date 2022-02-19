@@ -34,6 +34,7 @@ export type ProductFilters = {
    blankStockMax?: number
    blankStockMin?: number
    limit?: number
+   simple?: boolean
 }
 
 export type ProductWithProviderAndCategory = Product & {
@@ -44,5 +45,7 @@ export type ProductWithProviderAndCategory = Product & {
       name: Category["name"]
    }
 }
+
+export type ProductSimple = Pick<Product, "name" | "code">
 
 export type ProductFormDto = Omit<Product, "updatedAt" | "createdAt">

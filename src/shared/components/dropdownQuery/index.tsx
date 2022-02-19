@@ -15,7 +15,7 @@ import {
    useOutsideClick,
 } from "@chakra-ui/react"
 import { AxiosError } from "axios"
-import { useCallback, useMemo, useRef, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import { AlertTriangle, Edit3, X } from "react-feather"
 import { UseQueryResult } from "react-query"
 import { useRoveFocus } from "../../hooks"
@@ -26,8 +26,8 @@ type ExtractArray<T> = T extends (infer U)[] ? U : T
 type DropdownQueryProps<T> = {
    query: (props: Record<string, unknown>) => UseQueryResult<T, AxiosError>
    mapOptionsTo: { value: keyof ExtractArray<T>; label: keyof ExtractArray<T> }
-   onChange: (data: ExtractArray<T> | undefined) => void
-   value?: string
+   onChange: (value: string | undefined) => void
+   initSearchVal?: string
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,39 +35,36 @@ function DropdownQuery<T extends Record<string, any>>({
    query,
    mapOptionsTo,
    onChange,
-   value,
+   initSearchVal = "",
 }: DropdownQueryProps<T>) {
    const inputPlaceholderColor = useColorModeValue("gray.100", "gray.600")
    const [menuOpen, setMenuOpen] = useBoolean(false)
    const [queryEnabled, setQueryEnabled] = useBoolean(false)
    const [didSelect, setDidSelect] = useBoolean(false)
 
-   const [searchValue, setSearchValue] = useState("")
+   const [searchValue, setSearchValue] = useState(initSearchVal)
 
    const wrapperRef = useRef<HTMLDivElement>(null)
 
    const { data, isLoading, isError, isRefetching } = query({
-      searchVal: searchValue,
+      searchVal: searchValue.trim().toLowerCase(),
       enabled: queryEnabled && Boolean(searchValue),
+      simple: true,
    })
-   const filteredData = useMemo(
-      () => data?.filter((d: ExtractArray<T>) => value !== d[mapOptionsTo.value]),
-      [data, mapOptionsTo.value, value]
-   )
 
    const inputRef = useRef<HTMLInputElement>(null)
    const containerRef = useRef<HTMLDivElement>(null)
-   const [cursor, setCursor] = useRoveFocus(filteredData?.length, containerRef)
+   const [cursor, setCursor] = useRoveFocus(data?.length, containerRef)
 
    const handleClick = useCallback(
       (selectVal: ExtractArray<T>) => {
          setQueryEnabled.off()
          setMenuOpen.off()
          setDidSelect.on()
-         onChange(selectVal)
-         setSearchValue(selectVal[mapOptionsTo.label])
+         onChange(selectVal[mapOptionsTo.value])
+         setSearchValue(selectVal[mapOptionsTo.label].trim())
       },
-      [mapOptionsTo.label, onChange, setDidSelect, setMenuOpen, setQueryEnabled]
+      [mapOptionsTo.label, mapOptionsTo.value, onChange, setDidSelect, setMenuOpen, setQueryEnabled]
    )
 
    const handleBlur = useCallback(
@@ -159,8 +156,8 @@ function DropdownQuery<T extends Record<string, any>>({
             </PopoverTrigger>
             <PopoverContent width="100%">
                <Box ref={containerRef}>
-                  {filteredData?.length ? (
-                     filteredData.map((d: ExtractArray<T>, i: number) => (
+                  {data?.length ? (
+                     data.map((d: ExtractArray<T>, i: number) => (
                         <DropdownButton
                            key={i}
                            isFocus={cursor === i}

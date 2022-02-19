@@ -7,35 +7,46 @@ import {
    UseQueryResult,
 } from "react-query"
 import { apiClient } from "../../shared/utils/apiClient"
-import { ProductFormDto, ProductWithProviderAndCategory, ProductFilters } from "./domain"
+import {
+   ProductFormDto,
+   ProductWithProviderAndCategory,
+   ProductFilters,
+   ProductSimple,
+} from "./domain"
 import { PRODUCTS_KEYS } from "./queryKeys"
 
-export function useProductQuery(
-   code: string
-): UseQueryResult<ProductWithProviderAndCategory, AxiosError> {
-   return useQuery(PRODUCTS_KEYS.byCode(code), async () => {
-      const response = await apiClient.get<ProductWithProviderAndCategory>(`/products/${code}`)
-      return response.data
-   })
+export function useProductQuery({
+   code,
+   enabled,
+}: {
+   code: string | undefined
+   enabled?: boolean
+}): UseQueryResult<ProductWithProviderAndCategory, AxiosError> {
+   return useQuery(
+      PRODUCTS_KEYS.byCode(code),
+      async () => {
+         const response = await apiClient.get<ProductWithProviderAndCategory>(`/products/${code}`)
+         return response.data
+      },
+      { enabled }
+   )
 }
 
 export function useProductsQuery({
    enabled = true,
    ...filters
 }: ProductFilters & { enabled?: boolean }): UseQueryResult<
-   ProductWithProviderAndCategory[],
+   ProductWithProviderAndCategory[] | ProductSimple[],
    AxiosError
 > {
-   const filterList = Object.values(filters)
+   const queryKey = Object.entries(filters).map(filter => `${filter[0]}=${filter[1]}`)
 
-   const query = Object.entries(filters)
-      .map(filter => `${filter[0]}=${filter[1]}`)
-      .join("&")
+   const query = queryKey.join("&")
 
    return useQuery(
-      PRODUCTS_KEYS.filtered(filterList),
+      PRODUCTS_KEYS.filtered(queryKey),
       async () => {
-         const response = await apiClient.get<ProductWithProviderAndCategory[]>(
+         const response = await apiClient.get<ProductWithProviderAndCategory[] | ProductSimple[]>(
             `/products${query ? `?${query}` : ""}`
          )
          return response.data

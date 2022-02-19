@@ -1,21 +1,25 @@
 import { useState } from "react"
+import { useBoolean } from "@chakra-ui/react"
 import { CommonForm, SelectOption } from "../../../shared/components/form"
 import { DropdownQuery } from "../../../shared/components"
-import { useProductsQuery, useUpdateProductQuery } from "../queries"
+import { useProductQuery, useProductsQuery, useUpdateProductQuery } from "../queries"
 import { getProductFormFields } from "../formFields"
 import { useCategoriesQuery } from "../../categories/queries"
 import { useProvidersQuery } from "../../providers/queries"
 import { productFormRules } from "../formRules"
-import { useBoolean } from "@chakra-ui/react"
 import { ModifyButton } from "../../../shared/components/buttons"
-import { ProductWithProviderAndCategory } from "../domain"
 
 const UpdateProductForm: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean(false)
-   const [currentProduct, setCurrentProduct] = useState<ProductWithProviderAndCategory>()
+   const [currentProductCode, setCurrentProductCode] = useState<string>()
 
    const { data: categoriesData, isLoading: isLoadingCategories } = useCategoriesQuery(isOpen)
    const { data: providersData, isLoading: isLoadingProviders } = useProvidersQuery(isOpen)
+
+   const { data: currentProduct } = useProductQuery({
+      code: currentProductCode,
+      enabled: Boolean(currentProductCode),
+   })
 
    const categories = categoriesData?.map<SelectOption>(category => ({
       label: category.name,
@@ -29,7 +33,7 @@ const UpdateProductForm: React.FC = () => {
 
    function handleClose() {
       setIsOpen.off()
-      setCurrentProduct(undefined)
+      setCurrentProductCode(undefined)
    }
 
    return (
@@ -39,8 +43,8 @@ const UpdateProductForm: React.FC = () => {
             title="Editar Producto"
             submitText="Aplicar"
             query={useUpdateProductQuery}
-            queryParams={currentProduct?.code}
-            disabled={!currentProduct}
+            queryParams={currentProductCode}
+            disabled={!currentProductCode}
             rules={productFormRules}
             isOpen={isOpen}
             onClose={handleClose}
@@ -56,8 +60,7 @@ const UpdateProductForm: React.FC = () => {
             <DropdownQuery
                query={useProductsQuery}
                mapOptionsTo={{ label: "name", value: "code" }}
-               onChange={setCurrentProduct}
-               value={currentProduct?.code}
+               onChange={setCurrentProductCode}
             />
          </CommonForm>
       </>
