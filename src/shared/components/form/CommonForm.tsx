@@ -80,7 +80,7 @@ export default function CommonForm<T extends Record<string, unknown>, K>({
                      {field.map(subField => (
                         <FormField
                            key={subField.name as Path<T>}
-                           isLoading={isLoading}
+                           isLoading={isLoading || Boolean(disabled)}
                            error={
                               (errors[subField.name as Path<T>] as unknown as FieldError)?.message
                            }
@@ -95,7 +95,7 @@ export default function CommonForm<T extends Record<string, unknown>, K>({
             return (
                <FormField
                   key={field.name as Path<T>}
-                  isLoading={isLoading}
+                  isLoading={isLoading || Boolean(disabled)}
                   error={(errors[field.name as Path<T>] as unknown as FieldError)?.message}
                   data={field}
                   {...register(field.name as Path<T>, rules?.[field.name])}

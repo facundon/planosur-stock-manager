@@ -13,7 +13,7 @@ import {
    useOutsideClick,
 } from "@chakra-ui/react"
 import { AxiosError } from "axios"
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useMemo, useRef, useState } from "react"
 import { AlertTriangle, X } from "react-feather"
 import { UseQueryResult } from "react-query"
 import { useRoveFocus } from "../../hooks"
@@ -46,15 +46,14 @@ function DropdownQuery<T extends Record<string, any>>({
       searchVal: searchValue,
       enabled: queryEnabled && Boolean(searchValue),
    })
+   const filteredData = useMemo(
+      () => data?.filter((d: ExtractArray<T>) => value !== d[mapOptionsTo.value]),
+      [data, mapOptionsTo.value, value]
+   )
 
    const inputRef = useRef<HTMLInputElement>(null)
    const containerRef = useRef<HTMLDivElement>(null)
-   const [cursor, setCursor] = useRoveFocus(
-      data?.some((d: ExtractArray<T>) => value === d[mapOptionsTo.value])
-         ? data?.length - 1
-         : data?.length,
-      containerRef
-   )
+   const [cursor, setCursor] = useRoveFocus(filteredData?.length, containerRef)
 
    const handleClick = useCallback(
       (selectVal: ExtractArray<T>) => {
@@ -92,8 +91,7 @@ function DropdownQuery<T extends Record<string, any>>({
          ref={wrapperRef}
          onBlur={handleBlur}
          onKeyDown={e => {
-            if (e.key === "Escape") {
-               e.preventDefault()
+            if (e.key === "Escape" && menuOpen) {
                e.stopPropagation()
                setMenuOpen.off()
                inputRef.current?.select()
@@ -140,18 +138,20 @@ function DropdownQuery<T extends Record<string, any>>({
             </PopoverTrigger>
             <PopoverContent width="100%">
                <Box ref={containerRef}>
-                  {data?.length ? (
-                     data
-                        .filter((d: ExtractArray<T>) => value !== d[mapOptionsTo.value])
-                        .map((d: ExtractArray<T>, i: number) => (
-                           <DropdownButton
-                              key={i}
-                              isFocus={cursor === i}
-                              onClick={() => handleClick(d)}
-                           >
-                              {d[mapOptionsTo.label]}
-                           </DropdownButton>
-                        ))
+                  {filteredData?.length ? (
+                     filteredData.map((d: ExtractArray<T>, i: number) => (
+                        <DropdownButton
+                           key={i}
+                           isFocus={cursor === i}
+                           onClick={() => handleClick(d)}
+                        >
+                           {d[mapOptionsTo.label]}
+                        </DropdownButton>
+                     ))
+                  ) : data?.length ? (
+                     <DropdownButton isSelect isFocus={false}>
+                        {data[0][mapOptionsTo.label]}
+                     </DropdownButton>
                   ) : (
                      <Button
                         leftIcon={<Icon as={X} fontSize={20} />}

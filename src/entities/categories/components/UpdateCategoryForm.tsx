@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useQueryClient } from "react-query"
 import { CommonForm } from "../../../shared/components/form"
 import { useCategoriesQuery, useUpdateCategoryQuery } from "../queries"
@@ -18,9 +18,10 @@ const UpdateCategoryForm: React.FC = () => {
    const { data: categories } = useCategoriesQuery(isOpen)
    const currentCategory = categories?.find(category => category.id === +categoryId)
 
-   useEffect(() => {
-      if (categories) setCategoryId(categories[0].id.toString())
-   }, [categories])
+   function handleClose() {
+      setIsOpen.off()
+      setCategoryId("")
+   }
 
    return (
       <>
@@ -32,11 +33,10 @@ const UpdateCategoryForm: React.FC = () => {
             queryParams={+categoryId}
             onSuccess={() => {
                queryClient.invalidateQueries(CATEGORIES_KEYS.base)
-               setIsOpen.off()
             }}
             disabled={!categoryId}
             rules={categoryFormRules}
-            onClose={setIsOpen.off}
+            onClose={handleClose}
             isOpen={isOpen}
             fields={getCategoryFormFields({ initialValues: currentCategory })}
          >
@@ -46,6 +46,7 @@ const UpdateCategoryForm: React.FC = () => {
                bgColor="secondary"
                color="text"
                fontWeight={600}
+               withEmptyOption
             >
                {categories?.map(category => (
                   <option key={category.id} value={category.id}>
