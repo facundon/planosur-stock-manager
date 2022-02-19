@@ -1,4 +1,4 @@
-import { Box, Flex, useColorMode } from "@chakra-ui/react"
+import { Box, Flex } from "@chakra-ui/react"
 import { navigate } from "hookrouter"
 import { useEffect } from "react"
 import { useAuth } from "../../auth"

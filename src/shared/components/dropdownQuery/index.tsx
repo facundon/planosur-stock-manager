@@ -10,6 +10,7 @@ import {
    PopoverTrigger,
    Spinner,
    useBoolean,
+   useColorModeValue,
    useOutsideClick,
 } from "@chakra-ui/react"
 import { AxiosError } from "axios"
@@ -35,6 +36,7 @@ function DropdownQuery<T extends Record<string, any>>({
    onChange,
    value,
 }: DropdownQueryProps<T>) {
+   const inputPlaceholderColor = useColorModeValue("gray.200", "gray.600")
    const [menuOpen, setMenuOpen] = useBoolean(false)
    const [queryEnabled, setQueryEnabled] = useBoolean(false)
 
@@ -102,7 +104,7 @@ function DropdownQuery<T extends Record<string, any>>({
             <PopoverTrigger>
                <InputGroup>
                   <Input
-                     _placeholder={{ color: "gray.500" }}
+                     _placeholder={{ color: inputPlaceholderColor }}
                      isInvalid={isError}
                      ref={inputRef}
                      placeholder="Buscar"

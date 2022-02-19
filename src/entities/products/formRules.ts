@@ -14,27 +14,45 @@ export const productFormRules: Partial<Record<keyof ProductFormDto, RegisterOpti
       maxLength: { value: 25, message: "Máximo 25 caracteres" },
       required: { value: true, message: "Ingrese un código" },
    },
-   currentStock: {
+   blankStock: {
       min: { value: 0, message: "Mínimo 0" },
       max: { value: 1000, message: "Máximo 1000" },
       required: { value: true, message: "Ingrese el stock actual" },
       valueAsNumber: true,
    },
-   maxStock: {
+   blankMaxStock: {
       min: { value: 1, message: "Mínimo 1" },
       max: { value: 1000, message: "Máximo 1000" },
       required: { value: true, message: "Ingrese el stock máximo" },
       valueAsNumber: true,
    },
-   minStock: {
+   blankMinStock: {
+      min: { value: 0, message: "Mínimo 0" },
+      max: { value: 800, message: "Máximo 800" },
+      required: { value: true, message: "Ingrese el stock mínimo" },
+      valueAsNumber: true,
+   },
+   unregisteredStock: {
+      min: { value: 0, message: "Mínimo 0" },
+      max: { value: 1000, message: "Máximo 1000" },
+      required: { value: true, message: "Ingrese el stock actual" },
+      valueAsNumber: true,
+   },
+   unregisteredMaxStock: {
+      min: { value: 1, message: "Mínimo 1" },
+      max: { value: 1000, message: "Máximo 1000" },
+      required: { value: true, message: "Ingrese el stock máximo" },
+      valueAsNumber: true,
+   },
+   unregisteredMinStock: {
       min: { value: 0, message: "Mínimo 0" },
       max: { value: 800, message: "Máximo 800" },
       required: { value: true, message: "Ingrese el stock mínimo" },
       valueAsNumber: true,
    },
    price: {
-      min: { value: 1, message: "Mínimo 1" },
-      max: { value: 999999, message: "Máximo 999999" },
+      min: { value: 1, message: "Mínimo u$s 1" },
+      max: { value: 999999, message: "Máximo u$s 999999" },
       required: { value: true, message: "Ingrese el precio" },
    },
    qty: {

@@ -1,6 +1,11 @@
-import { extendTheme, withDefaultColorScheme } from "@chakra-ui/react"
+import { extendTheme, ThemeConfig, withDefaultColorScheme } from "@chakra-ui/react"
+
+const config: ThemeConfig = {
+   initialColorMode: "dark",
+}
 
 const theme = extendTheme(withDefaultColorScheme({ colorScheme: "yellow" }), {
+   config,
    semanticTokens: {
       colors: {
          error: {
