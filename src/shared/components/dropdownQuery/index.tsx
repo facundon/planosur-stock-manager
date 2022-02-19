@@ -13,10 +13,10 @@ import {
    useOutsideClick,
 } from "@chakra-ui/react"
 import { AxiosError } from "axios"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import { AlertTriangle, X } from "react-feather"
 import { UseQueryResult } from "react-query"
-import { useDebounce, useKeyPress, useRoveFocus } from "../../hooks"
+import { useRoveFocus } from "../../hooks"
 import { DropdownButton } from "./DropdownButton"
 
 type ExtractArray<T> = T extends (infer U)[] ? U : T
@@ -36,18 +36,15 @@ function DropdownQuery<T extends Record<string, any>>({
    value,
 }: DropdownQueryProps<T>) {
    const [menuOpen, setMenuOpen] = useBoolean(false)
-   const [didSelect, setDidSelect] = useBoolean(false)
-   const [shouldOpen, setShouldOpen] = useBoolean(false)
+   const [queryEnabled, setQueryEnabled] = useBoolean(false)
 
    const [searchValue, setSearchValue] = useState("")
-   const debouncedSearchValue = useDebounce(searchValue, 500)
 
    const wrapperRef = useRef<HTMLDivElement>(null)
-   const escapePress = useKeyPress("Escape", wrapperRef)
 
-   const { data, isLoading, isError, isRefetching, isSuccess } = query({
-      searchVal: debouncedSearchValue,
-      enabled: !didSelect && Boolean(debouncedSearchValue),
+   const { data, isLoading, isError, isRefetching } = query({
+      searchVal: searchValue,
+      enabled: queryEnabled && Boolean(searchValue),
    })
 
    const inputRef = useRef<HTMLInputElement>(null)
@@ -59,48 +56,51 @@ function DropdownQuery<T extends Record<string, any>>({
       containerRef
    )
 
-   function handleClick(selectVal: ExtractArray<T>) {
-      onChange(selectVal)
-      setMenuOpen.off()
-      setDidSelect.on()
-      setSearchValue(selectVal[mapOptionsTo.label])
-      inputRef.current?.focus()
-      setCursor(0)
-   }
-
-   useEffect(() => {
-      if (escapePress && menuOpen && shouldOpen) {
-         setShouldOpen.off()
+   const handleClick = useCallback(
+      (selectVal: ExtractArray<T>) => {
+         setQueryEnabled.off()
          setMenuOpen.off()
-         inputRef.current?.select()
-      }
-   }, [escapePress, setCursor, setMenuOpen, menuOpen, setShouldOpen, shouldOpen])
+         onChange(selectVal)
+         setSearchValue(selectVal[mapOptionsTo.label])
+         inputRef.current?.focus()
+      },
+      [mapOptionsTo.label, onChange, setMenuOpen, setQueryEnabled]
+   )
 
-   useEffect(() => {
-      if (!didSelect && isSuccess && Boolean(debouncedSearchValue) && !menuOpen && shouldOpen) {
-         setMenuOpen.on()
-      }
-   }, [debouncedSearchValue, didSelect, isSuccess, menuOpen, setMenuOpen, shouldOpen])
+   const handleBlur = useCallback(
+      e => {
+         const currentTarget = e.currentTarget
+         // Give browser time to focus the next element
+         requestAnimationFrame(() => {
+            // Check if the new focused element is a child of the original container
+            if (!currentTarget.contains(document.activeElement)) {
+               setMenuOpen.off()
+            }
+         })
+      },
+      [setMenuOpen]
+   )
 
    useOutsideClick({
       ref: wrapperRef,
       enabled: menuOpen,
-      handler: () => {
-         setShouldOpen.off()
-         setMenuOpen.off()
-      },
+      handler: setMenuOpen.off,
    })
 
    return (
-      <Box ref={wrapperRef}>
-         <Popover
-            isOpen={menuOpen}
-            gutter={5}
-            autoFocus={false}
-            matchWidth
-            isLazy
-            lazyBehavior="unmount"
-         >
+      <Box
+         ref={wrapperRef}
+         onBlur={handleBlur}
+         onKeyDown={e => {
+            if (e.key === "Escape") {
+               e.preventDefault()
+               e.stopPropagation()
+               setMenuOpen.off()
+               inputRef.current?.select()
+            }
+         }}
+      >
+         <Popover isOpen={menuOpen} gutter={5} autoFocus={false} matchWidth>
             <PopoverTrigger>
                <InputGroup>
                   <Input
@@ -113,14 +113,21 @@ function DropdownQuery<T extends Record<string, any>>({
                      fontWeight="600"
                      value={searchValue}
                      onClick={e => e.currentTarget.select()}
+                     onKeyPress={e => {
+                        if (e.key === "Enter") {
+                           setQueryEnabled.on()
+                           setMenuOpen.on()
+                           setCursor(0)
+                        }
+                     }}
                      onChange={e => {
                         setSearchValue(e.target.value)
-                        if (!shouldOpen) setShouldOpen.on()
-                        if (didSelect) setDidSelect.off()
+                        if (queryEnabled) setQueryEnabled.off()
+                        if (menuOpen) setMenuOpen.off()
                      }}
                   />
                   {(isLoading || isRefetching) && (
-                     <InputRightElement color="text" mr={3}>
+                     <InputRightElement color="text" mr={3} pointerEvents="none">
                         <Spinner />
                      </InputRightElement>
                   )}
@@ -139,9 +146,7 @@ function DropdownQuery<T extends Record<string, any>>({
                         .map((d: ExtractArray<T>, i: number) => (
                            <DropdownButton
                               key={i}
-                              index={i}
-                              focus={cursor === i}
-                              setFocus={setCursor}
+                              isFocus={cursor === i}
                               onClick={() => handleClick(d)}
                            >
                               {d[mapOptionsTo.label]}

@@ -31,8 +31,8 @@ const UpdateProductForm: React.FC = () => {
       <>
          <ModifyButton onClick={setIsOpen.on} />
          <CommonForm
-            title="Modificar Producto"
-            submitText="Modificar"
+            title="Editar Producto"
+            submitText="Aplicar"
             query={useUpdateProductQuery}
             queryParams={currentProduct?.code}
             disabled={!currentProduct}

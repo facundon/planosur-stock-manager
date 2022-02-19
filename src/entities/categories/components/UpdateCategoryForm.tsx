@@ -26,8 +26,8 @@ const UpdateCategoryForm: React.FC = () => {
       <>
          <ModifyButton onClick={setIsOpen.on} />
          <CommonForm
-            title="Modificar Categoría"
-            submitText="Modificar"
+            title="Editar Categoría"
+            submitText="Aplicar"
             query={useUpdateCategoryQuery}
             queryParams={+categoryId}
             onSuccess={() => {

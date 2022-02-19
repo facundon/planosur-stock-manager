@@ -26,8 +26,8 @@ const UpdateProviderForm: React.FC = () => {
       <>
          <ModifyButton onClick={setIsOpen.on} />
          <CommonForm
-            title="Modificar Proveedor"
-            submitText="Modificar"
+            title="Editar Proveedor"
+            submitText="Aplicar"
             query={useUpdateProviderQuery}
             queryParams={+providerId}
             onSuccess={() => queryClient.invalidateQueries(PROVIDERS_KEYS.base)}

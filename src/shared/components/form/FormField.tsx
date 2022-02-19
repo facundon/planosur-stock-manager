@@ -48,7 +48,12 @@ export const FormField = React.forwardRef<HTMLInputElement | HTMLSelectElement, 
                         {type === "email" && <AtSign strokeWidth={1} size={18} />}
                      </InputLeftElement>
                   )}
-                  <Input type={type} {...rest} ref={ref as React.ForwardedRef<HTMLInputElement>} />
+                  <Input
+                     type={type}
+                     {...rest}
+                     ref={ref as React.ForwardedRef<HTMLInputElement>}
+                     onClick={e => e.currentTarget.select()}
+                  />
                </InputGroup>
             )}
             <FormErrorMessage>{error}</FormErrorMessage>
