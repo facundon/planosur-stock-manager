@@ -18,9 +18,10 @@ const UpdateProviderForm: React.FC = () => {
    const { data: providers } = useProvidersQuery(isOpen)
    const currentProvider = providers?.find(provider => provider.id === +providerId)
 
-   useEffect(() => {
-      if (providers) setProviderId(providers[0].id.toString())
-   }, [providers])
+   function handleClose() {
+      setIsOpen.off()
+      setProviderId("")
+   }
 
    return (
       <>
@@ -34,7 +35,7 @@ const UpdateProviderForm: React.FC = () => {
             disabled={!providerId}
             rules={providerFormRules}
             isOpen={isOpen}
-            onClose={setIsOpen.off}
+            onClose={handleClose}
             fields={getProviderFormFields({ initialValues: currentProvider })}
          >
             <AsyncSelect
@@ -43,6 +44,7 @@ const UpdateProviderForm: React.FC = () => {
                bgColor="secondary"
                color="text"
                fontWeight={600}
+               withEmptyOption
             >
                {providers?.map(provider => (
                   <option key={provider.id} value={provider.id}>

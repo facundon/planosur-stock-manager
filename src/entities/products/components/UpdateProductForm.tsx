@@ -27,6 +27,11 @@ const UpdateProductForm: React.FC = () => {
       value: provider.id.toString(),
    }))
 
+   function handleClose() {
+      setIsOpen.off()
+      setCurrentProduct(undefined)
+   }
+
    return (
       <>
          <ModifyButton onClick={setIsOpen.on} />
@@ -38,8 +43,8 @@ const UpdateProductForm: React.FC = () => {
             disabled={!currentProduct}
             rules={productFormRules}
             isOpen={isOpen}
-            onClose={setIsOpen.off}
-            onSuccess={setIsOpen.off}
+            onClose={handleClose}
+            onSuccess={handleClose}
             fields={getProductFormFields({
                initialValues: currentProduct,
                optionFields: {

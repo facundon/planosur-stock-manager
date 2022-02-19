@@ -113,11 +113,11 @@ const DeleteModal: React.FC = () => {
                      <DropdownQuery
                         query={useProductsQuery}
                         mapOptionsTo={{ label: "name", value: "code" }}
-                        onChange={setRecordToDelete}
+                        onChange={product => setRecordToDelete(product.code)}
                      />
                   </TabPanel>
                   <TabPanel>
-                     <AsyncSelect onChange={e => setRecordToDelete(e.target.value)}>
+                     <AsyncSelect onChange={e => setRecordToDelete(e.target.value)} withEmptyOption>
                         {providers?.map(provider => (
                            <option key={provider.id} value={provider.id}>
                               {provider.name}
@@ -126,7 +126,7 @@ const DeleteModal: React.FC = () => {
                      </AsyncSelect>
                   </TabPanel>
                   <TabPanel>
-                     <AsyncSelect onChange={e => setRecordToDelete(e.target.value)}>
+                     <AsyncSelect onChange={e => setRecordToDelete(e.target.value)} withEmptyOption>
                         {categories?.map(category => (
                            <option key={category.id} value={category.id}>
                               {category.name}

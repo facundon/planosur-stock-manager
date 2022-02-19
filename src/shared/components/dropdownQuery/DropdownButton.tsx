@@ -3,10 +3,10 @@ import { useRef, useLayoutEffect } from "react"
 
 type DropdownButtonProps = {
    isFocus: boolean
-   isSelected?: boolean
+   isSelect?: boolean
 } & ButtonProps
 
-export function DropdownButton({ isFocus, isSelected, children, ...rest }: DropdownButtonProps) {
+export function DropdownButton({ isFocus, isSelect, children, ...rest }: DropdownButtonProps) {
    const ref = useRef<HTMLButtonElement>(null)
 
    useLayoutEffect(() => {
@@ -17,13 +17,13 @@ export function DropdownButton({ isFocus, isSelected, children, ...rest }: Dropd
 
    return (
       <Button
-         tabIndex={!isSelected && isFocus ? 0 : -1}
+         tabIndex={!isSelect && isFocus ? 0 : -1}
          isFullWidth
-         isActive={!isSelected && isFocus}
-         disabled={isSelected}
-         colorScheme={isSelected ? "yellow" : "gray"}
-         fontStyle={isSelected ? "italic" : "normal"}
-         fontWeight={isSelected ? "600" : "400"}
+         isActive={!isSelect && isFocus}
+         disabled={isSelect}
+         colorScheme={isSelect ? "yellow" : "gray"}
+         fontStyle={isSelect ? "italic" : "normal"}
+         fontWeight={isSelect ? "600" : "400"}
          variant="ghost"
          justifyContent="flex-start"
          ref={ref}
