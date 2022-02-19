@@ -1,7 +1,13 @@
 import { AxiosError } from "axios"
-import { useMutation, UseMutationResult, useQuery, UseQueryResult } from "react-query"
+import {
+   useMutation,
+   UseMutationResult,
+   useQuery,
+   useQueryClient,
+   UseQueryResult,
+} from "react-query"
 import { apiClient } from "../../shared/utils/apiClient"
-import { ProductFormDto, Product, ProductWithProviderAndCategory, ProductFilters } from "./domain"
+import { ProductFormDto, ProductWithProviderAndCategory, ProductFilters } from "./domain"
 import { PRODUCTS_KEYS } from "./queryKeys"
 
 export function useProductQuery(
@@ -40,23 +46,43 @@ export function useProductsQuery({
 
 export function useUpdateProductQuery(
    code: string
-): UseMutationResult<Product, AxiosError, ProductFormDto> {
-   return useMutation(async form => {
-      const response = await apiClient.patch<Product>(`/products/${code}`, form)
-      return response.data
-   })
+): UseMutationResult<ProductWithProviderAndCategory, AxiosError, ProductFormDto> {
+   const queryClient = useQueryClient()
+
+   return useMutation(
+      async form => {
+         const response = await apiClient.patch<ProductWithProviderAndCategory>(
+            `/products/${code}`,
+            form
+         )
+         return response.data
+      },
+      {
+         onSuccess: data => {
+            queryClient.setQueryData(PRODUCTS_KEYS.byCode(code), data)
+         },
+      }
+   )
 }
 
-export function useDeleteProductQuery(): UseMutationResult<Product, AxiosError, string> {
+export function useDeleteProductQuery(): UseMutationResult<
+   ProductWithProviderAndCategory,
+   AxiosError,
+   string
+> {
    return useMutation(async code => {
-      const response = await apiClient.delete<Product>(`/products/${code}`)
+      const response = await apiClient.delete<ProductWithProviderAndCategory>(`/products/${code}`)
       return response.data
    })
 }
 
-export function useAddProductQuery(): UseMutationResult<Product, AxiosError, ProductFormDto> {
+export function useAddProductQuery(): UseMutationResult<
+   ProductWithProviderAndCategory,
+   AxiosError,
+   ProductFormDto
+> {
    return useMutation(async form => {
-      const response = await apiClient.post<Product>("/products", form)
+      const response = await apiClient.post<ProductWithProviderAndCategory>("/products", form)
       return response.data
    })
 }

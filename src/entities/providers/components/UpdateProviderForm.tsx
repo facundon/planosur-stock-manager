@@ -41,8 +41,8 @@ const UpdateProviderForm: React.FC = () => {
             <AsyncSelect
                onChange={e => setProviderId(e.target.value)}
                value={providerId}
-               bgColor="secondary"
-               color="text"
+               bgColor="primary"
+               color="blackAlpha.900"
                fontWeight={600}
                withEmptyOption
             >

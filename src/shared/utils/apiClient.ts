@@ -5,7 +5,7 @@ export const JWT_KEY = "PS_JWT"
 
 const axiosClient = axios.create()
 
-axiosClient.defaults.baseURL = "http://localhost:3001"
+axiosClient.defaults.baseURL = (import.meta.env.VITE_API_URL as string) || "http://localhost:3001"
 
 axiosClient.defaults.headers.common = {
    Accept: "application/json",

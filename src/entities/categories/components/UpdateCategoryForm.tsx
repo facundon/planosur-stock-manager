@@ -31,9 +31,6 @@ const UpdateCategoryForm: React.FC = () => {
             submitText="Aplicar"
             query={useUpdateCategoryQuery}
             queryParams={+categoryId}
-            onSuccess={() => {
-               queryClient.invalidateQueries(CATEGORIES_KEYS.base)
-            }}
             disabled={!categoryId}
             rules={categoryFormRules}
             onClose={handleClose}
@@ -43,8 +40,8 @@ const UpdateCategoryForm: React.FC = () => {
             <AsyncSelect
                onChange={e => setCategoryId(e.target.value)}
                value={categoryId}
-               bgColor="secondary"
-               color="text"
+               bgColor="primary"
+               color="blackAlpha.900"
                fontWeight={600}
                withEmptyOption
             >
