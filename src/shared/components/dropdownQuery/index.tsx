@@ -2,6 +2,7 @@ import {
    Box,
    Button,
    Icon,
+   IconButton,
    Input,
    InputGroup,
    InputRightElement,
@@ -15,7 +16,7 @@ import {
 } from "@chakra-ui/react"
 import { AxiosError } from "axios"
 import { useCallback, useMemo, useRef, useState } from "react"
-import { AlertTriangle, X } from "react-feather"
+import { AlertTriangle, Edit3, X } from "react-feather"
 import { UseQueryResult } from "react-query"
 import { useRoveFocus } from "../../hooks"
 import { DropdownButton } from "./DropdownButton"
@@ -25,7 +26,7 @@ type ExtractArray<T> = T extends (infer U)[] ? U : T
 type DropdownQueryProps<T> = {
    query: (props: Record<string, unknown>) => UseQueryResult<T, AxiosError>
    mapOptionsTo: { value: keyof ExtractArray<T>; label: keyof ExtractArray<T> }
-   onChange: (data: ExtractArray<T>) => void
+   onChange: (data: ExtractArray<T> | undefined) => void
    value?: string
 }
 
@@ -36,9 +37,10 @@ function DropdownQuery<T extends Record<string, any>>({
    onChange,
    value,
 }: DropdownQueryProps<T>) {
-   const inputPlaceholderColor = useColorModeValue("gray.200", "gray.600")
+   const inputPlaceholderColor = useColorModeValue("gray.100", "gray.600")
    const [menuOpen, setMenuOpen] = useBoolean(false)
    const [queryEnabled, setQueryEnabled] = useBoolean(false)
+   const [didSelect, setDidSelect] = useBoolean(false)
 
    const [searchValue, setSearchValue] = useState("")
 
@@ -61,11 +63,11 @@ function DropdownQuery<T extends Record<string, any>>({
       (selectVal: ExtractArray<T>) => {
          setQueryEnabled.off()
          setMenuOpen.off()
+         setDidSelect.on()
          onChange(selectVal)
          setSearchValue(selectVal[mapOptionsTo.label])
-         inputRef.current?.focus()
       },
-      [mapOptionsTo.label, onChange, setMenuOpen, setQueryEnabled]
+      [mapOptionsTo.label, onChange, setDidSelect, setMenuOpen, setQueryEnabled]
    )
 
    const handleBlur = useCallback(
@@ -108,10 +110,11 @@ function DropdownQuery<T extends Record<string, any>>({
                      isInvalid={isError}
                      ref={inputRef}
                      placeholder="Buscar"
-                     bgColor="secondary"
-                     color="text"
+                     bgColor="primary"
+                     color="blackAlpha.900"
                      fontWeight="600"
                      value={searchValue}
+                     disabled={didSelect}
                      onClick={e => e.currentTarget.select()}
                      onKeyPress={e => {
                         if (e.key === "Enter") {
@@ -127,13 +130,29 @@ function DropdownQuery<T extends Record<string, any>>({
                      }}
                   />
                   {(isLoading || isRefetching) && (
-                     <InputRightElement color="text" mr={3} pointerEvents="none">
+                     <InputRightElement color="primaryContrast" mr={3} pointerEvents="none">
                         <Spinner />
                      </InputRightElement>
                   )}
                   {isError && (
                      <InputRightElement color="red.500" mr={3}>
                         <AlertTriangle />
+                     </InputRightElement>
+                  )}
+                  {(!isLoading || !isRefetching) && didSelect && (
+                     <InputRightElement>
+                        <IconButton
+                           aria-label="Editar"
+                           title="Editar"
+                           variant="link"
+                           color="primaryContrastDisabled"
+                           icon={<Edit3 />}
+                           onClick={() => {
+                              setDidSelect.off()
+                              onChange(undefined)
+                              setTimeout(() => inputRef.current?.select())
+                           }}
+                        />
                      </InputRightElement>
                   )}
                </InputGroup>

@@ -10,7 +10,7 @@
          "experimentalObjectRestSpread": true,
          "jsx": true
       },
-      "ecmaVersion": 2020,
+      "ecmaVersion": "latest",
       "sourceType": "module"
    },
    "extends": [
@@ -63,6 +63,6 @@
       "@typescript-eslint/consistent-type-definitions": [2, "type"],
       "@typescript-eslint/explicit-function-return-type": 0,
       "@typescript-eslint/no-unsafe-return": 0,
-      "@typescript-eslint/member-ordering": 2
+      "@typescript-eslint/member-ordering": 1
    }
 }

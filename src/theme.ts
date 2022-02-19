@@ -48,15 +48,23 @@ const theme = extendTheme(withDefaultColorScheme({ colorScheme: "yellow" }), {
             _dark: "orange.300",
          },
          primary: {
-            default: "red.500",
-            _dark: "red.400",
+            default: "yellow.400",
+            _dark: "yellow.300",
          },
          secondary: {
-            default: "yellow.500",
-            _dark: "yellow.400",
+            default: "teal.400",
+            _dark: "teal.300",
+         },
+         primaryContrast: {
+            default: "teal.500",
+            _dark: "teal.400",
+         },
+         primaryContrastDisabled: {
+            default: "teal.400",
+            _dark: "teal.300",
          },
          text: {
-            default: "whiteAlpha.900",
+            default: "blackAlpha.900",
             _dark: "blackAlpha.900",
          },
       },
