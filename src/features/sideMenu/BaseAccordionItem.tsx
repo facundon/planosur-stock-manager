@@ -4,7 +4,7 @@ import {
    AccordionPanel,
    Heading,
    Icon,
-   VStack,
+   Box,
 } from "@chakra-ui/react"
 import { Minus, Plus } from "react-feather"
 
@@ -15,18 +15,23 @@ export const BaseAccordionItem: React.FC<BaseAccordionItemProps> = ({ title, chi
       <AccordionItem>
          {({ isExpanded }) => (
             <>
-               <AccordionButton _expanded={{ bg: "red.100", color: "red.900" }} borderRadius={10}>
-                  <Heading flex="1" textAlign="left" size="md" my={1}>
-                     {title}
-                  </Heading>
+               <AccordionButton
+                  role="group"
+                  cursor="pointer"
+                  _expanded={{ bg: "yellow.100", color: "yellow.700" }}
+                  _hover={{ bg: "yellow: 700", color: "yellow.100" }}
+               >
                   {isExpanded ? (
-                     <Icon as={Minus} color="yellow.900" />
+                     <Icon as={Minus} color="yellow.700" />
                   ) : (
                      <Icon as={Plus} color="yellow.100" />
                   )}
+                  <Heading flex="1" ml={3} textAlign="left" size="md">
+                     {title}
+                  </Heading>
                </AccordionButton>
-               <AccordionPanel pb={4} w="100%">
-                  <VStack>{children}</VStack>
+               <AccordionPanel bg={isExpanded ? "gray.700" : undefined} pb={2} w="100%">
+                  <Box>{children}</Box>
                </AccordionPanel>
             </>
          )}

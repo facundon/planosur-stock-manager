@@ -1,12 +1,4 @@
-import {
-   FlexProps,
-   Flex,
-   Text,
-   useColorModeValue,
-   IconButton,
-   HStack,
-   Icon,
-} from "@chakra-ui/react"
+import { FlexProps, Flex, useColorModeValue, IconButton, HStack, Icon } from "@chakra-ui/react"
 import { Menu } from "react-feather"
 import { PlanosurLogo } from "../../shared/assets/PlanosurLogo"
 
