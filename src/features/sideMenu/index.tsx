@@ -1,58 +1,56 @@
-import { Accordion, Icon, Switch, useColorMode, VStack } from "@chakra-ui/react"
-import { AddCategoryForm } from "../../entities/categories/components/AddCategoryForm"
-import UpdateCategoryForm from "../../entities/categories/components/UpdateCategoryForm"
-import AddProductForm from "../../entities/products/components/AddProductForm"
-import UpdateProductForm from "../../entities/products/components/UpdateProductForm"
-import AddProviderForm from "../../entities/providers/components/AddProviderForm"
-import UpdateProviderForm from "../../entities/providers/components/UpdateProviderForm"
-import DeleteModal from "../DeleteModal"
-import BaseAccordionItem from "./BaseAccordionItem"
-import { PlanosurLogo } from "../../shared/assets/PlanosurLogo"
+import {
+   Box,
+   useColorModeValue,
+   Drawer,
+   DrawerContent,
+   useDisclosure,
+   DrawerFooter,
+   Switch,
+   useColorMode,
+} from "@chakra-ui/react"
+import { SidebarContent } from "./SidebarContent"
+import { MobileNav } from "./MobileNav"
 
-const SideMenu: React.FC = () => {
+export const SidebarWithHeader: React.FC = ({ children }) => {
    const { toggleColorMode, colorMode } = useColorMode()
+   const { isOpen, onOpen, onClose } = useDisclosure()
 
    return (
-      <VStack boxShadow="dark-lg" h="100%" px={1} minW="2xs">
-         <Icon
-            as={PlanosurLogo}
-            color="red.500"
-            my={6}
-            mx={6}
-            w="100%"
-            maxW={250}
-            h="auto"
-            flexShrink={1}
-         />
-         <Accordion allowToggle w="100%" flexGrow={1}>
-            <BaseAccordionItem title="Productos">
-               <AddProductForm />
-               <UpdateProductForm />
-            </BaseAccordionItem>
-            <BaseAccordionItem title="Proveedores">
-               <AddProviderForm />
-               <UpdateProviderForm />
-            </BaseAccordionItem>
-            <BaseAccordionItem title="Categorias">
-               <AddCategoryForm />
-               <UpdateCategoryForm />
-            </BaseAccordionItem>
-            <DeleteModal />
-         </Accordion>
-         <Switch
-            id="dark-mode"
-            colorScheme="teal"
-            onChange={toggleColorMode}
-            defaultChecked
-            checked={colorMode === "dark"}
-            alignSelf="flex-start"
-            pb={4}
-            pl={2}
+      <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
+         <SidebarContent onClose={() => onClose} display={{ base: "none", lg: "block" }} />
+         <Drawer
+            autoFocus={false}
+            isOpen={isOpen}
+            placement="left"
+            onClose={onClose}
+            returnFocusOnClose={false}
+            onOverlayClick={onClose}
+            size="full"
          >
-            Modo Oscuro
-         </Switch>
-      </VStack>
+            <DrawerContent>
+               <SidebarContent onClose={onClose} />
+            </DrawerContent>
+            <DrawerFooter>
+               <Switch
+                  id="dark-mode"
+                  colorScheme="teal"
+                  onChange={toggleColorMode}
+                  defaultChecked
+                  checked={colorMode === "dark"}
+                  alignSelf="flex-start"
+                  pb={4}
+                  pl={2}
+               >
+                  Modo Oscuro
+               </Switch>
+            </DrawerFooter>
+         </Drawer>
+
+         <MobileNav onOpen={onOpen} />
+
+         <Box ml={{ base: 0, lg: 60 }} p="4">
+            {children}
+         </Box>
+      </Box>
    )
 }
-
-export default SideMenu

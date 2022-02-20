@@ -10,7 +10,7 @@ import { Minus, Plus } from "react-feather"
 
 type BaseAccordionItemProps = { title: string }
 
-const BaseAccordionItem: React.FC<BaseAccordionItemProps> = ({ title, children }) => {
+export const BaseAccordionItem: React.FC<BaseAccordionItemProps> = ({ title, children }) => {
    return (
       <AccordionItem>
          {({ isExpanded }) => (
@@ -33,5 +33,3 @@ const BaseAccordionItem: React.FC<BaseAccordionItemProps> = ({ title, children }
       </AccordionItem>
    )
 }
-
-export default BaseAccordionItem

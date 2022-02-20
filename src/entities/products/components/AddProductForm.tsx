@@ -7,7 +7,7 @@ import { productFormRules } from "../formRules"
 import { useBoolean } from "@chakra-ui/react"
 import { AddButton } from "../../../shared/components/buttons"
 
-const AddProductForm: React.FC = () => {
+export const AddProductForm: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean(false)
    const { data: categoriesData, isLoading: isLoadingCategories } = useCategoriesQuery(isOpen)
    const { data: providersData, isLoading: isLoadingProviders } = useProvidersQuery(isOpen)
@@ -42,5 +42,3 @@ const AddProductForm: React.FC = () => {
       </>
    )
 }
-
-export default AddProductForm

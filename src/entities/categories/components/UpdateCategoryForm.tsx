@@ -1,19 +1,15 @@
 import { useState } from "react"
-import { useQueryClient } from "react-query"
 import { CommonForm } from "../../../shared/components/form"
 import { useCategoriesQuery, useUpdateCategoryQuery } from "../queries"
-import { CATEGORIES_KEYS } from "../queryKeys"
 import { getCategoryFormFields } from "../formFields"
 import { categoryFormRules } from "../formRules"
 import { useBoolean } from "@chakra-ui/react"
 import { ModifyButton } from "../../../shared/components/buttons"
 import AsyncSelect from "../../../shared/components/form/AsyncSelect"
 
-const UpdateCategoryForm: React.FC = () => {
+export const UpdateCategoryForm: React.FC = () => {
    const [categoryId, setCategoryId] = useState("")
    const [isOpen, setIsOpen] = useBoolean(false)
-
-   const queryClient = useQueryClient()
 
    const { data: categories } = useCategoriesQuery(isOpen)
    const currentCategory = categories?.find(category => category.id === +categoryId)
@@ -55,5 +51,3 @@ const UpdateCategoryForm: React.FC = () => {
       </>
    )
 }
-
-export default UpdateCategoryForm

@@ -5,7 +5,7 @@ import { providerFormRules } from "../formRules"
 import { useBoolean } from "@chakra-ui/react"
 import { AddButton } from "../../../shared/components/buttons"
 
-const AddProviderForm: React.FC = () => {
+export const AddProviderForm: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean(false)
 
    return (
@@ -23,5 +23,3 @@ const AddProviderForm: React.FC = () => {
       </>
    )
 }
-
-export default AddProviderForm

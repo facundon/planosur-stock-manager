@@ -1,19 +1,15 @@
 import { useState } from "react"
-import { useQueryClient } from "react-query"
 import { CommonForm } from "../../../shared/components/form"
 import { useProvidersQuery, useUpdateProviderQuery } from "../queries"
-import { PROVIDERS_KEYS } from "../queryKeys"
 import { getProviderFormFields } from "../formFields"
 import { providerFormRules } from "../formRules"
 import { useBoolean } from "@chakra-ui/react"
 import { ModifyButton } from "../../../shared/components/buttons"
 import AsyncSelect from "../../../shared/components/form/AsyncSelect"
 
-const UpdateProviderForm: React.FC = () => {
+export const UpdateProviderForm: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean(false)
    const [providerId, setProviderId] = useState("")
-
-   const queryClient = useQueryClient()
 
    const { data: providers } = useProvidersQuery(isOpen)
    const currentProvider = providers?.find(provider => provider.id === +providerId)
@@ -31,7 +27,6 @@ const UpdateProviderForm: React.FC = () => {
             submitText="Aplicar"
             query={useUpdateProviderQuery}
             queryParams={+providerId}
-            onSuccess={() => queryClient.invalidateQueries(PROVIDERS_KEYS.base)}
             disabled={!providerId}
             rules={providerFormRules}
             isOpen={isOpen}
@@ -56,5 +51,3 @@ const UpdateProviderForm: React.FC = () => {
       </>
    )
 }
-
-export default UpdateProviderForm

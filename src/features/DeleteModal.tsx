@@ -10,7 +10,7 @@ import { PROVIDERS_KEYS } from "../entities/providers/queryKeys"
 import { BaseForm, DropdownQuery } from "../shared/components"
 import AsyncSelect from "../shared/components/form/AsyncSelect"
 
-const DeleteModal: React.FC = () => {
+export const DeleteModal: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean()
    const [recordToDelete, setRecordToDelete] = useState("")
    const [tabIndex, setTabIndex] = useState(0)
@@ -140,5 +140,3 @@ const DeleteModal: React.FC = () => {
       </>
    )
 }
-
-export default DeleteModal

@@ -9,7 +9,7 @@ import { useProvidersQuery } from "../../providers/queries"
 import { productFormRules } from "../formRules"
 import { ModifyButton } from "../../../shared/components/buttons"
 
-const UpdateProductForm: React.FC = () => {
+export const UpdateProductForm: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean(false)
    const [currentProductCode, setCurrentProductCode] = useState<string>()
 
@@ -66,5 +66,3 @@ const UpdateProductForm: React.FC = () => {
       </>
    )
 }
-
-export default UpdateProductForm
