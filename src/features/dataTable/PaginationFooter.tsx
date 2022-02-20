@@ -26,10 +26,11 @@ export const PaginationFooter: React.FC<PaginationFooterProps> = ({
 }) => {
    return (
       <Flex align="center" width="fit-content" justifyContent="flex-end" grow={1}>
-         <Text fontSize="sm" mr={2}>
+         <Text display={{ base: "none", lg: "flex" }} fontSize="sm" mr={2}>
             Mostrando
          </Text>
          <Select
+            display={{ base: "none", lg: "flex" }}
             onChange={e => {
                onPageResize(+e.target.value)
             }}

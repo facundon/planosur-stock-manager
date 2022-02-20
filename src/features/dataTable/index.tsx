@@ -115,31 +115,47 @@ export function DataTable<T extends Record<string, unknown>[]>({
 
    return (
       <VStack display="block" maxW="100%" m="auto" boxShadow="dark-lg" p={5}>
-         <Box maxW="100%" overflowX="auto" overflowY="hidden" display="block">
+         <Box maxW="100%" maxH={{ base: "70vh", lg: "100vh" }} overflow="auto" display="block">
             <Table {...getTableProps()} w="100%" colorScheme="teal">
                <Thead>
                   {headerGroups.map(headerGroup => (
                      // eslint-disable-next-line react/jsx-key
-                     <Tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map(column => (
-                           // eslint-disable-next-line react/jsx-key
-                           <Th
-                              {...column.getHeaderProps(
-                                 column.getSortByToggleProps({ title: "Ordenar" })
-                              )}
-                           >
-                              <Text display="flex" align="center" alignItems="center">
-                                 {column.render("Header")}
-                                 {column.isSorted && (
-                                    <Icon
-                                       ml={1}
-                                       color="yellow.300"
-                                       as={column.isSortedDesc ? ArrowDown : ArrowUp}
-                                    />
+                     <Tr
+                        {...headerGroup.getHeaderGroupProps()}
+                        position="sticky"
+                        top={0}
+                        overflow="scroll"
+                        bg="gray.900"
+                        boxShadow="xl"
+                        zIndex="1"
+                     >
+                        {headerGroup.headers.map(column => {
+                           const isSticky = column.id === "code"
+                           return (
+                              // eslint-disable-next-line react/jsx-key
+                              <Th
+                                 {...column.getHeaderProps(
+                                    column.getSortByToggleProps({ title: "Ordenar" })
                                  )}
-                              </Text>
-                           </Th>
-                        ))}
+                                 backgroundClip="padding-box"
+                                 position={isSticky ? "sticky" : undefined}
+                                 left={isSticky ? 0 : undefined}
+                                 bg={isSticky ? "gray.900" : undefined}
+                                 boxShadow={isSticky ? "xl" : undefined}
+                              >
+                                 <Text display="flex" align="center" alignItems="center">
+                                    {column.render("Header")}
+                                    {column.isSorted && (
+                                       <Icon
+                                          ml={1}
+                                          color="yellow.300"
+                                          as={column.isSortedDesc ? ArrowDown : ArrowUp}
+                                       />
+                                    )}
+                                 </Text>
+                              </Th>
+                           )
+                        })}
                      </Tr>
                   ))}
                </Thead>
@@ -148,12 +164,17 @@ export function DataTable<T extends Record<string, unknown>[]>({
                      prepareRow(row)
                      return (
                         // eslint-disable-next-line react/jsx-key
-                        <Tr {...row.getRowProps()}>
+                        <Tr {...row.getRowProps()} border="none">
                            {row.cells.map(cell => {
+                              const isSticky = cell.column.id === "code"
                               return (
                                  // eslint-disable-next-line react/jsx-key
                                  <Td
                                     {...cell.getCellProps()}
+                                    position={isSticky ? "sticky" : undefined}
+                                    left={isSticky ? 0 : undefined}
+                                    bg={isSticky ? "gray.900" : undefined}
+                                    boxShadow={isSticky ? "xl" : undefined}
                                     whiteSpace="nowrap"
                                     textAlign={Number.isInteger(cell.value) ? "center" : "left"}
                                  >

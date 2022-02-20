@@ -30,7 +30,7 @@ export const SidebarContent: React.FC<SidebarContentProps> = ({ onClose, ...rest
          h="full"
          {...rest}
       >
-         <Flex my={5} mx={3} alignItems="center" justifyContent="space-between">
+         <Flex my={8} mx={4} alignItems="center" justifyContent="space-between">
             <Icon
                as={PlanosurLogo}
                color="red.500"
