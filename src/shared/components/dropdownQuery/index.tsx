@@ -19,9 +19,8 @@ import { useCallback, useRef, useState } from "react"
 import { AlertTriangle, Edit3, X } from "react-feather"
 import { UseQueryResult } from "react-query"
 import { useRoveFocus } from "../../hooks"
+import { ExtractArray } from "../../utils/types"
 import { DropdownButton } from "./DropdownButton"
-
-type ExtractArray<T> = T extends (infer U)[] ? U : T
 
 type DropdownQueryProps<T> = {
    query: (props: Record<string, unknown>) => UseQueryResult<T, AxiosError>

@@ -53,6 +53,7 @@ export const FormField = React.forwardRef<HTMLInputElement | HTMLSelectElement, 
                      {...rest}
                      ref={ref as React.ForwardedRef<HTMLInputElement>}
                      onClick={e => e.currentTarget.select()}
+                     step={0.01}
                   />
                </InputGroup>
             )}

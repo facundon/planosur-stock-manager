@@ -22,7 +22,7 @@
       "plugin:prettier/recommended"
    ],
    "plugins": ["@typescript-eslint/eslint-plugin", "react", "react-hooks", "prettier"],
-   "ignorePatterns": ["dist", "node_modules"],
+   "ignorePatterns": ["dist", "node_modules", "*.d.ts"],
    "settings": {
       "react": {
          "pragma": "React",

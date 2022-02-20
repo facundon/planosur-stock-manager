@@ -71,6 +71,7 @@ export function useUpdateProductQuery(
       {
          onSuccess: data => {
             queryClient.setQueryData(PRODUCTS_KEYS.byCode(code), data)
+            queryClient.invalidateQueries(PRODUCTS_KEYS.base)
          },
       }
    )
@@ -81,10 +82,22 @@ export function useDeleteProductQuery(): UseMutationResult<
    AxiosError,
    string
 > {
-   return useMutation(async code => {
-      const response = await apiClient.delete<ProductWithProviderAndCategory>(`/products/${code}`)
-      return response.data
-   })
+   const queryClient = useQueryClient()
+
+   return useMutation(
+      async code => {
+         const response = await apiClient.delete<ProductWithProviderAndCategory>(
+            `/products/${code}`
+         )
+         return response.data
+      },
+      {
+         onSuccess: (_, code) => {
+            queryClient.setQueryData(PRODUCTS_KEYS.byCode(code), () => undefined)
+            queryClient.invalidateQueries(PRODUCTS_KEYS.base)
+         },
+      }
+   )
 }
 
 export function useAddProductQuery(): UseMutationResult<
@@ -92,8 +105,17 @@ export function useAddProductQuery(): UseMutationResult<
    AxiosError,
    ProductFormDto
 > {
-   return useMutation(async form => {
-      const response = await apiClient.post<ProductWithProviderAndCategory>("/products", form)
-      return response.data
-   })
+   const queryClient = useQueryClient()
+
+   return useMutation(
+      async form => {
+         const response = await apiClient.post<ProductWithProviderAndCategory>("/products", form)
+         return response.data
+      },
+      {
+         onSuccess: () => {
+            queryClient.invalidateQueries(PRODUCTS_KEYS.base)
+         },
+      }
+   )
 }

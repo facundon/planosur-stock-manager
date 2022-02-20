@@ -9,7 +9,9 @@ import theme from "./theme"
 import { Global } from "@emotion/react"
 import "focus-visible/dist/focus-visible"
 
-const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: Infinity } } })
+const queryClient = new QueryClient({
+   defaultOptions: { queries: { staleTime: Infinity, notifyOnChangeProps: "tracked" } },
+})
 
 //@ts-expect-error emotion
 const globalStyles = css`

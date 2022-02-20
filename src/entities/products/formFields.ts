@@ -75,14 +75,14 @@ export function getProductFormFields(props?: {
       ],
       [
          {
-            initialValue: props?.initialValues?.currentStock || 0,
+            initialValue: props?.initialValues?.blankStock || 0,
             label: "Stock Capial",
             name: "blankStock",
             required: true,
             type: "number",
          },
          {
-            initialValue: props?.initialValues?.currentStock || 0,
+            initialValue: props?.initialValues?.unregisteredStock || 0,
             label: "Stock Provincia",
             name: "unregisteredStock",
             required: true,
