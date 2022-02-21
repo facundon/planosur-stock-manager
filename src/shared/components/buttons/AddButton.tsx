@@ -1,22 +1,14 @@
-import { Button, ButtonProps } from "@chakra-ui/react"
+import { ButtonProps } from "@chakra-ui/react"
 import { Plus } from "react-feather"
+import { SidebarButton } from "./SidebarButton"
 
 type AddButtonProps = ButtonProps
 
-const AddButton: React.FC<AddButtonProps> = ({ onClick, ...rest }) => {
+const AddButton: React.FC<AddButtonProps> = ({ ...rest }) => {
    return (
-      <Button
-         variant="ghost"
-         w="100%"
-         onClick={onClick}
-         leftIcon={<Plus />}
-         iconSpacing={3}
-         justifyContent="space-between"
-         colorScheme="green"
-         {...rest}
-      >
+      <SidebarButton leftIcon={<Plus />} colorScheme="green" {...rest}>
          Alta
-      </Button>
+      </SidebarButton>
    )
 }
 

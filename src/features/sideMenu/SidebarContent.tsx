@@ -45,6 +45,8 @@ export const SidebarContent: React.FC<SidebarContentProps> = ({ onClose, ...rest
             <CloseButton display={{ base: "flex", lg: "none" }} onClick={onClose} />
          </Flex>
          <Accordion allowToggle w="100%" flexGrow={1}>
+            <SalesForm />
+            <DeleteModal />
             <BaseAccordionItem title="Productos">
                <AddProductForm />
                <UpdateProductForm />
@@ -57,8 +59,6 @@ export const SidebarContent: React.FC<SidebarContentProps> = ({ onClose, ...rest
                <AddCategoryForm />
                <UpdateCategoryForm />
             </BaseAccordionItem>
-            <DeleteModal />
-            <SalesForm />
          </Accordion>
       </Box>
    )

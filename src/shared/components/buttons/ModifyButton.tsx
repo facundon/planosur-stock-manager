@@ -1,22 +1,14 @@
-import { Button, ButtonProps } from "@chakra-ui/react"
+import { ButtonProps } from "@chakra-ui/react"
 import { Edit2 } from "react-feather"
+import { SidebarButton } from "./SidebarButton"
 
 type ModifyButtonProps = ButtonProps
 
-const ModifyButton: React.FC<ModifyButtonProps> = ({ onClick, ...rest }) => {
+const ModifyButton: React.FC<ModifyButtonProps> = ({ ...rest }) => {
    return (
-      <Button
-         variant="ghost"
-         w="100%"
-         onClick={onClick}
-         leftIcon={<Edit2 />}
-         iconSpacing={3}
-         justifyContent="space-between"
-         colorScheme="orange"
-         {...rest}
-      >
+      <SidebarButton leftIcon={<Edit2 />} colorScheme="orange" {...rest}>
          Editar
-      </Button>
+      </SidebarButton>
    )
 }
 

@@ -8,6 +8,7 @@ import {
    IconButton,
    Input,
    InputGroup,
+   InputLeftElement,
    InputProps,
    InputRightElement,
    Popover,
@@ -20,7 +21,7 @@ import {
 } from "@chakra-ui/react"
 import { AxiosError } from "axios"
 import { useCallback, useRef, useState } from "react"
-import { AlertTriangle, Edit3, X } from "react-feather"
+import { AlertTriangle, Edit3, Search, X } from "react-feather"
 import { UseQueryResult } from "react-query"
 import { useRoveFocus } from "../../hooks"
 import { ExtractArray } from "../../utils/types"
@@ -118,6 +119,9 @@ function DropdownQuery<T extends Record<string, any>>({
                <FormControl isRequired={isRequired}>
                   {label && <FormLabel>{label}</FormLabel>}
                   <InputGroup>
+                     <InputLeftElement h="100%" color="gray.400">
+                        <Search size={inputProps?.size === "sm" ? "16" : undefined} />
+                     </InputLeftElement>
                      <Input
                         {...inputProps}
                         _placeholder={{ color: inputPlaceholderColor }}

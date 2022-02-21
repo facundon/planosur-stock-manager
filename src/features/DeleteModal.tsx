@@ -114,11 +114,6 @@ export const DeleteModal: React.FC = () => {
                         query={useProductsQuery}
                         mapOptionsTo={{ label: "name", value: "code" }}
                         onChange={value => setRecordToDelete(value || "")}
-                        inputProps={{
-                           bgColor: "primary",
-                           color: "blackAlpha.900",
-                           fontWeight: "600",
-                        }}
                      />
                   </TabPanel>
                   <TabPanel>
