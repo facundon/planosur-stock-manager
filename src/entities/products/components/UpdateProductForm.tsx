@@ -61,6 +61,7 @@ export const UpdateProductForm: React.FC = () => {
                query={useProductsQuery}
                mapOptionsTo={{ label: "name", value: "code" }}
                onChange={setCurrentProductCode}
+               inputProps={{ bgColor: "primary", color: "blackAlpha.900", fontWeight: "600" }}
             />
          </CommonForm>
       </>

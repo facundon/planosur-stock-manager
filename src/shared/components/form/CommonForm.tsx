@@ -17,6 +17,7 @@ export default function CommonForm<T extends Record<string, unknown>, K>({
    isOpen,
    disabled,
    children,
+   ...rest
 }: PropsWithChildren<CommonFormProps<T, K>>) {
    const {
       mutate: sendToServer,
@@ -71,6 +72,7 @@ export default function CommonForm<T extends Record<string, unknown>, K>({
          submitProps={{ disabled: disabled || !Object.values(dirtyFields).some(v => v) }}
          title={title}
          isLoading={isLoading}
+         {...rest}
       >
          {children}
          {fields.map(field => {

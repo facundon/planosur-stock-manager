@@ -29,14 +29,7 @@ export function DataTable<T extends Record<string, unknown>[]>({
                      )
 
                   case "price":
-                     return (
-                        <Text display="flex" justifyContent="space-between">
-                           <Text as="span" mr={5}>
-                              u$s
-                           </Text>
-                           {value}
-                        </Text>
-                     )
+                     return <Text textAlign="right">{value}</Text>
 
                   case "updatedAt":
                   case "orderedAt":

@@ -36,8 +36,10 @@ const BaseForm: React.FC<BaseFormProps> = ({
    submitProps,
    onSubmit,
    children,
+   size = "xl",
    ...rest
 }) => {
+   const id = `form_${Math.random()}`
    return (
       <Modal
          {...rest}
@@ -46,15 +48,16 @@ const BaseForm: React.FC<BaseFormProps> = ({
          autoFocus
          closeOnEsc
          closeOnOverlayClick={false}
-         size={"xl"}
+         scrollBehavior="inside"
+         size={size}
       >
          <ModalOverlay />
          <ModalContent>
             <ModalHeader>{title}</ModalHeader>
             <ModalCloseButton disabled={isLoading} tabIndex={-1} />
 
-            <form onSubmit={onSubmit}>
-               <ModalBody>
+            <ModalBody>
+               <form onSubmit={onSubmit} id={id}>
                   <VStack spacing={5} align="stretch">
                      {children}
                   </VStack>
@@ -64,31 +67,32 @@ const BaseForm: React.FC<BaseFormProps> = ({
                         <Text mt={3}>{error}</Text>
                      </Box>
                   )}
-               </ModalBody>
+               </form>
+            </ModalBody>
 
-               <ModalFooter mt={2}>
-                  <ButtonGroup spacing={4}>
-                     <Button
-                        colorScheme="grey"
-                        variant="outline"
-                        onClick={onClose}
-                        disabled={isLoading}
-                     >
-                        Cancelar
-                     </Button>
-                     <Button
-                        type="submit"
-                        {...submitProps}
-                        isLoading={isLoading}
-                        iconSpacing={3}
-                        spinnerPlacement="end"
-                        loadingText="Solicitando"
-                     >
-                        {submitText}
-                     </Button>
-                  </ButtonGroup>
-               </ModalFooter>
-            </form>
+            <ModalFooter mt={2}>
+               <ButtonGroup spacing={4}>
+                  <Button
+                     colorScheme="grey"
+                     variant="outline"
+                     onClick={onClose}
+                     disabled={isLoading}
+                  >
+                     Cancelar
+                  </Button>
+                  <Button
+                     type="submit"
+                     {...submitProps}
+                     isLoading={isLoading}
+                     iconSpacing={3}
+                     spinnerPlacement="end"
+                     loadingText="Solicitando"
+                     form={id}
+                  >
+                     {submitText}
+                  </Button>
+               </ButtonGroup>
+            </ModalFooter>
          </ModalContent>
       </Modal>
    )

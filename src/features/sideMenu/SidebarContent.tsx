@@ -13,6 +13,7 @@ import { AddCategoryForm, UpdateCategoryForm } from "../../entities/categories/c
 import { AddProductForm, UpdateProductForm } from "../../entities/products/components"
 import { AddProviderForm, UpdateProviderForm } from "../../entities/providers/components"
 import { DeleteModal } from "../DeleteModal"
+import { SalesForm } from "../salesForm"
 
 type SidebarContentProps = {
    onClose: () => void
@@ -57,6 +58,7 @@ export const SidebarContent: React.FC<SidebarContentProps> = ({ onClose, ...rest
                <UpdateCategoryForm />
             </BaseAccordionItem>
             <DeleteModal />
+            <SalesForm />
          </Accordion>
       </Box>
    )
