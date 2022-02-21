@@ -41,7 +41,7 @@ export default function CommonForm<T extends Record<string, unknown>, K>({
       formState: { errors, dirtyFields },
       reset: resetForm,
       resetField,
-   } = useForm<T>({ defaultValues })
+   } = useForm<T>({ defaultValues, shouldFocusError: true })
 
    useEffect(() => {
       fields.flat().forEach(field => {

@@ -2,7 +2,7 @@ import { StockType } from "../../entities/products/domain"
 
 export type SaleProduct = {
    code: string
-   qty: number
+   amount: number
    type: StockType
 }
 

@@ -3,6 +3,7 @@ import {
    BoxProps,
    Button,
    FormControl,
+   FormErrorMessage,
    FormLabel,
    Icon,
    IconButton,
@@ -20,7 +21,7 @@ import {
    useOutsideClick,
 } from "@chakra-ui/react"
 import { AxiosError } from "axios"
-import { useCallback, useRef, useState } from "react"
+import React, { forwardRef, useCallback, useRef, useState } from "react"
 import { AlertTriangle, Edit3, Search, X } from "react-feather"
 import { UseQueryResult } from "react-query"
 import { useRoveFocus } from "../../hooks"
@@ -37,20 +38,25 @@ type DropdownQueryProps<T> = {
    isDisabled?: boolean
    isRequired?: boolean
    label?: string
+   error?: string
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function DropdownQuery<T extends Record<string, any>>({
-   query,
-   mapOptionsTo,
-   onChange,
-   inputProps,
-   wrapperProps,
-   isDisabled,
-   isRequired,
-   label,
-   initSearchVal = "",
-}: DropdownQueryProps<T>) {
+function DropdownQueryWithoutRef<T extends Record<string, any>>(
+   {
+      query,
+      mapOptionsTo,
+      onChange,
+      inputProps,
+      wrapperProps,
+      isDisabled,
+      isRequired,
+      label,
+      error,
+      initSearchVal = "",
+   }: DropdownQueryProps<T>,
+   ref: React.RefCallback<HTMLInputElement | null>
+) {
    const inputPlaceholderColor = useColorModeValue("gray.100", "gray.600")
    const [menuOpen, setMenuOpen] = useBoolean(false)
    const [queryEnabled, setQueryEnabled] = useBoolean(false)
@@ -59,14 +65,13 @@ function DropdownQuery<T extends Record<string, any>>({
    const [searchValue, setSearchValue] = useState(initSearchVal)
 
    const wrapperRef = useRef<HTMLDivElement>(null)
-
    const { data, isLoading, isError, isRefetching } = query({
       searchVal: searchValue.trim().toLowerCase(),
       enabled: queryEnabled && Boolean(searchValue),
       simple: true,
    })
 
-   const inputRef = useRef<HTMLInputElement>(null)
+   const inputRef = useRef<HTMLInputElement | null>(null)
    const containerRef = useRef<HTMLDivElement>(null)
    const [cursor, setCursor] = useRoveFocus(data?.length, containerRef)
 
@@ -116,10 +121,10 @@ function DropdownQuery<T extends Record<string, any>>({
       >
          <Popover isOpen={menuOpen} gutter={5} autoFocus={false} matchWidth>
             <PopoverTrigger>
-               <FormControl isRequired={isRequired}>
+               <FormControl isRequired={isRequired} isInvalid={!!error}>
                   {label && <FormLabel>{label}</FormLabel>}
                   <InputGroup>
-                     <InputLeftElement h="100%" color="gray.400">
+                     <InputLeftElement h="100%" color="gray.400" pointerEvents="none">
                         <Search size={inputProps?.size === "sm" ? "16" : undefined} />
                      </InputLeftElement>
                      <Input
@@ -127,14 +132,19 @@ function DropdownQuery<T extends Record<string, any>>({
                         _placeholder={{ color: inputPlaceholderColor }}
                         isInvalid={isError}
                         isTruncated
-                        ref={inputRef}
+                        ref={_ref => {
+                           if (ref) {
+                              ref(_ref)
+                              inputRef.current = _ref
+                           }
+                        }}
                         placeholder="Buscar"
                         type="search"
                         value={searchValue}
                         disabled={didSelect}
                         onClick={e => e.currentTarget.select()}
                         onKeyPress={e => {
-                           if (e.key === "Enter") {
+                           if (e.key === "Enter" && Boolean(searchValue)) {
                               e.preventDefault()
                               e.stopPropagation()
                               setQueryEnabled.on()
@@ -149,17 +159,12 @@ function DropdownQuery<T extends Record<string, any>>({
                         }}
                      />
                      {(isLoading || isRefetching) && (
-                        <InputRightElement
-                           h="100%"
-                           color="primaryContrast"
-                           mr={1}
-                           pointerEvents="none"
-                        >
+                        <InputRightElement h="100%" color="primaryContrast" mr={1}>
                            <Spinner size={inputProps?.size} />
                         </InputRightElement>
                      )}
                      {isError && (
-                        <InputRightElement h="100%" color="red.500" mr={1}>
+                        <InputRightElement h="100%" color="red.500" mr={1} pointerEvents="none">
                            <AlertTriangle size={inputProps?.size === "sm" ? "16" : undefined} />
                         </InputRightElement>
                      )}
@@ -181,6 +186,7 @@ function DropdownQuery<T extends Record<string, any>>({
                         </InputRightElement>
                      )}
                   </InputGroup>
+                  <FormErrorMessage>{error}</FormErrorMessage>
                </FormControl>
             </PopoverTrigger>
             <PopoverContent w="100%">
@@ -220,4 +226,5 @@ function DropdownQuery<T extends Record<string, any>>({
    )
 }
 
-export default DropdownQuery
+//@ts-expect-error forward ref typings
+export const DropdownQuery = forwardRef(DropdownQueryWithoutRef)
