@@ -3,7 +3,9 @@ import { Provider } from "../providers/domain"
 
 export type Unit = "g" | "kg" | "lt" | "ml"
 
-export type StockLevel = "Alto" | "Medio" | "Bajo"
+export type StockLevel = "high" | "medium" | "low"
+
+export type StockType = "blank" | "unregistered"
 
 export type Product = {
    code: string

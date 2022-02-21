@@ -27,7 +27,7 @@ const HomePage: React.FC = () => {
                      { value: "Nombre", accessor: "name" },
                      { value: "Cantidad", accessor: "qty" },
                      { value: "Unidad", accessor: "unit" },
-                     { value: "Precio", accessor: "price" },
+                     { value: "Precio [u$S]", accessor: "price" },
                      { value: "Proveedor", accessor: "provider" },
                      { value: "Categoría", accessor: "category" },
                      { value: "Fue pedido", accessor: "didOrder" },

@@ -1,10 +1,14 @@
 import {
    Box,
+   BoxProps,
    Button,
+   FormControl,
+   FormLabel,
    Icon,
    IconButton,
    Input,
    InputGroup,
+   InputProps,
    InputRightElement,
    Popover,
    PopoverContent,
@@ -27,6 +31,11 @@ type DropdownQueryProps<T> = {
    mapOptionsTo: { value: keyof ExtractArray<T>; label: keyof ExtractArray<T> }
    onChange: (value: string | undefined) => void
    initSearchVal?: string
+   inputProps?: InputProps
+   wrapperProps?: BoxProps
+   isDisabled?: boolean
+   isRequired?: boolean
+   label?: string
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -34,6 +43,11 @@ function DropdownQuery<T extends Record<string, any>>({
    query,
    mapOptionsTo,
    onChange,
+   inputProps,
+   wrapperProps,
+   isDisabled,
+   isRequired,
+   label,
    initSearchVal = "",
 }: DropdownQueryProps<T>) {
    const inputPlaceholderColor = useColorModeValue("gray.100", "gray.600")
@@ -97,63 +111,75 @@ function DropdownQuery<T extends Record<string, any>>({
                inputRef.current?.select()
             }
          }}
+         {...wrapperProps}
       >
          <Popover isOpen={menuOpen} gutter={5} autoFocus={false} matchWidth>
             <PopoverTrigger>
-               <InputGroup>
-                  <Input
-                     _placeholder={{ color: inputPlaceholderColor }}
-                     isInvalid={isError}
-                     ref={inputRef}
-                     placeholder="Buscar"
-                     bgColor="primary"
-                     color="blackAlpha.900"
-                     fontWeight="600"
-                     value={searchValue}
-                     disabled={didSelect}
-                     onClick={e => e.currentTarget.select()}
-                     onKeyPress={e => {
-                        if (e.key === "Enter") {
-                           setQueryEnabled.on()
-                           setMenuOpen.on()
-                           setCursor(0)
-                        }
-                     }}
-                     onChange={e => {
-                        setSearchValue(e.target.value)
-                        if (queryEnabled) setQueryEnabled.off()
-                        if (menuOpen) setMenuOpen.off()
-                     }}
-                  />
-                  {(isLoading || isRefetching) && (
-                     <InputRightElement color="primaryContrast" mr={3} pointerEvents="none">
-                        <Spinner />
-                     </InputRightElement>
-                  )}
-                  {isError && (
-                     <InputRightElement color="red.500" mr={3}>
-                        <AlertTriangle />
-                     </InputRightElement>
-                  )}
-                  {(!isLoading || !isRefetching) && didSelect && (
-                     <InputRightElement>
-                        <IconButton
-                           aria-label="Editar"
-                           title="Editar"
-                           variant="link"
-                           color="primaryContrastDisabled"
-                           icon={<Edit3 />}
-                           onClick={() => {
-                              setDidSelect.off()
-                              onChange(undefined)
-                              setTimeout(() => inputRef.current?.select())
-                           }}
-                        />
-                     </InputRightElement>
-                  )}
-               </InputGroup>
+               <FormControl isRequired={isRequired}>
+                  {label && <FormLabel>{label}</FormLabel>}
+                  <InputGroup>
+                     <Input
+                        {...inputProps}
+                        _placeholder={{ color: inputPlaceholderColor }}
+                        isInvalid={isError}
+                        isTruncated
+                        ref={inputRef}
+                        placeholder="Buscar"
+                        type="search"
+                        value={searchValue}
+                        disabled={didSelect}
+                        onClick={e => e.currentTarget.select()}
+                        onKeyPress={e => {
+                           if (e.key === "Enter") {
+                              e.preventDefault()
+                              e.stopPropagation()
+                              setQueryEnabled.on()
+                              setMenuOpen.on()
+                              setCursor(0)
+                           }
+                        }}
+                        onChange={e => {
+                           setSearchValue(e.target.value)
+                           if (queryEnabled) setQueryEnabled.off()
+                           if (menuOpen) setMenuOpen.off()
+                        }}
+                     />
+                     {(isLoading || isRefetching) && (
+                        <InputRightElement
+                           h="100%"
+                           color="primaryContrast"
+                           mr={1}
+                           pointerEvents="none"
+                        >
+                           <Spinner size={inputProps?.size} />
+                        </InputRightElement>
+                     )}
+                     {isError && (
+                        <InputRightElement h="100%" color="red.500" mr={1}>
+                           <AlertTriangle size={inputProps?.size === "sm" ? "16" : undefined} />
+                        </InputRightElement>
+                     )}
+                     {(!isLoading || !isRefetching) && didSelect && (
+                        <InputRightElement h="100%">
+                           <IconButton
+                              isDisabled={isDisabled}
+                              aria-label="Editar"
+                              title="Editar"
+                              variant="link"
+                              color="primaryContrastDisabled"
+                              icon={<Edit3 size={inputProps?.size === "sm" ? "16" : undefined} />}
+                              onClick={() => {
+                                 setDidSelect.off()
+                                 onChange(undefined)
+                                 setTimeout(() => inputRef.current?.select())
+                              }}
+                           />
+                        </InputRightElement>
+                     )}
+                  </InputGroup>
+               </FormControl>
             </PopoverTrigger>
-            <PopoverContent width="100%">
+            <PopoverContent w="100%">
                <Box ref={containerRef}>
                   {data?.length ? (
                      data.map((d: ExtractArray<T>, i: number) => (

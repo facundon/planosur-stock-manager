@@ -17,6 +17,7 @@ export function DropdownButton({ isFocus, isSelect, children, ...rest }: Dropdow
 
    return (
       <Button
+         _active={{ bg: "yellow.200", color: "yellow.800" }}
          tabIndex={!isSelect && isFocus ? 0 : -1}
          isFullWidth
          isActive={!isSelect && isFocus}

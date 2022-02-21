@@ -1,3 +1,4 @@
+import { FormControlProps, InputProps, ModalProps, SelectProps } from "@chakra-ui/react"
 import { RegisterOptions, UnpackNestedValue, UseFormRegisterReturn } from "react-hook-form"
 import { UseMutationResult } from "react-query"
 
@@ -25,11 +26,14 @@ export type CommonFormProps<T, K> = {
    onSuccess?: () => void
    onClose: () => void
    isOpen: boolean
-}
+} & ModalProps
 
 export type FormFieldProps = {
    error: string | undefined
    isLoading: boolean
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   data: CommonFormField<any>
-} & UseFormRegisterReturn
+   data: Omit<CommonFormField<any>, "initialValue">
+   wrapperProps?: FormControlProps
+} & UseFormRegisterReturn &
+   InputProps &
+   SelectProps
