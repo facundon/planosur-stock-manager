@@ -11,7 +11,7 @@ export function useAddSaleQuery(): UseMutationResult<
    SaleDto
 > {
    const queryClient = useQueryClient()
-
+   console.log()
    return useMutation(
       async form => {
          const response = await apiClient.post<ProductWithProviderAndCategory[]>(
