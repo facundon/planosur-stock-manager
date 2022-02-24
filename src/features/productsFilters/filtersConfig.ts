@@ -1,110 +1,95 @@
-import { ProductWithProviderAndCategory } from "../../entities/products/domain"
-import { SelectOption } from "../../shared/components/form"
+import { ProductFilters } from "../../entities/products/domain"
 
-export type FilterOptionsKind = "text" | "select" | "checkbox" | "date"
-export type FilterOptions = (SelectOption & { kind: FilterOptionsKind })[]
+export type FilterCondition = "gte" | "lte" | "lt" | "gt" | "eq" | "not-eq"
 
-export type Filter = {
-   options: FilterOptions
-   value: string | number | boolean | Date
-   label: string
-   accessor: keyof ProductWithProviderAndCategory
+export type FiltersDto = {
+   filters: {
+      accessor: string
+      value: string | number | boolean | Date
+      condition: FilterCondition
+   }[]
 }
 
-const dateOptions: FilterOptions = [
-   { label: "Antes de", value: "lte", kind: "date" },
-   { label: "Despues de", value: "gte", kind: "date" },
-   { label: "El día", value: "eq", kind: "date" },
+export type FilterInputKind = "text" | "select" | "checkbox" | "date"
+
+export type Filter = {
+   options: FilterSelectOption[]
+   label: string
+   accessor: string
+   inputKind: FilterInputKind
+}
+
+export type FilterSelectOption = {
+   label: string
+   value: FilterCondition
+}
+
+const dateOptions: FilterSelectOption[] = [
+   { label: "Antes de", value: "lte" },
+   { label: "Despues de", value: "gte" },
+   { label: "El día", value: "eq" },
 ]
 
-const numericOptions: FilterOptions = [
-   { label: "Mayor o igual", value: "gte", kind: "text" },
-   { label: "Menor o igual", value: "lte", kind: "text" },
-   { label: "Igual", value: "eq", kind: "text" },
+const numericOptions: FilterSelectOption[] = [
+   { label: "Mayor o igual", value: "gte" },
+   { label: "Menor o igual", value: "lte" },
+   { label: "Igual", value: "eq" },
 ]
 
-const selectOptions: FilterOptions = [
-   { label: "Es", value: "eq", kind: "select" },
-   { label: "No es", value: "not-eq", kind: "select" },
+const selectOptions: FilterSelectOption[] = [
+   { label: "Es", value: "eq" },
+   { label: "No es", value: "not-eq" },
 ]
 
-const checkboxOptions: FilterOptions = [{ label: "Es", value: "eq", kind: "checkbox" }]
+const checkboxOptions: FilterSelectOption[] = [{ label: "Es", value: "eq" }]
 
 export const filtersConfig: Filter[] = [
-   { label: "Código", accessor: "code", value: "", options: [] },
-   { label: "Nombre", accessor: "name", value: "", options: [] },
-   { label: "Cantidad", accessor: "qty", value: "", options: [] },
-   { label: "Unidad", accessor: "unit", value: "", options: [] },
    {
       label: "Precio [u$S]",
       accessor: "price",
-      value: "",
       options: numericOptions,
+      inputKind: "text",
    },
    {
       label: "Proveedor",
       accessor: "provider",
-      value: "",
       options: selectOptions,
+      inputKind: "select",
    },
    {
       label: "Categoría",
       accessor: "category",
-      value: "",
       options: selectOptions,
+      inputKind: "select",
    },
    {
       label: "Fue pedido",
       accessor: "didOrder",
-      value: "",
       options: checkboxOptions,
+      inputKind: "checkbox",
    },
    {
       label: "Último pedido",
       accessor: "orderedAt",
-      value: "",
       options: dateOptions,
+      inputKind: "date",
    },
    {
       label: "Stock Capital",
       accessor: "blankStock",
-      value: "",
       options: numericOptions,
+      inputKind: "text",
    },
    {
       label: "Stock Provincia",
       accessor: "unregisteredStock",
-      value: "",
       options: numericOptions,
-   },
-   {
-      label: "Stock Mín. Capital",
-      accessor: "blankMinStock",
-      value: "",
-      options: numericOptions,
-   },
-   {
-      label: "Stock Mín. Provincia",
-      accessor: "unregisteredMinStock",
-      value: "",
-      options: numericOptions,
-   },
-   {
-      label: "Stock Max. Capital",
-      accessor: "blankMaxStock",
-      value: "",
-      options: numericOptions,
-   },
-   {
-      label: "Stock Max. Provincia",
-      accessor: "unregisteredMaxStock",
-      value: "",
-      options: numericOptions,
+      inputKind: "text",
    },
    {
       label: "Actualizado",
       accessor: "updatedAt",
-      value: "",
       options: dateOptions,
+      inputKind: "date",
    },
 ]
