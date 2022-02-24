@@ -7,7 +7,7 @@ import {
    Accordion,
    CloseButton,
 } from "@chakra-ui/react"
-import { PlanosurLogo } from "../../shared/assets/PlanosurLogo"
+import { PlanosurLogo } from "../../shared/assets"
 import { BaseAccordionItem } from "./BaseAccordionItem"
 import { AddCategoryForm, UpdateCategoryForm } from "../../entities/categories/components"
 import { AddProductForm, UpdateProductForm } from "../../entities/products/components"
@@ -23,9 +23,8 @@ export const SidebarContent: React.FC<SidebarContentProps> = ({ onClose, ...rest
    return (
       <Box
          transition="1s ease"
-         bg={useColorModeValue("white", "gray.900")}
-         borderRight="1px"
-         borderRightColor={useColorModeValue("gray.200", "gray.700")}
+         bg={useColorModeValue("white", "gray.800")}
+         boxShadow="dark-lg"
          w={{ base: "full", lg: 60 }}
          pos="fixed"
          h="full"

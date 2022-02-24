@@ -1,6 +1,6 @@
 import { FlexProps, Flex, useColorModeValue, IconButton, HStack, Icon } from "@chakra-ui/react"
 import { Menu } from "react-feather"
-import { PlanosurLogo } from "../../shared/assets/PlanosurLogo"
+import { PlanosurLogo } from "../../shared/assets"
 
 type MobileNavProps = {
    onOpen: () => void
@@ -11,7 +11,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ onOpen, ...rest }) => {
       <Flex
          ml={{ base: 0, lg: 60 }}
          px={4}
-         height="20"
+         height={10}
          alignItems="center"
          bg={useColorModeValue("white", "gray.900")}
          justifyContent={{ base: "space-between", lg: "flex-end" }}

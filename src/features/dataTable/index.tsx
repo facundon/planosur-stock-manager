@@ -1,14 +1,31 @@
-import { Box, HStack, Icon, Table, Tbody, Td, Text, Th, Thead, Tr, VStack } from "@chakra-ui/react"
+import {
+   Box,
+   HStack,
+   Skeleton,
+   Table,
+   Tbody,
+   Td,
+   Text,
+   Th,
+   Thead,
+   Tr,
+   VStack,
+} from "@chakra-ui/react"
 import { useMemo } from "react"
-import { ArrowDown, ArrowUp } from "react-feather"
 import { useTable, Column, usePagination, useSortBy } from "react-table"
+import { SortIcon } from "../../shared/assets"
 import { ExtractArray } from "../../shared/utils/types"
 import { PaginationFooter } from "./PaginationFooter"
 import { ShowAllColumnsCheckbox } from "./ShowAllColumnsCheckbox"
 
+export type TableColumn<T> = {
+   label: string
+   accessor: keyof T
+}
+
 type DataTableProps<T> = {
-   headers: { accessor: keyof ExtractArray<T>; value: string }[]
-   data: T
+   headers: TableColumn<ExtractArray<T>>[]
+   data: T | undefined
 }
 
 export function DataTable<T extends Record<string, unknown>[]>({
@@ -54,7 +71,7 @@ export function DataTable<T extends Record<string, unknown>[]>({
                }
             }
             return {
-               Header: header.value,
+               Header: header.label,
                accessor: header.accessor as string,
                Cell: cell,
             }
@@ -62,10 +79,12 @@ export function DataTable<T extends Record<string, unknown>[]>({
       [headers]
    )
 
+   //trick to show skeleton on table
+   const tableData = useMemo(() => data || (new Array(10).fill(0) as T), [data])
    const tableInstance = useTable(
       {
          columns,
-         data,
+         data: tableData,
          initialState: {
             hiddenColumns: [
                "blankMaxStock",
@@ -117,10 +136,10 @@ export function DataTable<T extends Record<string, unknown>[]>({
                         {...headerGroup.getHeaderGroupProps()}
                         position="sticky"
                         top={0}
-                        overflow="scroll"
+                        overflow="auto"
                         bg="gray.900"
                         boxShadow="xl"
-                        zIndex="1"
+                        zIndex={1}
                      >
                         {headerGroup.headers.map(column => {
                            const isSticky = column.id === "code"
@@ -139,11 +158,7 @@ export function DataTable<T extends Record<string, unknown>[]>({
                                  <Text display="flex" align="center" alignItems="center">
                                     {column.render("Header")}
                                     {column.isSorted && (
-                                       <Icon
-                                          ml={1}
-                                          color="yellow.300"
-                                          as={column.isSortedDesc ? ArrowDown : ArrowUp}
-                                       />
+                                       <SortIcon isAscending={!column.isSortedDesc} ml={1} />
                                     )}
                                  </Text>
                               </Th>
@@ -171,7 +186,11 @@ export function DataTable<T extends Record<string, unknown>[]>({
                                     whiteSpace="nowrap"
                                     textAlign={Number.isInteger(cell.value) ? "center" : "left"}
                                  >
-                                    {cell.render("Cell")}
+                                    {data ? (
+                                       cell.render("Cell")
+                                    ) : (
+                                       <Skeleton startColor="yellow.300" h={2} />
+                                    )}
                                  </Td>
                               )
                            })}

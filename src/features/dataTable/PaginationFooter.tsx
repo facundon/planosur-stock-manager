@@ -47,7 +47,7 @@ export const PaginationFooter: React.FC<PaginationFooterProps> = ({
 
          <Text mx={5} fontSize="sm">
             Página{" "}
-            <Text as="strong" color="yellow">
+            <Text as="strong" color="yellow.200">
                {currentPage}
             </Text>{" "}
             / {totalPages}

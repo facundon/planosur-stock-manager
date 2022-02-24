@@ -17,7 +17,6 @@ export function DropdownButton({ isFocus, isSelect, children, ...rest }: Dropdow
 
    return (
       <Button
-         _active={{ bg: "yellow.200", color: "yellow.800" }}
          tabIndex={!isSelect && isFocus ? 0 : -1}
          isFullWidth
          isActive={!isSelect && isFocus}
@@ -27,6 +26,7 @@ export function DropdownButton({ isFocus, isSelect, children, ...rest }: Dropdow
          fontWeight={isSelect ? "600" : "400"}
          variant="ghost"
          justifyContent="flex-start"
+         size="sm"
          ref={ref}
          {...rest}
       >

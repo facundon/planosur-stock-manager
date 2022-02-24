@@ -44,7 +44,7 @@ export function useProductsQuery({
    const query = queryKey.join("&")
 
    return useQuery(
-      PRODUCTS_KEYS.filtered(queryKey),
+      PRODUCTS_KEYS.filtered(filters),
       async () => {
          const response = await apiClient.get<ProductWithProviderAndCategory[] | ProductSimple[]>(
             `/products${query ? `?${query}` : ""}`

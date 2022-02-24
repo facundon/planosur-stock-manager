@@ -11,7 +11,6 @@ import {
    Portal,
    Stack,
 } from "@chakra-ui/react"
-import { useRef } from "react"
 import { Columns } from "react-feather"
 import { TableToggleHideAllColumnProps, ColumnInstance } from "react-table"
 
@@ -25,29 +24,21 @@ export const ShowAllColumnsCheckbox: React.FC<ShowAllColumnsCheckboxProps> = ({
    checked,
    ...rest
 }) => {
-   const defaultRef = useRef(null)
-   const resolvedRef = defaultRef
-
    return (
       <Popover>
          <PopoverTrigger>
             <IconButton aria-label="Columnas" title="Columnas" variant="ghost" icon={<Columns />} />
          </PopoverTrigger>
          <Portal>
-            <PopoverContent>
+            <PopoverContent maxW="max-content">
                <PopoverArrow />
                <PopoverHeader fontWeight={600}>Columnas</PopoverHeader>
                <PopoverCloseButton />
-               <PopoverBody>
-                  <Checkbox
-                     ref={resolvedRef}
-                     {...rest}
-                     isIndeterminate={indeterminate}
-                     isChecked={checked}
-                  >
+               <PopoverBody maxW="max-content">
+                  <Checkbox {...rest} isIndeterminate={indeterminate} isChecked={checked}>
                      Ver todas
                   </Checkbox>
-                  <Stack pl={6} mt={1} spacing={1}>
+                  <Stack px={6} mt={1} spacing={1} maxW="max-content">
                      {allColumns.map(column => (
                         <Checkbox
                            size="sm"

@@ -1,11 +1,19 @@
-import { Box } from "@chakra-ui/react"
+import { Box, Heading, Icon, VStack } from "@chakra-ui/react"
 import { navigate } from "hookrouter"
 import { useEffect } from "react"
+import { AlertOctagon } from "react-feather"
 import { useAuth } from "../../auth"
 import { ProductWithProviderAndCategory } from "../../entities/products/domain"
 import { useProductsQuery } from "../../entities/products/queries"
-import { DataTable } from "../../features/dataTable"
+import { DataTable, TableColumn } from "../../features/dataTable"
+import { ProductsFilters } from "../../features/productsFilters"
+import { filtersConfig } from "../../features/productsFilters/filtersConfig"
 import { SidebarWithHeader } from "../../features/sideMenu"
+
+const tableColumns: TableColumn<ProductWithProviderAndCategory>[] = filtersConfig.map(filter => ({
+   accessor: filter.accessor,
+   label: filter.label,
+}))
 
 const HomePage: React.FC = () => {
    const { isAuth } = useAuth()
@@ -14,33 +22,19 @@ const HomePage: React.FC = () => {
       if (isAuth !== undefined && !isAuth) navigate("/login")
    }, [isAuth])
 
-   const { data } = useProductsQuery({})
+   const { data, error } = useProductsQuery({})
 
    return (
       <Box minH="100vh" position="relative" overflow="hidden" minW="100vw">
          <SidebarWithHeader>
-            {data && (
-               <DataTable
-                  data={data as ProductWithProviderAndCategory[]}
-                  headers={[
-                     { value: "Código", accessor: "code" },
-                     { value: "Nombre", accessor: "name" },
-                     { value: "Cantidad", accessor: "qty" },
-                     { value: "Unidad", accessor: "unit" },
-                     { value: "Precio [u$S]", accessor: "price" },
-                     { value: "Proveedor", accessor: "provider" },
-                     { value: "Categoría", accessor: "category" },
-                     { value: "Fue pedido", accessor: "didOrder" },
-                     { value: "Último pedido", accessor: "orderedAt" },
-                     { value: "Stock Capital", accessor: "blankStock" },
-                     { value: "Stock Provincia", accessor: "unregisteredStock" },
-                     { value: "Stock Mín. Capital", accessor: "blankMinStock" },
-                     { value: "Stock Mín. Provincia", accessor: "unregisteredMinStock" },
-                     { value: "Stock Max. Capital", accessor: "blankMaxStock" },
-                     { value: "Stock Max. Provincia", accessor: "unregisteredMaxStock" },
-                     { value: "Actualizado", accessor: "updatedAt" },
-                  ]}
-               />
+            <ProductsFilters filters={tableColumns} onSearch={() => null} />
+            {error?.message ? (
+               <VStack color="error">
+                  <Icon as={AlertOctagon} w="24" h="auto" />
+                  <Heading>{error.message}</Heading>
+               </VStack>
+            ) : (
+               <DataTable data={data as ProductWithProviderAndCategory[]} headers={tableColumns} />
             )}
          </SidebarWithHeader>
       </Box>
