@@ -1,10 +1,22 @@
-import { ProductFilters } from "../../entities/products/domain"
+import { ProductWithProviderAndCategory } from "../../entities/products/domain"
 
 export type FilterCondition = "gte" | "lte" | "lt" | "gt" | "eq" | "not-eq"
 
+export type FilterAccessor = keyof Pick<
+   ProductWithProviderAndCategory,
+   | "blankStock"
+   | "category"
+   | "didOrder"
+   | "orderedAt"
+   | "provider"
+   | "unregisteredStock"
+   | "updatedAt"
+   | "price"
+>
+
 export type FiltersDto = {
    filters: {
-      accessor: string
+      accessor: FilterAccessor
       value: string | number | boolean | Date
       condition: FilterCondition
    }[]
@@ -15,7 +27,7 @@ export type FilterInputKind = "text" | "select" | "checkbox" | "date"
 export type Filter = {
    options: FilterSelectOption[]
    label: string
-   accessor: string
+   accessor: FilterAccessor
    inputKind: FilterInputKind
 }
 

@@ -14,14 +14,19 @@ import {
 import { PlusCircle, RotateCcw, Search } from "react-feather"
 import { useFieldArray, useForm } from "react-hook-form"
 import { FilterItem } from "./FilterItem"
-import { filtersConfig, FiltersDto } from "./filtersConfig"
+import { FilterAccessor, filtersConfig, FiltersDto } from "./filtersConfig"
 
 type ProductsFiltersProps = {
    onSearch: (filters: FiltersDto) => void
 }
 
+const defaultAccessor: FilterAccessor = "blankStock"
+const defaultValues: FiltersDto = {
+   filters: [{ accessor: defaultAccessor, condition: "lte", value: "" }],
+}
+
 export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) => {
-   const { register, control, handleSubmit } = useForm<FiltersDto>()
+   const { register, control, handleSubmit } = useForm<FiltersDto>({ defaultValues })
 
    const { fields, replace, remove } = useFieldArray({
       control,
@@ -66,6 +71,7 @@ export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) =>
                               )
                               replace(newFilters)
                            }}
+                           defaultValue={[defaultAccessor]}
                         >
                            {filtersConfig.map(filter => (
                               <MenuItemOption
@@ -83,7 +89,19 @@ export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) =>
                <Button leftIcon={<Search />} type="submit">
                   Buscar
                </Button>
-               <Button leftIcon={<RotateCcw />} colorScheme="red" variant="outline" type="reset">
+               <Button
+                  leftIcon={<RotateCcw />}
+                  colorScheme="red"
+                  variant="outline"
+                  type="reset"
+                  onClick={() =>
+                     remove(
+                        fields
+                           .filter(field => field.accessor !== defaultAccessor)
+                           .map(field => +field.id)
+                     )
+                  }
+               >
                   Reestablecer
                </Button>
             </ButtonGroup>

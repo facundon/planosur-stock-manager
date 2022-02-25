@@ -1,7 +1,9 @@
-import { HStack, Icon, IconButton, Input, Select, Switch, Text } from "@chakra-ui/react"
-import { ChangeEvent } from "react"
-import { X } from "react-feather"
+import { HStack, Input, Select, Switch, Text } from "@chakra-ui/react"
+import { ChangeEvent, useMemo } from "react"
 import { Control, Controller, Noop, UseFormRegister } from "react-hook-form"
+import { useCategoriesQuery } from "../../entities/categories/queries"
+import { useProvidersQuery } from "../../entities/providers/queries"
+import AsyncSelect from "../../shared/components/form/AsyncSelect"
 import { Filter, FilterInputKind, FiltersDto } from "./filtersConfig"
 
 type KindFieldProps = {
@@ -10,9 +12,11 @@ type KindFieldProps = {
    name: string
    onBlur: Noop
    value: string | number | boolean | Date
+   isLoading?: boolean
+   isError?: boolean
 }
 
-const KindField: React.FC<KindFieldProps> = ({ kind, value, ...rest }) => {
+const KindField: React.FC<KindFieldProps> = ({ kind, value, children, ...rest }) => {
    switch (kind) {
       case "checkbox":
          return <Switch {...rest} checked={value as boolean} />
@@ -21,7 +25,11 @@ const KindField: React.FC<KindFieldProps> = ({ kind, value, ...rest }) => {
       case "text":
          return <Input {...rest} value={value as number} type="number" />
       case "select":
-         return <Select {...rest} value={value as string}></Select>
+         return (
+            <AsyncSelect {...rest} value={value as string}>
+               {children}
+            </AsyncSelect>
+         )
       default:
          return null
    }
@@ -43,13 +51,34 @@ export const FilterItem: React.FC<FilterPropsItem> = ({
    index,
    control,
    register,
-   onRemove,
 }) => {
+   const {
+      data: providers,
+      isLoading: isLoadingProviders,
+      isError: isProvidersError,
+   } = useProvidersQuery(accessor === "provider")
+   const {
+      data: categories,
+      isLoading: isLoadingCategories,
+      isError: isCategoriesError,
+   } = useCategoriesQuery(accessor === "category")
+
+   const isLoading = useMemo(
+      () => (accessor === "category" ? isLoadingCategories : isLoadingProviders),
+      [accessor, isLoadingCategories, isLoadingProviders]
+   )
+   const isError = useMemo(
+      () => (accessor === "category" ? isCategoriesError : isProvidersError),
+      [accessor, isCategoriesError, isProvidersError]
+   )
+
    return (
       <HStack w="100%">
-         <Text minW={32}>{label}</Text>
+         <Text minW={32} fontWeight={600}>
+            {label}
+         </Text>
 
-         <Select placeholder="Seleccionar" {...register(`filters.${index}.condition`)}>
+         <Select {...register(`filters.${index}.condition`)}>
             {options.map(option => (
                <option key={`${accessor}-${option.value}`} value={option.value}>
                   {option.label}
@@ -61,10 +90,26 @@ export const FilterItem: React.FC<FilterPropsItem> = ({
             control={control}
             name={`filters.${index}.value`}
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            render={({ field: { ref, ...rest } }) => <KindField kind={inputKind} {...rest} />}
+            render={({ field: { ref, ...rest } }) => (
+               <KindField kind={inputKind} {...rest} isLoading={isLoading} isError={isError}>
+                  {accessor === "provider" &&
+                     providers?.map(provider => (
+                        <option key={provider.id} value={provider.id}>
+                           {provider.name}
+                        </option>
+                     ))}
+
+                  {accessor === "category" &&
+                     categories?.map(category => (
+                        <option key={category.id} value={category.id}>
+                           {category.name}
+                        </option>
+                     ))}
+               </KindField>
+            )}
          />
 
-         <IconButton
+         {/*     <IconButton
             aria-label="Eliminar"
             title="Eliminar"
             size="sm"
@@ -73,7 +118,7 @@ export const FilterItem: React.FC<FilterPropsItem> = ({
             variant="link"
             icon={<Icon w={5} h="auto" as={X} />}
             onClick={onRemove}
-         />
+         /> */}
       </HStack>
    )
 }
