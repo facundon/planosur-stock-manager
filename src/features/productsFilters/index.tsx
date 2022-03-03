@@ -1,7 +1,6 @@
 import {
    Box,
    Button,
-   ButtonGroup,
    Divider,
    MenuButton,
    MenuItemOption,
@@ -10,6 +9,7 @@ import {
    MenuOptionGroup,
    VStack,
    Portal,
+   IconButton,
 } from "@chakra-ui/react"
 import { PlusCircle, RotateCcw, Search } from "react-feather"
 import { useFieldArray, useForm } from "react-hook-form"
@@ -34,29 +34,33 @@ export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) =>
    })
 
    return (
-      <Box boxShadow="dark-lg" p={6}>
+      <Box boxShadow="dark-lg" p={{ base: 3, sm: 6 }}>
          <form onSubmit={handleSubmit(onSearch)}>
-            <VStack>
+            <VStack gap={3}>
                {fields.map((field, index) => {
                   const currentFilter = filtersConfig.find(
                      filter => filter.accessor === field.accessor
                   )
                   if (!currentFilter) return null
                   return (
-                     <FilterItem
-                        {...currentFilter}
-                        key={field.id}
-                        control={control}
-                        register={register}
-                        index={index}
-                     />
+                     <>
+                        <FilterItem
+                           {...currentFilter}
+                           key={field.id}
+                           control={control}
+                           register={register}
+                           index={index}
+                           onRemove={() => remove(index)}
+                        />
+                        <Divider display={fields.length === index + 1 ? "none" : undefined} />
+                     </>
                   )
                })}
             </VStack>
             <Divider my={6} />
-            <ButtonGroup>
+            <Box display="flex" flexWrap="wrap" w="100%" gap={3}>
                <Menu closeOnSelect={false}>
-                  <MenuButton as={Button} colorScheme="teal" leftIcon={<PlusCircle />}>
+                  <MenuButton flexGrow={1} as={Button} colorScheme="teal" leftIcon={<PlusCircle />}>
                      Añadir Filtro
                   </MenuButton>
                   <Portal>
@@ -70,6 +74,7 @@ export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) =>
                               )
                               replace(newFilters)
                            }}
+                           value={fields.map(field => field.accessor)}
                            defaultValue={[defaultAccessor]}
                         >
                            {filtersConfig.map(filter => (
@@ -77,6 +82,9 @@ export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) =>
                                  _checked={{ svg: { color: "success" } }}
                                  key={filter.accessor}
                                  value={filter.accessor}
+                                 isDisabled={
+                                    filter.accessor === fields[0]?.accessor && fields.length === 1
+                                 }
                               >
                                  {filter.label}
                               </MenuItemOption>
@@ -85,11 +93,11 @@ export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) =>
                      </MenuList>
                   </Portal>
                </Menu>
-               <Button leftIcon={<Search />} type="submit">
-                  Buscar
-               </Button>
-               <Button
-                  leftIcon={<RotateCcw />}
+               <IconButton
+                  aria-label="reestablecer"
+                  title="Reestablecer"
+                  flexGrow={0}
+                  icon={<RotateCcw />}
                   colorScheme="red"
                   variant="outline"
                   type="reset"
@@ -100,10 +108,11 @@ export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) =>
                            .map(field => +field.id)
                      )
                   }
-               >
-                  Reestablecer
+               />
+               <Button w="100%" leftIcon={<Search />} type="submit">
+                  Buscar
                </Button>
-            </ButtonGroup>
+            </Box>
          </form>
       </Box>
    )

@@ -63,7 +63,6 @@ export const filtersConfig: Filter[] = [
       accessor: "price",
       options: numericOptions,
       inputKind: "text",
-      rules: { required: { value: true, message: "Ingresar un valor" } },
    },
    {
       label: "Proveedor",

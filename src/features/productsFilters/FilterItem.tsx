@@ -1,13 +1,17 @@
 import {
+   Box,
    FormControl,
    FormErrorMessage,
    HStack,
+   Icon,
+   IconButton,
    Input,
    Select,
    Switch,
    Text,
 } from "@chakra-ui/react"
 import { ChangeEvent, useMemo } from "react"
+import { X } from "react-feather"
 import { Control, Controller, Noop, UseFormRegister } from "react-hook-form"
 import { useCategoriesQuery } from "../../entities/categories/queries"
 import { useProvidersQuery } from "../../entities/providers/queries"
@@ -55,6 +59,7 @@ type FilterPropsItem = {
    control: Control<FiltersDto, object>
    index: number
    register: UseFormRegister<FiltersDto>
+   onRemove: Noop
 } & Filter
 
 export const FilterItem: React.FC<FilterPropsItem> = ({
@@ -66,6 +71,7 @@ export const FilterItem: React.FC<FilterPropsItem> = ({
    control,
    rules,
    register,
+   onRemove,
 }) => {
    const {
       data: providers,
@@ -88,56 +94,58 @@ export const FilterItem: React.FC<FilterPropsItem> = ({
    )
 
    return (
-      <HStack w="100%">
-         <Text minW={32} fontWeight={600}>
+      <Box w="100%" display="flex" flexWrap="wrap" alignItems="center" gap={3}>
+         <Text minW={32} fontWeight={600} flexBasis="fit-content" color="yellow.500">
             {label}
          </Text>
 
-         <Select {...register(`filters.${index}.condition`)}>
-            {options.map(option => (
-               <option key={`${accessor}-${option.value}`} value={option.value}>
-                  {option.label}
-               </option>
-            ))}
-         </Select>
+         <HStack flexGrow={1}>
+            <Select {...register(`filters.${index}.condition`)} minWidth={40} flex={1}>
+               {options.map(option => (
+                  <option key={`${accessor}-${option.value}`} value={option.value}>
+                     {option.label}
+                  </option>
+               ))}
+            </Select>
 
-         <Controller
-            rules={rules}
-            control={control}
-            name={`filters.${index}.value`}
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            render={({ field: { ref, ...rest }, fieldState: { error } }) => (
-               <FormControl isInvalid={!!error?.message}>
-                  <KindField kind={inputKind} {...rest} isLoading={isLoading} isError={isError}>
-                     {accessor === "provider" &&
-                        providers?.map(provider => (
-                           <option key={provider.id} value={provider.id}>
-                              {provider.name}
-                           </option>
-                        ))}
+            <Controller
+               rules={{ required: { value: true, message: "Ingrese un valor" }, ...rules }}
+               control={control}
+               name={`filters.${index}.value`}
+               // eslint-disable-next-line @typescript-eslint/no-unused-vars
+               render={({ field: { ref, ...rest }, fieldState: { error } }) => (
+                  <FormControl isInvalid={!!error?.message} minWidth={20} flex={1}>
+                     <KindField kind={inputKind} {...rest} isLoading={isLoading} isError={isError}>
+                        {accessor === "provider" &&
+                           providers?.map(provider => (
+                              <option key={provider.id} value={provider.id}>
+                                 {provider.name}
+                              </option>
+                           ))}
 
-                     {accessor === "category" &&
-                        categories?.map(category => (
-                           <option key={category.id} value={category.id}>
-                              {category.name}
-                           </option>
-                        ))}
-                  </KindField>
-                  <FormErrorMessage>{error?.message}</FormErrorMessage>
-               </FormControl>
-            )}
-         />
-
-         {/*     <IconButton
-            aria-label="Eliminar"
-            title="Eliminar"
-            size="sm"
-            isRound
-            colorScheme="red"
-            variant="link"
-            icon={<Icon w={5} h="auto" as={X} />}
-            onClick={onRemove}
-         /> */}
-      </HStack>
+                        {accessor === "category" &&
+                           categories?.map(category => (
+                              <option key={category.id} value={category.id}>
+                                 {category.name}
+                              </option>
+                           ))}
+                     </KindField>
+                     <FormErrorMessage>{error?.message}</FormErrorMessage>
+                  </FormControl>
+               )}
+            />
+            <IconButton
+               display={{ base: "none", sm: "block" }}
+               aria-label="Eliminar"
+               title="Eliminar"
+               size="sm"
+               isRound
+               colorScheme="red"
+               variant="link"
+               icon={<Icon w={5} h="auto" as={X} />}
+               onClick={onRemove}
+            />
+         </HStack>
+      </Box>
    )
 }

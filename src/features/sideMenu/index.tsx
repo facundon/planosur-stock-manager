@@ -24,7 +24,7 @@ export const SidebarWithHeader: React.FC = ({ children }) => {
 
          <MobileNav onOpen={onOpen} />
 
-         <Box ml={{ base: 0, lg: 60 }} p={6}>
+         <Box ml={{ base: 0, lg: 60 }} p={{ sm: 6 }}>
             {children}
          </Box>
       </Box>

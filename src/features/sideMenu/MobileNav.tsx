@@ -9,8 +9,10 @@ type MobileNavProps = {
 export const MobileNav: React.FC<MobileNavProps> = ({ onOpen, ...rest }) => {
    return (
       <Flex
+         display={{ base: "flex", lg: "none" }}
          ml={{ base: 0, lg: 60 }}
          px={4}
+         py={10}
          height={10}
          alignItems="center"
          bg={useColorModeValue("white", "gray.900")}
