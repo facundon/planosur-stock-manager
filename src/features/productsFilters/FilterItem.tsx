@@ -1,4 +1,12 @@
-import { HStack, Input, Select, Switch, Text } from "@chakra-ui/react"
+import {
+   FormControl,
+   FormErrorMessage,
+   HStack,
+   Input,
+   Select,
+   Switch,
+   Text,
+} from "@chakra-ui/react"
 import { ChangeEvent, useMemo } from "react"
 import { Control, Controller, Noop, UseFormRegister } from "react-hook-form"
 import { useCategoriesQuery } from "../../entities/categories/queries"
@@ -16,7 +24,14 @@ type KindFieldProps = {
    isError?: boolean
 }
 
-const KindField: React.FC<KindFieldProps> = ({ kind, value, children, ...rest }) => {
+const KindField: React.FC<KindFieldProps> = ({
+   kind,
+   value,
+   children,
+   isLoading,
+   isError,
+   ...rest
+}) => {
    switch (kind) {
       case "checkbox":
          return <Switch {...rest} checked={value as boolean} />
@@ -26,7 +41,7 @@ const KindField: React.FC<KindFieldProps> = ({ kind, value, children, ...rest })
          return <Input {...rest} value={value as number} type="number" />
       case "select":
          return (
-            <AsyncSelect {...rest} value={value as string}>
+            <AsyncSelect {...rest} value={value as string} isLoading={isLoading} isError={isError}>
                {children}
             </AsyncSelect>
          )
@@ -40,7 +55,6 @@ type FilterPropsItem = {
    control: Control<FiltersDto, object>
    index: number
    register: UseFormRegister<FiltersDto>
-   onRemove: Noop
 } & Filter
 
 export const FilterItem: React.FC<FilterPropsItem> = ({
@@ -50,6 +64,7 @@ export const FilterItem: React.FC<FilterPropsItem> = ({
    inputKind,
    index,
    control,
+   rules,
    register,
 }) => {
    const {
@@ -87,25 +102,29 @@ export const FilterItem: React.FC<FilterPropsItem> = ({
          </Select>
 
          <Controller
+            rules={rules}
             control={control}
             name={`filters.${index}.value`}
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            render={({ field: { ref, ...rest } }) => (
-               <KindField kind={inputKind} {...rest} isLoading={isLoading} isError={isError}>
-                  {accessor === "provider" &&
-                     providers?.map(provider => (
-                        <option key={provider.id} value={provider.id}>
-                           {provider.name}
-                        </option>
-                     ))}
+            render={({ field: { ref, ...rest }, fieldState: { error } }) => (
+               <FormControl isInvalid={!!error?.message}>
+                  <KindField kind={inputKind} {...rest} isLoading={isLoading} isError={isError}>
+                     {accessor === "provider" &&
+                        providers?.map(provider => (
+                           <option key={provider.id} value={provider.id}>
+                              {provider.name}
+                           </option>
+                        ))}
 
-                  {accessor === "category" &&
-                     categories?.map(category => (
-                        <option key={category.id} value={category.id}>
-                           {category.name}
-                        </option>
-                     ))}
-               </KindField>
+                     {accessor === "category" &&
+                        categories?.map(category => (
+                           <option key={category.id} value={category.id}>
+                              {category.name}
+                           </option>
+                        ))}
+                  </KindField>
+                  <FormErrorMessage>{error?.message}</FormErrorMessage>
+               </FormControl>
             )}
          />
 

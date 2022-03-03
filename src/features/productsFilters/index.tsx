@@ -49,7 +49,6 @@ export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) =>
                         control={control}
                         register={register}
                         index={index}
-                        onRemove={() => remove(index)}
                      />
                   )
                })}

@@ -1,12 +1,13 @@
 import { Box, Heading, Icon, VStack } from "@chakra-ui/react"
 import { navigate } from "hookrouter"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { AlertOctagon } from "react-feather"
 import { useAuth } from "../../auth"
-import { ProductWithProviderAndCategory } from "../../entities/products/domain"
+import { ProductFilters, ProductWithProviderAndCategory } from "../../entities/products/domain"
 import { useProductsQuery } from "../../entities/products/queries"
 import { DataTable, TableColumn } from "../../features/dataTable"
 import { ProductsFilters } from "../../features/productsFilters"
+import { mapFilters } from "../../features/productsFilters/filtersConfig"
 import { SidebarWithHeader } from "../../features/sideMenu"
 
 const tableColumns: TableColumn<ProductWithProviderAndCategory>[] = [
@@ -30,25 +31,29 @@ const tableColumns: TableColumn<ProductWithProviderAndCategory>[] = [
 
 const HomePage: React.FC = () => {
    const { isAuth } = useAuth()
+   const [filters, setFilters] = useState<ProductFilters>()
 
    useEffect(() => {
       if (isAuth !== undefined && !isAuth) navigate("/login")
    }, [isAuth])
 
-   const { data, error } = useProductsQuery({})
+   const { data: products, error } = useProductsQuery({ ...filters, enabled: !!filters })
 
    return (
       <Box minH="100vh" position="relative" overflow="hidden" minW="100vw">
          <SidebarWithHeader>
-            <ProductsFilters onSearch={filters => console.log(filters)} />
+            <ProductsFilters onSearch={data => setFilters(mapFilters(data))} />
             {error?.message ? (
                <VStack color="error">
                   <Icon as={AlertOctagon} w="24" h="auto" />
                   <Heading>{error.message}</Heading>
                </VStack>
-            ) : (
-               <DataTable data={data as ProductWithProviderAndCategory[]} headers={tableColumns} />
-            )}
+            ) : products ? (
+               <DataTable
+                  data={products as ProductWithProviderAndCategory[]}
+                  headers={tableColumns}
+               />
+            ) : null}
          </SidebarWithHeader>
       </Box>
    )
