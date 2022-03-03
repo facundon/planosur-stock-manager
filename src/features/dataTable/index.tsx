@@ -25,12 +25,14 @@ export type TableColumn<T> = {
 
 type DataTableProps<T> = {
    headers: TableColumn<ExtractArray<T>>[]
-   data: T | undefined
+   data: T
+   isLoading?: boolean
 }
 
 export function DataTable<T extends Record<string, unknown>[]>({
    headers,
    data,
+   isLoading,
 }: DataTableProps<T>) {
    const columns: Column<Record<string, unknown>>[] = useMemo(
       () =>
@@ -79,8 +81,10 @@ export function DataTable<T extends Record<string, unknown>[]>({
       [headers]
    )
 
-   //trick to show skeleton on table
-   const tableData = useMemo(() => data || (new Array(10).fill(0) as T), [data])
+   const tableData = useMemo(
+      () => (isLoading ? (new Array(10).fill(0) as T) : data),
+      [data, isLoading]
+   )
    const tableInstance = useTable(
       {
          columns,
@@ -186,7 +190,7 @@ export function DataTable<T extends Record<string, unknown>[]>({
                                     whiteSpace="nowrap"
                                     textAlign={Number.isInteger(cell.value) ? "center" : "left"}
                                  >
-                                    {data ? (
+                                    {!isLoading ? (
                                        cell.render("Cell")
                                     ) : (
                                        <Skeleton startColor="yellow.300" h={2} />

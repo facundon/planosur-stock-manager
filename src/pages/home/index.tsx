@@ -1,4 +1,4 @@
-import { Box, Heading, Icon, VStack } from "@chakra-ui/react"
+import { Box, Heading, Icon, VStack, Text } from "@chakra-ui/react"
 import { navigate } from "hookrouter"
 import { useEffect, useState } from "react"
 import { AlertOctagon } from "react-feather"
@@ -37,23 +37,36 @@ const HomePage: React.FC = () => {
       if (isAuth !== undefined && !isAuth) navigate("/login")
    }, [isAuth])
 
-   const { data: products, error } = useProductsQuery({ ...filters, enabled: !!filters })
+   const {
+      data: products,
+      error,
+      isLoading,
+      isFetched,
+   } = useProductsQuery({ ...filters, enabled: !!filters })
 
    return (
       <Box minH="100vh" position="relative" overflow="hidden" minW="100vw">
          <SidebarWithHeader>
             <ProductsFilters onSearch={data => setFilters(mapFilters(data))} />
-            {error?.message ? (
-               <VStack color="error">
+            {filters &&
+               (isFetched && !products?.length ? (
+                  <VStack color="error" textAlign="center" mt={10}>
+                     <Icon as={AlertOctagon} w="24" h="auto" />
+                     <Heading>No hay resultados para la búsqueda</Heading>
+                  </VStack>
+               ) : (
+                  <DataTable
+                     data={products as ProductWithProviderAndCategory[]}
+                     headers={tableColumns}
+                     isLoading={isLoading}
+                  />
+               ))}
+            {error?.message && (
+               <VStack color="error" textAlign="center" mt={10}>
                   <Icon as={AlertOctagon} w="24" h="auto" />
                   <Heading>{error.message}</Heading>
                </VStack>
-            ) : products ? (
-               <DataTable
-                  data={products as ProductWithProviderAndCategory[]}
-                  headers={tableColumns}
-               />
-            ) : null}
+            )}
          </SidebarWithHeader>
       </Box>
    )
