@@ -33,10 +33,22 @@ export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) =>
 
    const { register, control, handleSubmit } = useForm<FiltersDto>({ defaultValues })
 
-   const { fields, replace, remove } = useFieldArray({
+   const { fields, remove, append } = useFieldArray({
       control,
       name: "filters",
    })
+
+   function handleChangeFilters(accessors: string[]) {
+      const newFilters = accessors
+         .filter(accessor => fields.findIndex(field => field.accessor === accessor) < 0)
+         .map(accessor => filtersConfig.find(filter => filter.accessor === accessor)!)
+
+      if (newFilters.length) append(newFilters)
+      else {
+         const removeIndex = fields.findIndex(field => !accessors.includes(field.accessor))
+         remove(removeIndex)
+      }
+   }
 
    return (
       <Box boxShadow="dark-lg" p={{ base: 3, sm: 6 }}>
@@ -73,12 +85,7 @@ export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) =>
                         <MenuOptionGroup
                            title="Filtros"
                            type="checkbox"
-                           onChange={accessors => {
-                              const newFilters = filtersConfig.filter(filter =>
-                                 accessors.includes(filter.accessor)
-                              )
-                              replace(newFilters)
-                           }}
+                           onChange={accessors => handleChangeFilters(accessors as string[])}
                            value={fields.map(field => field.accessor)}
                            defaultValue={[defaultAccessor]}
                         >
