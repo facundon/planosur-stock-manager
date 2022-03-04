@@ -1,4 +1,4 @@
-import { Box, Heading, Icon, VStack, Text } from "@chakra-ui/react"
+import { Box, Heading, Icon, VStack } from "@chakra-ui/react"
 import { navigate } from "hookrouter"
 import { useEffect, useState } from "react"
 import { AlertOctagon } from "react-feather"

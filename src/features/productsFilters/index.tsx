@@ -11,21 +11,26 @@ import {
    Portal,
    IconButton,
 } from "@chakra-ui/react"
+import React, { useMemo } from "react"
 import { PlusCircle, RotateCcw, Search } from "react-feather"
 import { useFieldArray, useForm } from "react-hook-form"
 import { FilterItem } from "./FilterItem"
-import { FilterAccessor, filtersConfig, FiltersDto } from "./filtersConfig"
+import { Filter, FilterAccessor, filtersConfig, FiltersDto } from "./filtersConfig"
 
 type ProductsFiltersProps = {
    onSearch: (filters: FiltersDto) => void
 }
 
 const defaultAccessor: FilterAccessor = "blankStock"
-const defaultValues: FiltersDto = {
-   filters: [{ accessor: defaultAccessor, condition: "lte", value: "" }],
-}
 
 export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) => {
+   const defaultValues: FiltersDto = useMemo(() => {
+      const item = filtersConfig.find(filter => filter.accessor === defaultAccessor) as Filter
+      return {
+         filters: [{ ...item }],
+      }
+   }, [])
+
    const { register, control, handleSubmit } = useForm<FiltersDto>({ defaultValues })
 
    const { fields, replace, remove } = useFieldArray({
@@ -35,7 +40,7 @@ export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) =>
 
    return (
       <Box boxShadow="dark-lg" p={{ base: 3, sm: 6 }}>
-         <form onSubmit={handleSubmit(onSearch)}>
+         <form onSubmit={handleSubmit(data => onSearch(data as FiltersDto))}>
             <VStack gap={3}>
                {fields.map((field, index) => {
                   const currentFilter = filtersConfig.find(
@@ -43,17 +48,17 @@ export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) =>
                   )
                   if (!currentFilter) return null
                   return (
-                     <>
+                     <React.Fragment key={field.id}>
                         <FilterItem
                            {...currentFilter}
-                           key={field.id}
                            control={control}
                            register={register}
                            index={index}
                            onRemove={() => remove(index)}
+                           removeDisabled={fields.length === 1}
                         />
                         <Divider display={fields.length === index + 1 ? "none" : undefined} />
-                     </>
+                     </React.Fragment>
                   )
                })}
             </VStack>

@@ -23,7 +23,7 @@ type KindFieldProps = {
    onChange: (event: ChangeEvent) => void
    name: string
    onBlur: Noop
-   value: string | number | boolean | Date
+   value: string | number | boolean | Date | undefined
    isLoading?: boolean
    isError?: boolean
 }
@@ -38,14 +38,20 @@ const KindField: React.FC<KindFieldProps> = ({
 }) => {
    switch (kind) {
       case "checkbox":
-         return <Switch {...rest} checked={value as boolean} />
+         return <Switch {...rest} checked={value as boolean} isChecked={value as boolean} />
       case "date":
          return <Input {...rest} value={value as string} type="date" />
       case "text":
          return <Input {...rest} value={value as number} type="number" />
       case "select":
          return (
-            <AsyncSelect {...rest} value={value as string} isLoading={isLoading} isError={isError}>
+            <AsyncSelect
+               {...rest}
+               value={value as string}
+               withEmptyOption
+               isLoading={isLoading}
+               isError={isError}
+            >
                {children}
             </AsyncSelect>
          )
@@ -60,6 +66,7 @@ type FilterPropsItem = {
    index: number
    register: UseFormRegister<FiltersDto>
    onRemove: Noop
+   removeDisabled: boolean
 } & Filter
 
 export const FilterItem: React.FC<FilterPropsItem> = ({
@@ -72,6 +79,8 @@ export const FilterItem: React.FC<FilterPropsItem> = ({
    rules,
    register,
    onRemove,
+   initialValue,
+   removeDisabled,
 }) => {
    const {
       data: providers,
@@ -100,42 +109,58 @@ export const FilterItem: React.FC<FilterPropsItem> = ({
          </Text>
 
          <HStack flexGrow={1}>
-            <Select {...register(`filters.${index}.condition`)} minWidth={40} flex={1}>
-               {options.map(option => (
-                  <option key={`${accessor}-${option.value}`} value={option.value}>
-                     {option.label}
-                  </option>
-               ))}
-            </Select>
+            {options && (
+               <Select
+                  {...register(`filters.${index}.condition`)}
+                  minWidth={40}
+                  flex={1}
+                  variant="flushed"
+               >
+                  {options.map(option => (
+                     <option key={`${accessor}-${option.value}`} value={option.value}>
+                        {option.label}
+                     </option>
+                  ))}
+               </Select>
+            )}
 
             <Controller
                rules={{ required: { value: true, message: "Ingrese un valor" }, ...rules }}
                control={control}
+               defaultValue={initialValue}
                name={`filters.${index}.value`}
                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-               render={({ field: { ref, ...rest }, fieldState: { error } }) => (
-                  <FormControl isInvalid={!!error?.message} minWidth={20} flex={1}>
-                     <KindField kind={inputKind} {...rest} isLoading={isLoading} isError={isError}>
-                        {accessor === "provider" &&
-                           providers?.map(provider => (
-                              <option key={provider.id} value={provider.id}>
-                                 {provider.name}
-                              </option>
-                           ))}
+               render={({ field: { ref, ...rest }, fieldState: { error } }) => {
+                  return (
+                     <FormControl isInvalid={!!error?.message} minWidth={20} flex={1}>
+                        <KindField
+                           kind={inputKind}
+                           {...rest}
+                           isLoading={isLoading}
+                           isError={isError}
+                        >
+                           {accessor === "provider" &&
+                              providers?.map(provider => (
+                                 <option key={provider.id} value={provider.id}>
+                                    {provider.name}
+                                 </option>
+                              ))}
 
-                        {accessor === "category" &&
-                           categories?.map(category => (
-                              <option key={category.id} value={category.id}>
-                                 {category.name}
-                              </option>
-                           ))}
-                     </KindField>
-                     <FormErrorMessage>{error?.message}</FormErrorMessage>
-                  </FormControl>
-               )}
+                           {accessor === "category" &&
+                              categories?.map(category => (
+                                 <option key={category.id} value={category.id}>
+                                    {category.name}
+                                 </option>
+                              ))}
+                        </KindField>
+                        <FormErrorMessage>{error?.message}</FormErrorMessage>
+                     </FormControl>
+                  )
+               }}
             />
             <IconButton
                display={{ base: "none", sm: "block" }}
+               disabled={removeDisabled}
                aria-label="Eliminar"
                title="Eliminar"
                size="sm"
