@@ -39,6 +39,11 @@ export type ProductFilters = {
    blankStockMin?: number
    limit?: number
    simple?: boolean
+   didOrder?: boolean
+   updatedAtFrom?: string
+   updatedAtTo?: string
+   orderedAtFrom?: string
+   orderedAtTo?: string
 }
 
 export type ProductWithProviderAndCategory = Product & {

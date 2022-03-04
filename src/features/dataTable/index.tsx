@@ -54,7 +54,13 @@ export function DataTable<T extends Record<string, unknown>[]>({
                   case "orderedAt":
                      return (
                         <Text textAlign="center">
-                           {value ? new Date(value).toLocaleDateString() : "-"}
+                           {value
+                              ? new Date(value).toLocaleDateString("es-ES", {
+                                   year: "numeric",
+                                   day: "2-digit",
+                                   month: "2-digit",
+                                })
+                              : "-"}
                         </Text>
                      )
 

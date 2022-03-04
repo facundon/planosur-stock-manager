@@ -147,7 +147,7 @@ export function mapFilters(data: FiltersDto): ProductFilters {
             break
 
          case "didOrder":
-            //TODO: add
+            productFilters.didOrder = Boolean(filter?.value)
             break
 
          case "price":
@@ -158,11 +158,17 @@ export function mapFilters(data: FiltersDto): ProductFilters {
             break
 
          case "updatedAt":
-            //TODO: add
+            if (filter.condition === "gte") productFilters.updatedAtFrom = filter.value as string
+            if (filter.condition === "lte") productFilters.updatedAtTo = filter.value as string
+            if (filter.condition === "eq")
+               productFilters.updatedAtTo = productFilters.updatedAtFrom = filter.value as string
             break
 
          case "orderedAt":
-            //TODO: add
+            if (filter.condition === "gte") productFilters.orderedAtFrom = filter.value as string
+            if (filter.condition === "lte") productFilters.orderedAtTo = filter.value as string
+            if (filter.condition === "eq")
+               productFilters.orderedAtTo = productFilters.orderedAtFrom = filter.value as string
             break
       }
    })
