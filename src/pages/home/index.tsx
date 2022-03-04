@@ -1,7 +1,7 @@
 import { Box, Heading, Icon, VStack } from "@chakra-ui/react"
 import { navigate } from "hookrouter"
 import { useEffect, useState } from "react"
-import { AlertOctagon } from "react-feather"
+import { AlertCircle, AlertOctagon } from "react-feather"
 import { useAuth } from "../../auth"
 import { ProductFilters, ProductWithProviderAndCategory } from "../../entities/products/domain"
 import { useProductsQuery } from "../../entities/products/queries"
@@ -50,8 +50,8 @@ const HomePage: React.FC = () => {
             <ProductsFilters onSearch={data => setFilters(mapFilters(data))} />
             {filters &&
                (isFetched && !products?.length ? (
-                  <VStack color="error" textAlign="center" mt={10}>
-                     <Icon as={AlertOctagon} w="24" h="auto" />
+                  <VStack color="warning" textAlign="center" mt={10}>
+                     <Icon as={AlertCircle} w="24" h="auto" />
                      <Heading>No hay resultados para la búsqueda</Heading>
                   </VStack>
                ) : (

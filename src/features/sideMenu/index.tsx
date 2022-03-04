@@ -1,4 +1,11 @@
-import { Box, useColorModeValue, Drawer, DrawerContent, useDisclosure } from "@chakra-ui/react"
+import {
+   Box,
+   useColorModeValue,
+   Drawer,
+   DrawerContent,
+   useDisclosure,
+   VStack,
+} from "@chakra-ui/react"
 import { SidebarContent } from "./SidebarContent"
 import { MobileNav } from "./MobileNav"
 
@@ -24,9 +31,9 @@ export const SidebarWithHeader: React.FC = ({ children }) => {
 
          <MobileNav onOpen={onOpen} />
 
-         <Box ml={{ base: 0, lg: 60 }} p={{ sm: 6 }}>
+         <VStack ml={{ base: 0, lg: 60 }} p={{ sm: 6 }} spacing={6}>
             {children}
-         </Box>
+         </VStack>
       </Box>
    )
 }

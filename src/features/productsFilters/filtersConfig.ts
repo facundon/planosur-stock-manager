@@ -14,13 +14,14 @@ export type FilterAccessor = keyof Pick<
    | "unregisteredStock"
    | "updatedAt"
    | "price"
+   | "name"
 >
 
 export type FiltersDto = {
    filters: Filter[]
 }
 
-export type FilterInputKind = "text" | "select" | "checkbox" | "date"
+export type FilterInputKind = "text" | "select" | "checkbox" | "date" | "number"
 
 export type Filter = {
    options?: FilterSelectOption[]
@@ -39,8 +40,8 @@ export type FilterSelectOption = {
 }
 
 const dateOptions: FilterSelectOption[] = [
-   { label: "Antes de", value: "lte" },
-   { label: "Despues de", value: "gte" },
+   { label: "Antes de", value: "lt" },
+   { label: "Despues de", value: "gt" },
    { label: "El día", value: "eq" },
 ]
 
@@ -50,30 +51,29 @@ const numericOptions: FilterSelectOption[] = [
    { label: "Igual", value: "eq" },
 ]
 
-const selectOptions: FilterSelectOption[] = [
-   { label: "Es", value: "eq" },
-   { label: "No es", value: "not-eq" },
-]
-
 export const filtersConfig: Filter[] = [
+   {
+      label: "Nombre/Código",
+      accessor: "name",
+      inputKind: "text",
+      initialValue: "",
+   },
    {
       label: "Precio [u$S]",
       accessor: "price",
       options: numericOptions,
-      inputKind: "text",
+      inputKind: "number",
       initialValue: "",
    },
    {
       label: "Proveedor",
       accessor: "provider",
-      options: selectOptions,
       inputKind: "select",
       initialValue: "",
    },
    {
       label: "Categoría",
       accessor: "category",
-      options: selectOptions,
       inputKind: "select",
       initialValue: "",
    },
@@ -95,14 +95,14 @@ export const filtersConfig: Filter[] = [
       label: "Stock Capital",
       accessor: "blankStock",
       options: numericOptions,
-      inputKind: "text",
+      inputKind: "number",
       initialValue: "",
    },
    {
       label: "Stock Provincia",
       accessor: "unregisteredStock",
       options: numericOptions,
-      inputKind: "text",
+      inputKind: "number",
       initialValue: "",
    },
    {
@@ -118,6 +118,10 @@ export function mapFilters(data: FiltersDto): ProductFilters {
    const productFilters: ProductFilters = {}
    data.filters.map(filter => {
       switch (filter.accessor) {
+         case "name":
+            productFilters.searchVal = filter.value as string
+            break
+
          case "blankStock":
             if (filter.condition === "gte") productFilters.blankStockMin = Number(filter?.value)
             if (filter.condition === "lte") productFilters.blankStockMax = Number(filter?.value)
@@ -137,13 +141,11 @@ export function mapFilters(data: FiltersDto): ProductFilters {
             break
 
          case "category":
-            if (filter.condition === "eq") productFilters.categoryId = Number(filter?.value)
-            //TODO: add not-eq condition value
+            productFilters.categoryId = Number(filter?.value)
             break
 
          case "provider":
-            if (filter.condition === "eq") productFilters.providerId = Number(filter?.value)
-            //TODO: add not-eq condition value
+            productFilters.providerId = Number(filter?.value)
             break
 
          case "didOrder":
@@ -158,15 +160,15 @@ export function mapFilters(data: FiltersDto): ProductFilters {
             break
 
          case "updatedAt":
-            if (filter.condition === "gte") productFilters.updatedAtFrom = filter.value as string
-            if (filter.condition === "lte") productFilters.updatedAtTo = filter.value as string
+            if (filter.condition === "gt") productFilters.updatedAtFrom = filter.value as string
+            if (filter.condition === "lt") productFilters.updatedAtTo = filter.value as string
             if (filter.condition === "eq")
                productFilters.updatedAtTo = productFilters.updatedAtFrom = filter.value as string
             break
 
          case "orderedAt":
-            if (filter.condition === "gte") productFilters.orderedAtFrom = filter.value as string
-            if (filter.condition === "lte") productFilters.orderedAtTo = filter.value as string
+            if (filter.condition === "gt") productFilters.orderedAtFrom = filter.value as string
+            if (filter.condition === "lt") productFilters.orderedAtTo = filter.value as string
             if (filter.condition === "eq")
                productFilters.orderedAtTo = productFilters.orderedAtFrom = filter.value as string
             break

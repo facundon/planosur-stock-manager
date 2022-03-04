@@ -10,6 +10,7 @@ import {
    Switch,
    Text,
 } from "@chakra-ui/react"
+import { css } from "@emotion/react"
 import { ChangeEvent, useMemo } from "react"
 import { X } from "react-feather"
 import { Control, Controller, Noop, UseFormRegister } from "react-hook-form"
@@ -40,9 +41,22 @@ const KindField: React.FC<KindFieldProps> = ({
       case "checkbox":
          return <Switch {...rest} checked={value as boolean} isChecked={value as boolean} />
       case "date":
-         return <Input {...rest} value={value as string} type="date" />
-      case "text":
+         return (
+            <Input
+               {...rest}
+               value={value as string}
+               type="date"
+               css={css`
+                  ::-webkit-calendar-picker-indicator {
+                     filter: invert(1);
+                  }
+               `}
+            />
+         )
+      case "number":
          return <Input {...rest} value={value as number} type="number" />
+      case "text":
+         return <Input {...rest} value={value as number} type="search" />
       case "select":
          return (
             <AsyncSelect

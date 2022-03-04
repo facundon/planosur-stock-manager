@@ -21,7 +21,7 @@ type ProductsFiltersProps = {
    onSearch: (filters: FiltersDto) => void
 }
 
-const defaultAccessor: FilterAccessor = "blankStock"
+const defaultAccessor: FilterAccessor = "name"
 
 export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) => {
    const defaultValues: FiltersDto = useMemo(() => {
@@ -33,7 +33,7 @@ export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) =>
 
    const { register, control, handleSubmit } = useForm<FiltersDto>({ defaultValues })
 
-   const { fields, remove, append } = useFieldArray({
+   const { fields, remove, append, replace } = useFieldArray({
       control,
       name: "filters",
    })
@@ -113,13 +113,7 @@ export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) =>
                   colorScheme="red"
                   variant="outline"
                   type="reset"
-                  onClick={() =>
-                     remove(
-                        fields
-                           .filter(field => field.accessor !== defaultAccessor)
-                           .map(field => +field.id)
-                     )
-                  }
+                  onClick={() => replace(defaultValues.filters)}
                />
                <Button w="100%" leftIcon={<Search />} type="submit">
                   Buscar

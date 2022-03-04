@@ -102,7 +102,9 @@ export function DataTable<T extends Record<string, unknown>[]>({
                "unregisteredMaxStock",
                "unregisteredMinStock",
                "updatedAt",
+               "orderedAt",
                "category",
+               "provider",
             ],
             sortBy: [
                { id: "code", desc: false },
@@ -132,11 +134,15 @@ export function DataTable<T extends Record<string, unknown>[]>({
       nextPage,
       previousPage,
       setPageSize,
+      rows,
       state: { pageIndex },
    } = tableInstance
 
    return (
       <VStack display="block" maxW="100%" m="auto" boxShadow="dark-lg" p={5}>
+         <Text color="yellow.200" textAlign="end" fontWeight={200}>
+            {rows.length} resultados
+         </Text>
          <Box maxW="100%" maxH={{ base: "70vh", lg: "100vh" }} overflow="auto" display="block">
             <Table {...getTableProps()} w="100%" colorScheme="teal">
                <Thead>
