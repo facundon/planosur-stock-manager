@@ -141,7 +141,7 @@ export function DataTable<T extends Record<string, unknown>[]>({
    return (
       <VStack display="block" maxW="100%" m="auto" boxShadow="dark-lg" p={5}>
          <Text color="yellow.200" textAlign="end" fontWeight={200}>
-            {rows.length} resultados
+            {`${rows.length} resultado${rows.length > 1 ? "s" : ""}`}
          </Text>
          <Box maxW="100%" maxH={{ base: "70vh", lg: "100vh" }} overflow="auto" display="block">
             <Table {...getTableProps()} w="100%" colorScheme="teal">
