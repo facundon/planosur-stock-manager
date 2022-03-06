@@ -29,8 +29,8 @@ export type CommonFormProps<T, K> = {
 } & Omit<ModalProps, "children">
 
 export type FormFieldProps = {
-   error: string | undefined
-   isLoading: boolean
+   error?: string | undefined
+   isLoading?: boolean
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
    data: Omit<CommonFormField<any>, "initialValue">
    wrapperProps?: FormControlProps

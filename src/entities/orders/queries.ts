@@ -56,7 +56,7 @@ export function useUpdateOrderQuery(
    )
 }
 
-export function useAddCategoryQuery(): UseMutationResult<Order, AxiosError, CreateOrderDto> {
+export function useCreateOrderQuery(): UseMutationResult<Order, AxiosError, CreateOrderDto> {
    const queryClient = useQueryClient()
 
    return useMutation(

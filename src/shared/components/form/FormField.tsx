@@ -30,7 +30,9 @@ function FormFieldWithoutRef(
          isDisabled={isLoading}
          {...wrapperProps}
       >
-         <FormLabel>{label}</FormLabel>
+         <FormLabel whiteSpace="nowrap" fontSize={rest.size}>
+            {label}
+         </FormLabel>
          {type === "select" ? (
             <AsyncSelect
                {...rest}

@@ -1,9 +1,10 @@
-import { Button, HStack, IconButton, useDisclosure } from "@chakra-ui/react"
+import { Button, HStack, useDisclosure } from "@chakra-ui/react"
 import { useMemo } from "react"
-import { MinusCircle, Plus, ShoppingCart } from "react-feather"
+import { Plus, ShoppingCart } from "react-feather"
 import { useForm, useFieldArray, Controller } from "react-hook-form"
 import { useSimpleProductQuery } from "../../entities/products/queries"
 import { BaseForm, DropdownQuery } from "../../shared/components"
+import { ListDeleteButton } from "../../shared/components/buttons"
 import { SidebarButton } from "../../shared/components/buttons/SidebarButton"
 import { FormField } from "../../shared/components/form/FormField"
 import { SaleDto } from "./domain"
@@ -18,8 +19,9 @@ export const SalesForm: React.FC = () => {
       control,
       register,
       handleSubmit,
-      formState: { errors, dirtyFields },
+      formState: { errors },
       reset,
+      watch,
    } = useForm<SaleDto>({
       defaultValues,
       shouldFocusError: true,
@@ -32,13 +34,15 @@ export const SalesForm: React.FC = () => {
 
    const { mutate, isLoading, error: serverError } = useAddSaleQuery()
 
-   const hasChanged = useMemo(
-      () => (dirtyFields.products ? Object.values(dirtyFields.products).every(v => v) : false),
-      [dirtyFields.products]
-   )
+   const currentProducts = watch("products")
+   const areEmptyFields = !currentProducts?.every(prod => !!prod.code)
+
+   function handleClose() {
+      onClose()
+      reset()
+   }
 
    //FIXME: product focus issue
-   //FIXME: dirty fields on appended fields
    return (
       <>
          <SidebarButton onClick={onOpen} leftIcon={<ShoppingCart />}>
@@ -47,16 +51,13 @@ export const SalesForm: React.FC = () => {
          <BaseForm
             submitText="Enviar"
             title="Nueva Venta"
-            onSubmit={handleSubmit(d => mutate(d))}
+            onSubmit={handleSubmit(data => mutate(data, { onSuccess: handleClose }))}
             isOpen={isOpen}
-            onClose={() => {
-               onClose()
-               reset()
-            }}
+            onClose={handleClose}
             size="2xl"
             error={serverError?.message}
             isLoading={isLoading}
-            submitProps={{ disabled: !hasChanged }}
+            submitProps={{ disabled: areEmptyFields }}
          >
             {fields.map((field, index) => (
                <HStack key={field.id} alignItems="flex-start">
@@ -122,16 +123,10 @@ export const SalesForm: React.FC = () => {
                      wrapperProps={{ flexBasis: "fit-content" }}
                      {...register(`products.${index}.type` as const)}
                   />
-                  <IconButton
-                     aria-label="Borrar"
-                     title="Borrar"
-                     variant="ghost"
-                     isRound
-                     size="sm"
-                     icon={<MinusCircle size="16" />}
-                     colorScheme="teal"
+                  <ListDeleteButton
                      onClick={() => remove(index)}
                      alignSelf={errors.products?.[index] ? "center" : "flex-end"}
+                     disabled={fields.length === 1}
                   />
                </HStack>
             ))}
@@ -140,7 +135,7 @@ export const SalesForm: React.FC = () => {
                colorScheme="teal"
                size="sm"
                onClick={() => append(defaultValues.products[0])}
-               disabled={!hasChanged}
+               disabled={areEmptyFields}
             >
                Agregar
             </Button>

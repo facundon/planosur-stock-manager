@@ -4,12 +4,10 @@ import { SidebarButton } from "./SidebarButton"
 
 type AddButtonProps = { title?: string } & ButtonProps
 
-const AddButton: React.FC<AddButtonProps> = ({ title, ...rest }) => {
+export const AddButton: React.FC<AddButtonProps> = ({ title, ...rest }) => {
    return (
       <SidebarButton leftIcon={<Plus />} colorScheme="green" {...rest}>
          {title || "Alta"}
       </SidebarButton>
    )
 }
-
-export default AddButton

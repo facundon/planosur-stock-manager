@@ -56,17 +56,20 @@ export function useProductsQuery({
 }
 
 export function useSimpleProductQuery({
-   searchVal,
    enabled = true,
-}: {
-   searchVal?: string
+   ...filters
+}: Pick<ProductFilters, "searchVal" | "providerId"> & {
    enabled?: boolean
 }): UseQueryResult<ProductSimple[], AxiosError> {
+   const queryKey = Object.entries(filters).map(filter => `${filter[0]}=${filter[1]}`)
+
+   const query = queryKey.join("&")
+
    return useQuery(
-      PRODUCTS_KEYS.simple(searchVal),
+      PRODUCTS_KEYS.simple(query),
       async () => {
          const response = await apiClient.get<ProductSimple[]>(
-            `/products/simple${searchVal ? `?searchVal=${searchVal}` : ""}`
+            `/products/simple${query ? `?${query}` : ""}`
          )
          return response.data
       },

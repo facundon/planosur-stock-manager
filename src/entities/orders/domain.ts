@@ -16,7 +16,8 @@ export type ProductInOrder = {
    id: number
    productId: string
    orderId: number
-   qty: number
+   blankQty: number
+   unregisteredQty: number
 }
 
 export type OrderWithProvider = Order & {
@@ -35,7 +36,8 @@ export type CreateOrderDto = {
    providerId: number
    products: {
       code: string
-      qty: number
+      blankQty: number
+      unregisteredQty: number
    }[]
 }
 

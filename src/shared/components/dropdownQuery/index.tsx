@@ -21,7 +21,7 @@ import {
    useOutsideClick,
 } from "@chakra-ui/react"
 import { AxiosError } from "axios"
-import React, { forwardRef, useCallback, useRef, useState } from "react"
+import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react"
 import { AlertTriangle, Edit3, Search, X } from "react-feather"
 import { UseQueryResult } from "react-query"
 import { useRoveFocus } from "../../hooks"
@@ -30,6 +30,7 @@ import { DropdownButton } from "./DropdownButton"
 
 type DropdownQueryProps<T> = {
    query: (props: Record<string, unknown>) => UseQueryResult<T, AxiosError>
+   queryParams?: Record<string, unknown>
    mapOptionsTo: { value: keyof ExtractArray<T>; label: keyof ExtractArray<T> }
    onChange: (value: string | undefined) => void
    initSearchVal?: string
@@ -45,6 +46,7 @@ type DropdownQueryProps<T> = {
 function DropdownQueryWithoutRef<T extends Record<string, any>>(
    {
       query,
+      queryParams,
       mapOptionsTo,
       onChange,
       inputProps,
@@ -66,6 +68,7 @@ function DropdownQueryWithoutRef<T extends Record<string, any>>(
 
    const wrapperRef = useRef<HTMLDivElement>(null)
    const { data, isLoading, isError, isRefetching } = query({
+      ...queryParams,
       searchVal: searchValue.trim().toLowerCase(),
       enabled: queryEnabled && Boolean(searchValue),
    })
@@ -80,7 +83,9 @@ function DropdownQueryWithoutRef<T extends Record<string, any>>(
          setMenuOpen.off()
          setDidSelect.on()
          onChange(selectVal[mapOptionsTo.value])
-         setSearchValue(selectVal[mapOptionsTo.label].trim())
+         setSearchValue(
+            `${selectVal[mapOptionsTo.value]} - ${selectVal[mapOptionsTo.label].trim()}`
+         )
       },
       [mapOptionsTo.label, mapOptionsTo.value, onChange, setDidSelect, setMenuOpen, setQueryEnabled]
    )
@@ -105,6 +110,11 @@ function DropdownQueryWithoutRef<T extends Record<string, any>>(
       handler: setMenuOpen.off,
    })
 
+   useEffect(() => {
+      if (initSearchVal) setDidSelect.on()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [])
+
    return (
       <Box
          ref={wrapperRef}
@@ -121,7 +131,7 @@ function DropdownQueryWithoutRef<T extends Record<string, any>>(
          <Popover isOpen={menuOpen} gutter={5} autoFocus={false} matchWidth>
             <PopoverTrigger>
                <FormControl isRequired={isRequired} isInvalid={!!error}>
-                  {label && <FormLabel>{label}</FormLabel>}
+                  {label && <FormLabel fontSize={inputProps?.size || undefined}>{label}</FormLabel>}
                   <InputGroup>
                      <InputLeftElement h="100%" color="gray.400" pointerEvents="none">
                         <Search size={inputProps?.size === "sm" ? "16" : undefined} />
@@ -180,6 +190,7 @@ function DropdownQueryWithoutRef<T extends Record<string, any>>(
                               onClick={() => {
                                  setDidSelect.off()
                                  onChange(undefined)
+                                 setSearchValue("")
                                  setTimeout(() => inputRef.current?.select())
                               }}
                            />

@@ -4,12 +4,10 @@ import { SidebarButton } from "./SidebarButton"
 
 type ModifyButtonProps = ButtonProps
 
-const ModifyButton: React.FC<ModifyButtonProps> = ({ ...rest }) => {
+export const ModifyButton: React.FC<ModifyButtonProps> = ({ ...rest }) => {
    return (
       <SidebarButton leftIcon={<Edit2 />} colorScheme="orange" {...rest}>
          Editar
       </SidebarButton>
    )
 }
-
-export default ModifyButton
