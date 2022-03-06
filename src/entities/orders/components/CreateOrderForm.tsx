@@ -37,6 +37,7 @@ export const CreateOrderForm: React.FC = () => {
       watch,
       handleSubmit,
       reset,
+      clearErrors,
    } = useForm<CreateOrderDto>()
 
    const currentProviderId = watch("providerId")
@@ -61,7 +62,8 @@ export const CreateOrderForm: React.FC = () => {
             })
          )
       } else if (currentProviderId) replace(defaultValues.products)
-   }, [currentProviderId, defaultValues.products, products, replace])
+      clearErrors()
+   }, [clearErrors, currentProviderId, defaultValues.products, products, replace])
 
    function handleClose() {
       onClose()
@@ -85,7 +87,7 @@ export const CreateOrderForm: React.FC = () => {
                isError={isProvidersError}
                withEmptyOption
                emptyOptionLabel="Seleccionar Proveedor"
-               {...register("providerId")}
+               {...register("providerId", { required: "Elija un proveedor" })}
             >
                {providers?.map(provider => (
                   <option key={provider.id} value={provider.id}>
@@ -123,7 +125,11 @@ export const CreateOrderForm: React.FC = () => {
                            label="Producto"
                            ref={ref}
                            error={error?.message}
-                           initSearchVal={value}
+                           initSearchVal={
+                              value
+                                 ? `${value} - ${products?.find(prod => prod.code === value)?.name}`
+                                 : value
+                           }
                         />
                      )}
                   />
@@ -137,7 +143,10 @@ export const CreateOrderForm: React.FC = () => {
                         required: true,
                         name: `products.${index}.blankQty`,
                      }}
-                     {...register(`products.${index}.blankQty`)}
+                     {...register(`products.${index}.blankQty`, {
+                        min: { message: "Mínimo 1", value: 1 },
+                     })}
+                     error={errors.products?.[index].blankQty?.message}
                      isLoading={isLoading}
                   />
                   <FormField
@@ -149,7 +158,10 @@ export const CreateOrderForm: React.FC = () => {
                         required: true,
                         name: `products.${index}.unregisteredQty`,
                      }}
-                     {...register(`products.${index}.unregisteredQty`)}
+                     {...register(`products.${index}.unregisteredQty`, {
+                        min: { message: "Mínimo 1", value: 1 },
+                     })}
+                     error={errors.products?.[index].unregisteredQty?.message}
                      isLoading={isLoading}
                   />
                   <ListDeleteButton
