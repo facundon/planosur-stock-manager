@@ -36,7 +36,7 @@ export function useProductsQuery({
    enabled = true,
    ...filters
 }: ProductFilters & { enabled?: boolean }): UseQueryResult<
-   ProductWithProviderAndCategory[] | ProductSimple[],
+   ProductWithProviderAndCategory[],
    AxiosError
 > {
    const queryKey = Object.entries(filters).map(filter => `${filter[0]}=${filter[1]}`)
@@ -46,8 +46,27 @@ export function useProductsQuery({
    return useQuery(
       PRODUCTS_KEYS.filtered(filters),
       async () => {
-         const response = await apiClient.get<ProductWithProviderAndCategory[] | ProductSimple[]>(
+         const response = await apiClient.get<ProductWithProviderAndCategory[]>(
             `/products${query ? `?${query}` : ""}`
+         )
+         return response.data
+      },
+      { enabled }
+   )
+}
+
+export function useSimpleProductQuery({
+   searchVal,
+   enabled = true,
+}: {
+   searchVal?: string
+   enabled?: boolean
+}): UseQueryResult<ProductSimple[], AxiosError> {
+   return useQuery(
+      PRODUCTS_KEYS.simple(searchVal),
+      async () => {
+         const response = await apiClient.get<ProductSimple[]>(
+            `/products/simple${searchVal ? `?searchVal=${searchVal}` : ""}`
          )
          return response.data
       },

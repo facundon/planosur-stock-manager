@@ -38,7 +38,7 @@ export type ProductFilters = {
    blankStockMax?: number
    blankStockMin?: number
    limit?: number
-   simple?: boolean
+   needStock?: boolean
    didOrder?: boolean
    updatedAtFrom?: string
    updatedAtTo?: string

@@ -5,7 +5,7 @@ import { getCategoryFormFields } from "../formFields"
 import { categoryFormRules } from "../formRules"
 import { useBoolean } from "@chakra-ui/react"
 import { ModifyButton } from "../../../shared/components/buttons"
-import AsyncSelect from "../../../shared/components/form/AsyncSelect"
+import { AsyncSelect } from "../../../shared/components/form/AsyncSelect"
 
 export const UpdateCategoryForm: React.FC = () => {
    const [categoryId, setCategoryId] = useState("")

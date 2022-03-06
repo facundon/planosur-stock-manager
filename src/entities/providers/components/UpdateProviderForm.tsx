@@ -5,7 +5,7 @@ import { getProviderFormFields } from "../formFields"
 import { providerFormRules } from "../formRules"
 import { useBoolean } from "@chakra-ui/react"
 import { ModifyButton } from "../../../shared/components/buttons"
-import AsyncSelect from "../../../shared/components/form/AsyncSelect"
+import { AsyncSelect } from "../../../shared/components/form/AsyncSelect"
 
 export const UpdateProviderForm: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean(false)

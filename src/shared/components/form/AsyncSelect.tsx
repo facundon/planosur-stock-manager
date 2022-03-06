@@ -8,7 +8,7 @@ export type AsyncSelectProps = {
    withEmptyOption?: boolean
 } & SelectProps
 
-const AsyncSelect = React.forwardRef<HTMLSelectElement, AsyncSelectProps>(
+export const AsyncSelect = React.forwardRef<HTMLSelectElement, AsyncSelectProps>(
    ({ isError, isLoading, isDisabled, withEmptyOption, children, ...rest }, ref) => {
       return (
          <Select
@@ -29,5 +29,3 @@ const AsyncSelect = React.forwardRef<HTMLSelectElement, AsyncSelectProps>(
       )
    }
 )
-
-export default AsyncSelect

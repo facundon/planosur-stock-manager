@@ -68,7 +68,6 @@ function DropdownQueryWithoutRef<T extends Record<string, any>>(
    const { data, isLoading, isError, isRefetching } = query({
       searchVal: searchValue.trim().toLowerCase(),
       enabled: queryEnabled && Boolean(searchValue),
-      simple: true,
    })
 
    const inputRef = useRef<HTMLInputElement | null>(null)
@@ -130,6 +129,7 @@ function DropdownQueryWithoutRef<T extends Record<string, any>>(
                      <Input
                         {...inputProps}
                         _placeholder={{ color: inputPlaceholderColor }}
+                        autoComplete="off"
                         isInvalid={isError}
                         isTruncated
                         ref={_ref => {

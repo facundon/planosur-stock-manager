@@ -26,7 +26,7 @@ export type CommonFormProps<T, K> = {
    onSuccess?: () => void
    onClose: () => void
    isOpen: boolean
-} & ModalProps
+} & Omit<ModalProps, "children">
 
 export type FormFieldProps = {
    error: string | undefined

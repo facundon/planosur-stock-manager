@@ -16,7 +16,7 @@ import { X } from "react-feather"
 import { Control, Controller, Noop, UseFormRegister } from "react-hook-form"
 import { useCategoriesQuery } from "../../entities/categories/queries"
 import { useProvidersQuery } from "../../entities/providers/queries"
-import AsyncSelect from "../../shared/components/form/AsyncSelect"
+import { AsyncSelect } from "../../shared/components/form/AsyncSelect"
 import { Filter, FilterInputKind, FiltersDto } from "./filtersConfig"
 
 type KindFieldProps = {

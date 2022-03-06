@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react"
 import React from "react"
 import { Phone, DollarSign, AtSign } from "react-feather"
-import AsyncSelect from "./AsyncSelect"
+import { AsyncSelect } from "./AsyncSelect"
 import { FormFieldProps } from "./types"
 
 function FormFieldWithoutRef(

@@ -2,7 +2,7 @@ import { Button, HStack, IconButton, useDisclosure } from "@chakra-ui/react"
 import { useMemo } from "react"
 import { MinusCircle, Plus, ShoppingCart } from "react-feather"
 import { useForm, useFieldArray, Controller } from "react-hook-form"
-import { useProductsQuery } from "../../entities/products/queries"
+import { useSimpleProductQuery } from "../../entities/products/queries"
 import { BaseForm, DropdownQuery } from "../../shared/components"
 import { SidebarButton } from "../../shared/components/buttons/SidebarButton"
 import { FormField } from "../../shared/components/form/FormField"
@@ -71,7 +71,7 @@ export const SalesForm: React.FC = () => {
                         <DropdownQuery
                            isRequired
                            mapOptionsTo={{ label: "name", value: "code" }}
-                           query={useProductsQuery}
+                           query={useSimpleProductQuery}
                            onChange={onChange}
                            inputProps={{
                               size: "sm",

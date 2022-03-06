@@ -4,11 +4,11 @@ import { Delete } from "react-feather"
 import { useQueryClient } from "react-query"
 import { useCategoriesQuery, useDeleteCategoryQuery } from "../entities/categories/queries"
 import { CATEGORIES_KEYS } from "../entities/categories/queryKeys"
-import { useDeleteProductQuery, useProductsQuery } from "../entities/products/queries"
+import { useDeleteProductQuery, useSimpleProductQuery } from "../entities/products/queries"
 import { useDeleteProviderQuery, useProvidersQuery } from "../entities/providers/queries"
 import { PROVIDERS_KEYS } from "../entities/providers/queryKeys"
 import { BaseForm, DropdownQuery } from "../shared/components"
-import AsyncSelect from "../shared/components/form/AsyncSelect"
+import { AsyncSelect } from "../shared/components/form/AsyncSelect"
 
 export const DeleteModal: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean()
@@ -111,7 +111,7 @@ export const DeleteModal: React.FC = () => {
                <TabPanels>
                   <TabPanel>
                      <DropdownQuery
-                        query={useProductsQuery}
+                        query={useSimpleProductQuery}
                         mapOptionsTo={{ label: "name", value: "code" }}
                         onChange={value => setRecordToDelete(value || "")}
                      />

@@ -24,7 +24,7 @@ type BaseFormProps = {
    title: string
    error?: string
    isLoading?: boolean
-} & ModalProps
+} & Omit<ModalProps, "children">
 
 const BaseForm: React.FC<BaseFormProps> = ({
    isOpen,
