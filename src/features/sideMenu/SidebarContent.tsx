@@ -12,9 +12,9 @@ import { BaseAccordionItem } from "./BaseAccordionItem"
 import { AddCategoryForm, UpdateCategoryForm } from "../../entities/categories/components"
 import { AddProductForm, UpdateProductForm } from "../../entities/products/components"
 import { AddProviderForm, UpdateProviderForm } from "../../entities/providers/components"
+import { CreateOrderForm, EntryOrderForm } from "../../entities/orders/components"
 import { DeleteModal } from "../DeleteModal"
 import { SalesForm } from "../salesForm"
-import { CreateOrderForm } from "../../entities/orders/components/CreateOrderForm"
 
 type SidebarContentProps = {
    onClose: () => void
@@ -49,6 +49,7 @@ export const SidebarContent: React.FC<SidebarContentProps> = ({ onClose, ...rest
             <DeleteModal />
             <BaseAccordionItem title="Pedidos">
                <CreateOrderForm />
+               <EntryOrderForm />
             </BaseAccordionItem>
             <BaseAccordionItem title="Productos">
                <AddProductForm />

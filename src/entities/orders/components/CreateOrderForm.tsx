@@ -14,7 +14,7 @@ import { useCreateOrderQuery } from "../queries"
 export const CreateOrderForm: React.FC = () => {
    const { isOpen, onClose, onOpen } = useDisclosure()
 
-   const { mutate, isLoading } = useCreateOrderQuery()
+   const { mutate, isLoading, error } = useCreateOrderQuery()
 
    const {
       data: providers,
@@ -24,7 +24,7 @@ export const CreateOrderForm: React.FC = () => {
 
    const defaultValues: CreateOrderDto = useMemo(
       () => ({
-         providerId: NaN,
+         providerId: undefined,
          products: [{ blankQty: 1, unregisteredQty: 1, code: "" }],
       }),
       []
@@ -62,12 +62,14 @@ export const CreateOrderForm: React.FC = () => {
             })
          )
       } else if (currentProviderId) replace(defaultValues.products)
+      if (!currentProviderId) replace([])
       clearErrors()
    }, [clearErrors, currentProviderId, defaultValues.products, products, replace])
 
    function handleClose() {
       onClose()
       reset()
+      replace([])
    }
 
    return (
@@ -79,15 +81,19 @@ export const CreateOrderForm: React.FC = () => {
             title="Nuevo Pedido"
             onSubmit={handleSubmit(data => mutate(data, { onSuccess: handleClose }))}
             submitText="Crear"
-            submitProps={{ isDisabled: !currentProviderId || !fields.length || areEmptyFields }}
+            submitProps={{
+               isDisabled:
+                  !currentProviderId || !fields.length || areEmptyFields || !!errors.products,
+            }}
             isLoading={isLoading}
+            error={Array.isArray(error?.message) ? error?.message.join(" - ") : error?.message}
          >
             <AsyncSelect
                isLoading={isLoadingProviders}
                isError={isProvidersError}
                withEmptyOption
                emptyOptionLabel="Seleccionar Proveedor"
-               {...register("providerId", { required: "Elija un proveedor" })}
+               {...register("providerId")}
             >
                {providers?.map(provider => (
                   <option key={provider.id} value={provider.id}>
@@ -105,10 +111,11 @@ export const CreateOrderForm: React.FC = () => {
                      control={control}
                      render={({
                         field: { onChange, name, onBlur, ref, value },
-                        fieldState: { error },
+                        fieldState: { error: fieldError },
                      }) => (
                         <DropdownQuery
                            isRequired
+                           showCompoundName
                            mapOptionsTo={{ label: "name", value: "code" }}
                            query={useSimpleProductQuery}
                            queryParams={{ providerId: currentProviderId }}
@@ -124,7 +131,7 @@ export const CreateOrderForm: React.FC = () => {
                            isDisabled={isLoading}
                            label="Producto"
                            ref={ref}
-                           error={error?.message}
+                           error={fieldError?.message}
                            initSearchVal={
                               value
                                  ? `${value} - ${products?.find(prod => prod.code === value)?.name}`
@@ -135,34 +142,34 @@ export const CreateOrderForm: React.FC = () => {
                   />
 
                   <FormField
-                     size="sm"
-                     wrapperProps={{ flexBasis: "min-content" }}
+                     {...register(`products.${index}.blankQty`, {
+                        min: { message: "Mínimo 1", value: 1 },
+                     })}
                      data={{
                         label: "Stock Capital",
                         type: "number",
                         required: true,
-                        name: `products.${index}.blankQty`,
                      }}
-                     {...register(`products.${index}.blankQty`, {
-                        min: { message: "Mínimo 1", value: 1 },
-                     })}
-                     error={errors.products?.[index].blankQty?.message}
-                     isLoading={isLoading}
-                  />
-                  <FormField
                      size="sm"
                      wrapperProps={{ flexBasis: "min-content" }}
+                     error={errors.products?.[index].blankQty?.message}
+                     isLoading={isLoading}
+                     textAlign="center"
+                  />
+                  <FormField
+                     {...register(`products.${index}.unregisteredQty`, {
+                        min: { message: "Mínimo 1", value: 1 },
+                     })}
                      data={{
                         label: "Stock Provincia",
                         type: "number",
                         required: true,
-                        name: `products.${index}.unregisteredQty`,
                      }}
-                     {...register(`products.${index}.unregisteredQty`, {
-                        min: { message: "Mínimo 1", value: 1 },
-                     })}
+                     size="sm"
+                     wrapperProps={{ flexBasis: "min-content" }}
                      error={errors.products?.[index].unregisteredQty?.message}
                      isLoading={isLoading}
+                     textAlign="center"
                   />
                   <ListDeleteButton
                      onClick={() => remove(index)}

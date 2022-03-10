@@ -40,6 +40,8 @@ type DropdownQueryProps<T> = {
    isRequired?: boolean
    label?: string
    error?: string
+   filters?: ((value: T) => T)[]
+   showCompoundName?: boolean
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -56,6 +58,8 @@ function DropdownQueryWithoutRef<T extends Record<string, any>>(
       label,
       error,
       initSearchVal = "",
+      showCompoundName,
+      filters,
    }: DropdownQueryProps<T>,
    ref: React.RefCallback<HTMLInputElement | null>
 ) {
@@ -83,11 +87,23 @@ function DropdownQueryWithoutRef<T extends Record<string, any>>(
          setMenuOpen.off()
          setDidSelect.on()
          onChange(selectVal[mapOptionsTo.value])
-         setSearchValue(
-            `${selectVal[mapOptionsTo.value]} - ${selectVal[mapOptionsTo.label].trim()}`
-         )
+         showCompoundName
+            ? setSearchValue(
+                 `${selectVal[mapOptionsTo.value]} - ${String(
+                    selectVal[mapOptionsTo.label]
+                 ).trim()}`
+              )
+            : setSearchValue(String(selectVal[mapOptionsTo.label]).trim())
       },
-      [mapOptionsTo.label, mapOptionsTo.value, onChange, setDidSelect, setMenuOpen, setQueryEnabled]
+      [
+         mapOptionsTo.label,
+         mapOptionsTo.value,
+         onChange,
+         setDidSelect,
+         setMenuOpen,
+         setQueryEnabled,
+         showCompoundName,
+      ]
    )
 
    const handleBlur = useCallback(

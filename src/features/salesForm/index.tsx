@@ -1,5 +1,4 @@
 import { Button, HStack, useDisclosure } from "@chakra-ui/react"
-import { useMemo } from "react"
 import { Plus, ShoppingCart } from "react-feather"
 import { useForm, useFieldArray, Controller } from "react-hook-form"
 import { useSimpleProductQuery } from "../../entities/products/queries"
@@ -57,7 +56,7 @@ export const SalesForm: React.FC = () => {
             size="2xl"
             error={serverError?.message}
             isLoading={isLoading}
-            submitProps={{ disabled: areEmptyFields }}
+            submitProps={{ disabled: areEmptyFields || !!errors.products }}
          >
             {fields.map((field, index) => (
                <HStack key={field.id} alignItems="flex-start">
@@ -93,7 +92,6 @@ export const SalesForm: React.FC = () => {
                      data={{
                         label: "Cantidad",
                         type: "number",
-                        name: "amount",
                         required: true,
                      }}
                      type="number"
@@ -114,7 +112,6 @@ export const SalesForm: React.FC = () => {
                            { label: "Capital", value: "blank" },
                            { label: "Provincia", value: "unregistered" },
                         ],
-                        name: "type",
                         required: true,
                      }}
                      isLoading={isLoading}

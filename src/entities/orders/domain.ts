@@ -1,10 +1,11 @@
 import { Product } from "../products/domain"
 import { Provider } from "../providers/domain"
 
-export type OrderStatus = "fullfiled" | "pending" | "claim" | "canceled"
+export type OrderStatus = "fullfiled" | "pending" | "canceled"
 
 export type Order = {
    id: number
+   provider: { name: Provider["name"] }
    providerId: number
    createdAt: Date
    updatedAt: Date
@@ -20,12 +21,6 @@ export type ProductInOrder = {
    unregisteredQty: number
 }
 
-export type OrderWithProvider = Order & {
-   provider: {
-      name: Provider["name"]
-   }
-}
-
 export type OrderWithProducts = Order & {
    productInOrder: (ProductInOrder & {
       product: Product
@@ -33,7 +28,7 @@ export type OrderWithProducts = Order & {
 }
 
 export type CreateOrderDto = {
-   providerId: number
+   providerId: number | undefined
    products: {
       code: string
       blankQty: number
@@ -41,6 +36,11 @@ export type CreateOrderDto = {
    }[]
 }
 
-export type UpdateOrderDto = Partial<CreateOrderDto> & {
+export type UpdateOrderDto = Pick<CreateOrderDto, "products"> & {
    status: OrderStatus
+}
+
+export type OrderFilters = {
+   searchVal?: string
+   status?: OrderStatus[]
 }

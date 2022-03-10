@@ -7,28 +7,42 @@ import {
    UseQueryResult,
 } from "react-query"
 import { apiClient } from "../../shared/utils/apiClient"
-import { addUpdater, deleteUpdater, patchUpdater } from "../../shared/utils/queriesUpdater"
-import {
-   CreateOrderDto,
-   Order,
-   OrderWithProducts,
-   OrderWithProvider,
-   UpdateOrderDto,
-} from "./domain"
+import { addUpdater } from "../../shared/utils/queriesUpdater"
+import { PRODUCTS_KEYS } from "../products/queryKeys"
+import { CreateOrderDto, Order, OrderFilters, OrderWithProducts, UpdateOrderDto } from "./domain"
 import { ORDER_KEYS } from "./queryKeys"
 
-export function useOrderQuery(id: number): UseQueryResult<OrderWithProducts, AxiosError> {
-   return useQuery(ORDER_KEYS.byId(id), async () => {
-      const response = await apiClient.get<OrderWithProducts>(`/orders/${id}`)
-      return response.data
-   })
+export function useOrderQuery({
+   enabled,
+   id,
+}: {
+   enabled?: boolean
+   id: number
+}): UseQueryResult<OrderWithProducts, AxiosError> {
+   return useQuery(
+      ORDER_KEYS.byId(id),
+      async () => {
+         const response = await apiClient.get<OrderWithProducts>(`/orders/${id}`)
+         return response.data
+      },
+      { enabled }
+   )
 }
 
-export function useOrdersQuery(enabled = true): UseQueryResult<OrderWithProvider[], AxiosError> {
+export function useOrdersQuery({
+   enabled = true,
+   ...filters
+}: OrderFilters & {
+   enabled?: boolean
+}): UseQueryResult<Order[], AxiosError> {
+   const queryKey = Object.entries(filters).map(filter => `${filter[0]}=${filter[1]}`)
+
+   const query = queryKey.join("&")
+
    return useQuery(
-      ORDER_KEYS.base,
+      ORDER_KEYS.filtered(filters),
       async () => {
-         const response = await apiClient.get<OrderWithProvider[]>("/orders")
+         const response = await apiClient.get<Order[]>(`/orders${query ? `?${query}` : ""}`)
          return response.data
       },
       { enabled }
@@ -46,12 +60,9 @@ export function useUpdateOrderQuery(
          return response.data
       },
       {
-         /*          onSuccess: data => {
-            queryClient.setQueryData(ORDER_KEYS.byId(id), data)
-            queryClient.setQueryData<Order[]>(ORDER_KEYS.base, prev =>
-               patchUpdater(data, prev, "id")
-            )
-         }, */
+         onSuccess: () => {
+            queryClient.invalidateQueries(PRODUCTS_KEYS.base)
+         },
       }
    )
 }
@@ -65,11 +76,9 @@ export function useCreateOrderQuery(): UseMutationResult<Order, AxiosError, Crea
          return response.data
       },
       {
-         /*          onSuccess: data => {
-            queryClient.setQueryData<Order[]>(ORDER_KEYS.base, prev =>
-               addUpdater(data, prev)
-            )
-         }, */
+         onSuccess: data => {
+            queryClient.setQueryData<Order[]>(ORDER_KEYS.base, prev => addUpdater(data, prev))
+         },
       }
    )
 }

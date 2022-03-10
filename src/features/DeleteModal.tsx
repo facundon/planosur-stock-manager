@@ -111,6 +111,7 @@ export const DeleteModal: React.FC = () => {
                <TabPanels>
                   <TabPanel>
                      <DropdownQuery
+                        showCompoundName
                         query={useSimpleProductQuery}
                         mapOptionsTo={{ label: "name", value: "code" }}
                         onChange={value => setRecordToDelete(value || "")}

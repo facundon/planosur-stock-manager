@@ -5,7 +5,6 @@ import { UseMutationResult } from "react-query"
 export type SelectOption = { label: string; value: string }
 
 export type CommonFormField<T> = {
-   name: keyof T
    label: string
    required?: boolean
    initialValue: T[keyof T] | undefined
@@ -15,8 +14,10 @@ export type CommonFormField<T> = {
    withEmptyOption?: boolean
 }
 
+export type CommonFormFieldWithName<T> = CommonFormField<T> & { name: keyof T }
+
 export type CommonFormProps<T, K> = {
-   fields: (CommonFormField<T> | CommonFormField<T>[])[]
+   fields: (CommonFormFieldWithName<T> | CommonFormFieldWithName<T>[])[]
    title: string
    submitText: string
    rules?: Partial<Record<keyof T, RegisterOptions>>

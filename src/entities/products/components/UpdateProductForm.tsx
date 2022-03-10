@@ -58,6 +58,7 @@ export const UpdateProductForm: React.FC = () => {
             })}
          >
             <DropdownQuery
+               showCompoundName
                query={useProductsQuery}
                mapOptionsTo={{ label: "name", value: "code" }}
                onChange={setCurrentProductCode}

@@ -26,7 +26,7 @@ type BaseFormProps = {
    isLoading?: boolean
 } & Omit<ModalProps, "children">
 
-const BaseForm: React.FC<BaseFormProps> = ({
+export const BaseForm: React.FC<BaseFormProps> = ({
    isOpen,
    isLoading,
    error,
@@ -97,5 +97,3 @@ const BaseForm: React.FC<BaseFormProps> = ({
       </Modal>
    )
 }
-
-export default BaseForm
