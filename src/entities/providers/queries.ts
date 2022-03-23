@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react"
 import { AxiosError } from "axios"
 import {
    useMutation,
@@ -33,6 +34,7 @@ export function useUpdateProviderQuery(
    id: number
 ): UseMutationResult<Provider, AxiosError, ProviderFormDto> {
    const queryClient = useQueryClient()
+   const toast = useToast({ variant: "top-accent", position: "bottom-left" })
 
    return useMutation(
       async form => {
@@ -45,6 +47,10 @@ export function useUpdateProviderQuery(
             queryClient.setQueryData<Provider[]>(PROVIDERS_KEYS.base, prev =>
                patchUpdater(data, prev, "id")
             )
+            toast({ title: `Proveedor actualizado`, status: "success" })
+         },
+         onError: () => {
+            toast({ title: "No se pudo actualizar el proveedor", status: "error" })
          },
       }
    )
@@ -52,6 +58,7 @@ export function useUpdateProviderQuery(
 
 export function useDeleteProviderQuery(): UseMutationResult<Provider, AxiosError, number> {
    const queryClient = useQueryClient()
+   const toast = useToast({ variant: "top-accent", position: "bottom-left" })
 
    return useMutation(
       async id => {
@@ -64,6 +71,10 @@ export function useDeleteProviderQuery(): UseMutationResult<Provider, AxiosError
             queryClient.setQueryData<Provider[] | undefined>(PROVIDERS_KEYS.base, prev =>
                deleteUpdater(id, prev, "id")
             )
+            toast({ title: `Proveedor eliminado`, status: "success" })
+         },
+         onError: () => {
+            toast({ title: "No se pudo eliminar el proveedor", status: "error" })
          },
       }
    )
@@ -71,6 +82,7 @@ export function useDeleteProviderQuery(): UseMutationResult<Provider, AxiosError
 
 export function useAddProviderQuery(): UseMutationResult<Provider, AxiosError, ProviderFormDto> {
    const queryClient = useQueryClient()
+   const toast = useToast({ variant: "top-accent", position: "bottom-left" })
 
    return useMutation(
       async form => {
@@ -82,6 +94,10 @@ export function useAddProviderQuery(): UseMutationResult<Provider, AxiosError, P
             queryClient.setQueryData<Provider[]>(PROVIDERS_KEYS.base, prev =>
                addUpdater(data, prev)
             )
+            toast({ title: `Proveedor creado`, status: "success" })
+         },
+         onError: () => {
+            toast({ title: "No se pudo agregar el proveedor", status: "error" })
          },
       }
    )
