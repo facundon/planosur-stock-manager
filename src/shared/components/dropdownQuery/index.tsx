@@ -40,7 +40,6 @@ type DropdownQueryProps<T> = {
    isRequired?: boolean
    label?: string
    error?: string
-   filters?: ((value: T) => T)[]
    showCompoundName?: boolean
 }
 
@@ -59,7 +58,6 @@ function DropdownQueryWithoutRef<T extends Record<string, any>>(
       error,
       initSearchVal = "",
       showCompoundName,
-      filters,
    }: DropdownQueryProps<T>,
    ref: React.RefCallback<HTMLInputElement | null>
 ) {

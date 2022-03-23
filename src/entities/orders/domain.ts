@@ -1,15 +1,11 @@
 import { Product } from "../products/domain"
 import { Provider } from "../providers/domain"
 
-export type OrderStatus = "fullfiled" | "pending" | "canceled"
-
 export type Order = {
    id: number
    provider: { name: Provider["name"] }
    providerId: number
    createdAt: Date
-   updatedAt: Date
-   status: OrderStatus
    file: string
 }
 
@@ -36,11 +32,8 @@ export type CreateOrderDto = {
    }[]
 }
 
-export type UpdateOrderDto = Pick<CreateOrderDto, "products"> & {
-   status: OrderStatus
-}
+export type UpdateOrderDto = Pick<CreateOrderDto, "products">
 
 export type OrderFilters = {
    searchVal?: string
-   status?: OrderStatus[]
 }

@@ -1,6 +1,7 @@
 import {
    Box,
    HStack,
+   Icon,
    Skeleton,
    Table,
    Tbody,
@@ -8,10 +9,12 @@ import {
    Text,
    Th,
    Thead,
+   Tooltip,
    Tr,
    VStack,
 } from "@chakra-ui/react"
 import { useMemo } from "react"
+import { AlertOctagon } from "react-feather"
 import { useTable, Column, usePagination, useSortBy } from "react-table"
 import { SortIcon } from "../../shared/assets"
 import { ExtractArray } from "../../shared/utils/types"
@@ -186,6 +189,18 @@ export function DataTable<T extends Record<string, unknown>[]>({
                <Tbody {...getTableBodyProps()}>
                   {page.map(row => {
                      prepareRow(row)
+                     const isAlert =
+                        (row.original.blankStock as number) <
+                           (row.original.blankMinStock as number) ||
+                        (row.original.unregisteredStock as number) <
+                           (row.original.unregisteredMinStock as number)
+
+                     const isWarn =
+                        (row.original.blankStock as number) ===
+                           (row.original.blankMinStock as number) ||
+                        (row.original.unregisteredStock as number) ===
+                           (row.original.unregisteredMinStock as number)
+
                      return (
                         // eslint-disable-next-line react/jsx-key
                         <Tr {...row.getRowProps()} border="none">
@@ -203,7 +218,32 @@ export function DataTable<T extends Record<string, unknown>[]>({
                                     textAlign={Number.isInteger(cell.value) ? "center" : "left"}
                                  >
                                     {!isLoading ? (
-                                       cell.render("Cell")
+                                       <HStack>
+                                          {isSticky && (isAlert || isWarn) && (
+                                             <Tooltip
+                                                label={
+                                                   isAlert
+                                                      ? "Stock comprometido"
+                                                      : isWarn
+                                                      ? "Stock al límite"
+                                                      : undefined
+                                                }
+                                                fontSize="sm"
+                                             >
+                                                <Icon
+                                                   color={
+                                                      isAlert
+                                                         ? "error"
+                                                         : isWarn
+                                                         ? "warning"
+                                                         : undefined
+                                                   }
+                                                   as={AlertOctagon}
+                                                />
+                                             </Tooltip>
+                                          )}
+                                          {cell.render("Cell")}
+                                       </HStack>
                                     ) : (
                                        <Skeleton startColor="yellow.300" h={2} />
                                     )}

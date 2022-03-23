@@ -56,13 +56,11 @@ export const EntryOrderForm: React.FC = () => {
       <>
          <ModifyButton onClick={onOpen} title="Ingresar" />
          <BaseForm
-            title="Ingresar Orden"
+            title="Ingresar Pedido"
             submitText="Ingresar"
             onClose={handleClose}
             isOpen={isOpen}
-            onSubmit={handleSubmit(data =>
-               mutate({ ...data, status: "fullfiled" }, { onSuccess: handleClose })
-            )}
+            onSubmit={handleSubmit(data => mutate(data, { onSuccess: handleClose }))}
             error={Array.isArray(error?.message) ? error?.message.join(" - ") : error?.message}
             isLoading={isLoading}
             submitProps={{ disabled: !currentOrderId || !!errors.products }}
@@ -75,6 +73,7 @@ export const EntryOrderForm: React.FC = () => {
                   label: "id",
                }}
                onChange={id => setCurrentOrderId(Number(id) || NaN)}
+               inputProps={{ bgColor: "primary", color: "blackAlpha.900", fontWeight: "600" }}
             />
             {order && (
                <Center gap={3}>
@@ -115,7 +114,7 @@ export const EntryOrderForm: React.FC = () => {
                      />
                      <FormField
                         {...register(`products.${index}.blankQty`, {
-                           min: { message: "Mínimo 1", value: 1 },
+                           min: { message: "Mínimo 0", value: 0 },
                         })}
                         data={{ label: "Stock Capital", type: "number", required: true }}
                         size="sm"
@@ -126,7 +125,7 @@ export const EntryOrderForm: React.FC = () => {
                      />
                      <FormField
                         {...register(`products.${index}.unregisteredQty`, {
-                           min: { message: "Mínimo 1", value: 1 },
+                           min: { message: "Mínimo 0", value: 0 },
                         })}
                         data={{ label: "Stock Provincia", type: "number", required: true }}
                         size="sm"

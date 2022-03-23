@@ -143,7 +143,7 @@ export const CreateOrderForm: React.FC = () => {
 
                   <FormField
                      {...register(`products.${index}.blankQty`, {
-                        min: { message: "Mínimo 1", value: 1 },
+                        min: { message: "Mínimo 0", value: 0 },
                      })}
                      data={{
                         label: "Stock Capital",
@@ -158,7 +158,7 @@ export const CreateOrderForm: React.FC = () => {
                   />
                   <FormField
                      {...register(`products.${index}.unregisteredQty`, {
-                        min: { message: "Mínimo 1", value: 1 },
+                        min: { message: "Mínimo 0", value: 0 },
                      })}
                      data={{
                         label: "Stock Provincia",
