@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react"
 import { AxiosError } from "axios"
 import {
    useMutation,
@@ -53,6 +54,7 @@ export function useUpdateOrderQuery(
    id: number
 ): UseMutationResult<Order, AxiosError, UpdateOrderDto> {
    const queryClient = useQueryClient()
+   const toast = useToast({ variant: "top-accent", position: "bottom-left" })
 
    return useMutation(
       async form => {
@@ -63,6 +65,10 @@ export function useUpdateOrderQuery(
          onSuccess: () => {
             queryClient.invalidateQueries(PRODUCTS_KEYS.base)
             queryClient.invalidateQueries(ORDER_KEYS.base)
+            toast({ title: `Pedido ingresado`, status: "success" })
+         },
+         onError: () => {
+            toast({ title: "No se pudo ingresar el pedido", status: "error" })
          },
       }
    )
@@ -70,6 +76,7 @@ export function useUpdateOrderQuery(
 
 export function useCreateOrderQuery(): UseMutationResult<Order, AxiosError, CreateOrderDto> {
    const queryClient = useQueryClient()
+   const toast = useToast({ variant: "top-accent", position: "bottom-left" })
 
    return useMutation(
       async form => {
@@ -79,6 +86,10 @@ export function useCreateOrderQuery(): UseMutationResult<Order, AxiosError, Crea
       {
          onSuccess: data => {
             queryClient.setQueryData<Order[]>(ORDER_KEYS.base, prev => addUpdater(data, prev))
+            toast({ title: `Pedido creado`, status: "success" })
+         },
+         onError: () => {
+            toast({ title: "No se pudo crear el pedido", status: "error" })
          },
       }
    )
