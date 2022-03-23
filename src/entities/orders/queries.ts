@@ -40,7 +40,7 @@ export function useOrdersQuery({
    const query = queryKey.join("&")
 
    return useQuery(
-      ORDER_KEYS.filtered(filters),
+      queryKey.length ? ORDER_KEYS.filtered(filters) : ORDER_KEYS.base,
       async () => {
          const response = await apiClient.get<Order[]>(`/orders${query ? `?${query}` : ""}`)
          return response.data
@@ -62,6 +62,7 @@ export function useUpdateOrderQuery(
       {
          onSuccess: () => {
             queryClient.invalidateQueries(PRODUCTS_KEYS.base)
+            queryClient.invalidateQueries(ORDER_KEYS.base)
          },
       }
    )

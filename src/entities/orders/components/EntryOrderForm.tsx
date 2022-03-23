@@ -2,8 +2,9 @@ import { Box, Center, Divider, Heading, HStack, Icon, Link, useDisclosure } from
 import { useEffect, useState } from "react"
 import { Check, ExternalLink, X } from "react-feather"
 import { useFieldArray, useForm } from "react-hook-form"
-import { BaseForm, DropdownQuery } from "../../../shared/components"
+import { BaseForm } from "../../../shared/components"
 import { ModifyButton } from "../../../shared/components/buttons"
+import { AsyncSelect } from "../../../shared/components/form/AsyncSelect"
 import { FormField } from "../../../shared/components/form/FormField"
 import { UpdateOrderDto } from "../domain"
 import { useOrderQuery, useOrdersQuery, useUpdateOrderQuery } from "../queries"
@@ -13,6 +14,7 @@ export const EntryOrderForm: React.FC = () => {
    const [currentOrderId, setCurrentOrderId] = useState(NaN)
 
    const { data: order } = useOrderQuery({ id: currentOrderId, enabled: !!currentOrderId })
+   const { data: orders } = useOrdersQuery({ enabled: isOpen })
 
    const { mutate, isLoading, error } = useUpdateOrderQuery(currentOrderId)
    const {
@@ -65,16 +67,20 @@ export const EntryOrderForm: React.FC = () => {
             isLoading={isLoading}
             submitProps={{ disabled: !currentOrderId || !!errors.products }}
          >
-            <DropdownQuery
-               query={useOrdersQuery}
-               queryParams={{ status: JSON.stringify(["pending"]) }}
-               mapOptionsTo={{
-                  value: "id",
-                  label: "id",
-               }}
-               onChange={id => setCurrentOrderId(Number(id) || NaN)}
-               inputProps={{ bgColor: "primary", color: "blackAlpha.900", fontWeight: "600" }}
-            />
+            <AsyncSelect
+               onChange={e => setCurrentOrderId(Number(e.target.value) || NaN)}
+               value={currentOrderId.toString()}
+               bgColor="primary"
+               color="blackAlpha.900"
+               fontWeight={600}
+               withEmptyOption
+            >
+               {orders?.map(o => (
+                  <option key={o.id} value={o.id}>
+                     {`${o.id} - ${o.provider.name}`}
+                  </option>
+               ))}
+            </AsyncSelect>
             {order && (
                <Center gap={3}>
                   <Heading fontSize={"md"}>{order.provider.name}</Heading>
