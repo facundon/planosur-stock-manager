@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react"
 import { AxiosError } from "axios"
 import {
    useMutation,
@@ -33,6 +34,7 @@ export function useUpdateCategoryQuery(
    id: number
 ): UseMutationResult<Category, AxiosError, CategoryFormDto> {
    const queryClient = useQueryClient()
+   const toast = useToast({ variant: "top-accent", position: "bottom-left" })
 
    return useMutation(
       async form => {
@@ -45,6 +47,10 @@ export function useUpdateCategoryQuery(
             queryClient.setQueryData<Category[]>(CATEGORIES_KEYS.base, prev =>
                patchUpdater(data, prev, "id")
             )
+            toast({ title: `Categoría actualizada`, status: "success" })
+         },
+         onError: () => {
+            toast({ title: "No se pudo actualizar la categoria", status: "error" })
          },
       }
    )
@@ -52,6 +58,7 @@ export function useUpdateCategoryQuery(
 
 export function useDeleteCategoryQuery(): UseMutationResult<Category, AxiosError, number> {
    const queryClient = useQueryClient()
+   const toast = useToast({ variant: "top-accent", position: "bottom-left" })
 
    return useMutation(
       async id => {
@@ -64,6 +71,10 @@ export function useDeleteCategoryQuery(): UseMutationResult<Category, AxiosError
             queryClient.setQueryData<Category[] | undefined>(CATEGORIES_KEYS.base, prev =>
                deleteUpdater(id, prev, "id")
             )
+            toast({ title: `Categoría eliminada`, status: "success" })
+         },
+         onError: () => {
+            toast({ title: "No se pudo eliminar la categoria", status: "error" })
          },
       }
    )
@@ -71,6 +82,7 @@ export function useDeleteCategoryQuery(): UseMutationResult<Category, AxiosError
 
 export function useAddCategoryQuery(): UseMutationResult<Category, AxiosError, CategoryFormDto> {
    const queryClient = useQueryClient()
+   const toast = useToast({ variant: "top-accent", position: "bottom-left" })
 
    return useMutation(
       async form => {
@@ -82,6 +94,10 @@ export function useAddCategoryQuery(): UseMutationResult<Category, AxiosError, C
             queryClient.setQueryData<Category[]>(CATEGORIES_KEYS.base, prev =>
                addUpdater(data, prev)
             )
+            toast({ title: `Categoría agregada`, status: "success" })
+         },
+         onError: () => {
+            toast({ title: "No se pudo agregar la categoria", status: "error" })
          },
       }
    )
