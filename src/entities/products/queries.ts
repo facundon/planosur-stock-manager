@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react"
 import { AxiosError } from "axios"
 import {
    useMutation,
@@ -81,6 +82,7 @@ export function useUpdateProductQuery(
    code: string
 ): UseMutationResult<ProductWithProviderAndCategory, AxiosError, ProductFormDto> {
    const queryClient = useQueryClient()
+   const toast = useToast({ variant: "top-accent", position: "bottom-left" })
 
    return useMutation(
       async form => {
@@ -91,9 +93,13 @@ export function useUpdateProductQuery(
          return response.data
       },
       {
-         onSuccess: data => {
-            queryClient.setQueryData(PRODUCTS_KEYS.byCode(code), data)
+         onSuccess: product => {
+            queryClient.setQueryData(PRODUCTS_KEYS.byCode(code), product)
             queryClient.invalidateQueries(PRODUCTS_KEYS.base)
+            toast({ title: `Producto actualizado`, status: "success" })
+         },
+         onError: () => {
+            toast({ title: "No se pudo actualizar el producto", status: "error" })
          },
       }
    )
@@ -105,6 +111,7 @@ export function useDeleteProductQuery(): UseMutationResult<
    string
 > {
    const queryClient = useQueryClient()
+   const toast = useToast({ variant: "top-accent", position: "bottom-left" })
 
    return useMutation(
       async code => {
@@ -117,6 +124,10 @@ export function useDeleteProductQuery(): UseMutationResult<
          onSuccess: (_, code) => {
             queryClient.setQueryData(PRODUCTS_KEYS.byCode(code), () => undefined)
             queryClient.invalidateQueries(PRODUCTS_KEYS.base)
+            toast({ title: `Producto eliminado`, status: "success" })
+         },
+         onError: () => {
+            toast({ title: "Error al eliminar el producto", status: "error" })
          },
       }
    )
@@ -128,6 +139,7 @@ export function useAddProductQuery(): UseMutationResult<
    ProductFormDto
 > {
    const queryClient = useQueryClient()
+   const toast = useToast({ variant: "top-accent", position: "bottom-left" })
 
    return useMutation(
       async form => {
@@ -137,6 +149,10 @@ export function useAddProductQuery(): UseMutationResult<
       {
          onSuccess: () => {
             queryClient.invalidateQueries(PRODUCTS_KEYS.base)
+            toast({ title: `Producto creado`, status: "success" })
+         },
+         onError: () => {
+            toast({ title: "Error al crear el producto", status: "error" })
          },
       }
    )
