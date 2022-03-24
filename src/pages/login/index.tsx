@@ -1,4 +1,4 @@
-import { Center, PinInput, PinInputField, Icon, Spinner, Progress } from "@chakra-ui/react"
+import { Center, PinInput, PinInputField, Icon, Progress } from "@chakra-ui/react"
 import { useEffect, useRef, useState } from "react"
 import { useAuth } from "../../auth"
 import { PlanosurLogo } from "../../shared/assets"
