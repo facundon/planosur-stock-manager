@@ -14,7 +14,7 @@ export const SidebarWithHeader: React.FC = ({ children }) => {
 
    return (
       <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
-         <SidebarContent onClose={onClose} display={{ base: "none", lg: "block" }} />
+         <SidebarContent onClose={onClose} display={{ base: "none", lg: "flex" }} />
          <Drawer
             autoFocus={false}
             isOpen={isOpen}

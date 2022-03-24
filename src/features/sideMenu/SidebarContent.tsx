@@ -29,6 +29,8 @@ export const SidebarContent: React.FC<SidebarContentProps> = ({ onClose, ...rest
          w={{ base: "full", lg: 60 }}
          pos="fixed"
          h="full"
+         display="flex"
+         flexDirection="column"
          {...rest}
       >
          <Flex my={8} mx={4} alignItems="center" justifyContent="space-between">
@@ -44,9 +46,9 @@ export const SidebarContent: React.FC<SidebarContentProps> = ({ onClose, ...rest
             />
             <CloseButton display={{ base: "flex", lg: "none" }} onClick={onClose} />
          </Flex>
+
+         <SalesForm />
          <Accordion allowToggle w="100%" flexGrow={1}>
-            <SalesForm />
-            <DeleteModal />
             <BaseAccordionItem title="Pedidos">
                <CreateOrderForm />
                <EntryOrderForm />
@@ -64,6 +66,7 @@ export const SidebarContent: React.FC<SidebarContentProps> = ({ onClose, ...rest
                <UpdateCategoryForm />
             </BaseAccordionItem>
          </Accordion>
+         <DeleteModal />
       </Box>
    )
 }
