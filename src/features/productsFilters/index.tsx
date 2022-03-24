@@ -51,7 +51,7 @@ export const ProductsFilters: React.FC<ProductsFiltersProps> = ({ onSearch }) =>
    }
 
    return (
-      <Box boxShadow="dark-lg" p={{ base: 3, sm: 6 }}>
+      <Box boxShadow="dark-lg" p={{ base: 3, sm: 6 }} minW={{ base: "100%", md: 620 }}>
          <form onSubmit={handleSubmit(data => onSearch(data as FiltersDto))}>
             <VStack gap={3}>
                {fields.map((field, index) => {

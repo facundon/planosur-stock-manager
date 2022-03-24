@@ -54,7 +54,7 @@ const KindField: React.FC<KindFieldProps> = ({
             />
          )
       case "number":
-         return <Input {...rest} value={value as number} type="number" />
+         return <Input {...rest} value={value as number} type="number" minW={10} />
       case "text":
          return <Input {...rest} value={value as number} type="search" />
       case "select":
@@ -126,9 +126,9 @@ export const FilterItem: React.FC<FilterPropsItem> = ({
             {options && (
                <Select
                   {...register(`filters.${index}.condition`)}
-                  minWidth={40}
                   flex={1}
                   variant="flushed"
+                  w="min-content"
                >
                   {options.map(option => (
                      <option key={`${accessor}-${option.value}`} value={option.value}>

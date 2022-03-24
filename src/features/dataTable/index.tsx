@@ -13,7 +13,7 @@ import {
    Tr,
    VStack,
 } from "@chakra-ui/react"
-import { useMemo } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { AlertOctagon } from "react-feather"
 import { useTable, Column, usePagination, useSortBy } from "react-table"
 import { SortIcon } from "../../shared/assets"
@@ -90,6 +90,13 @@ export function DataTable<T extends Record<string, unknown>[]>({
       [headers]
    )
 
+   const wrapperRef = useRef<HTMLDivElement>(null)
+   useEffect(() => {
+      if (data) {
+         wrapperRef.current?.scrollIntoView({ behavior: "smooth" })
+      }
+   }, [data])
+
    const tableData = useMemo(
       () => (isLoading ? (new Array(10).fill(0) as T) : data),
       [data, isLoading]
@@ -142,7 +149,7 @@ export function DataTable<T extends Record<string, unknown>[]>({
    } = tableInstance
 
    return (
-      <VStack display="block" maxW="100%" m="auto" boxShadow="dark-lg" p={5}>
+      <VStack display="block" maxW="100%" m="auto" boxShadow="dark-lg" p={5} ref={wrapperRef}>
          <Text color="yellow.200" textAlign="end" fontWeight={200}>
             {`${rows.length} resultado${rows.length > 1 ? "s" : ""}`}
          </Text>

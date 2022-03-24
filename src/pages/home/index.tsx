@@ -45,7 +45,7 @@ const HomePage: React.FC = () => {
    } = useProductsQuery({ ...filters, enabled: !!filters })
 
    return (
-      <Box minH="100vh" position="relative" overflow="hidden" minW="100vw">
+      <Box minH="100vh" position="relative" overflow="hidden" minW="100%">
          <SidebarWithHeader>
             <ProductsFilters onSearch={data => setFilters(mapFilters(data))} />
             {filters &&
