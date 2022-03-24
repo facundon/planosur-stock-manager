@@ -10,6 +10,12 @@ import { PROVIDERS_KEYS } from "../entities/providers/queryKeys"
 import { BaseForm, DropdownQuery } from "../shared/components"
 import { AsyncSelect } from "../shared/components/form/AsyncSelect"
 
+const tileMap = new Map<number, string>([
+   [0, "el producto"],
+   [1, "el proveedor"],
+   [2, "la categoría"],
+])
+
 export const DeleteModal: React.FC = () => {
    const [isOpen, setIsOpen] = useBoolean()
    const [recordToDelete, setRecordToDelete] = useState("")
@@ -91,6 +97,8 @@ export const DeleteModal: React.FC = () => {
             isLoading={isLoadingCategory || isLoadingProduct || isLoadingProvider}
             error={categoryError?.message || productError?.message || providerError?.message}
             submitProps={{ disabled: recordToDelete === "" }}
+            withConfirmation
+            confirmationMessage={`Esta seguro de eliminar ${tileMap.get(tabIndex)}?`}
          >
             <Tabs
                isFitted
