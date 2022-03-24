@@ -4,13 +4,13 @@ import { apiClient, JWT_KEY } from "../shared/utils/apiClient"
 import { useLoginQuery } from "./query"
 
 export function useAuth() {
-   const loginQuery = useLoginQuery()
+   const { mutate: requestLogin, data, isError, isLoading } = useLoginQuery()
    const [isAuth, setIsAuth] = useState<boolean>()
 
    useEffect(() => {
       const checkAuth = async () => {
          const response = await apiClient.get<boolean>("/auth/isAuth")
-         if (response.data) return setIsAuth(true)
+         if (response?.data) return setIsAuth(true)
          setIsAuth(false)
       }
 
@@ -20,14 +20,14 @@ export function useAuth() {
    }, [])
 
    useEffect(() => {
-      if (loginQuery.data?.access_token) {
-         localStorage.setItem(JWT_KEY, loginQuery.data.access_token)
+      if (data?.access_token) {
+         localStorage.setItem(JWT_KEY, data.access_token)
          navigate("/")
       }
-   }, [loginQuery.data?.access_token])
+   }, [data?.access_token])
 
    const login = (password: string) =>
-      loginQuery.mutate({ password }, { onSuccess: () => setIsAuth(true) })
+      requestLogin({ password }, { onSuccess: () => setIsAuth(true) })
 
-   return { login, isAuth }
+   return { login, isAuth, isError, isLoading }
 }

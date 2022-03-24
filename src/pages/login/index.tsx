@@ -1,9 +1,19 @@
-import { Center, PinInput, PinInputField, Box, Icon } from "@chakra-ui/react"
+import { Center, PinInput, PinInputField, Icon, Spinner, Progress } from "@chakra-ui/react"
+import { useEffect, useRef, useState } from "react"
 import { useAuth } from "../../auth"
 import { PlanosurLogo } from "../../shared/assets"
 
 const LoginPage: React.FC = () => {
-   const { login } = useAuth()
+   const { login, isError, isLoading } = useAuth()
+   const [value, setValue] = useState("")
+   const firstInputRef = useRef<HTMLInputElement>(null)
+
+   useEffect(() => {
+      if (isError) {
+         setValue("")
+         firstInputRef.current?.focus()
+      }
+   }, [isError])
 
    return (
       <>
@@ -13,20 +23,39 @@ const LoginPage: React.FC = () => {
 
          <Center gap={2} h="100vh">
             <PinInput
+               value={value}
+               onComplete={login}
+               onChange={setValue}
+               isInvalid={isError && value === ""}
+               isDisabled={isLoading}
+               placeholder="🔑"
+               variant="filled"
                size="lg"
                type="alphanumeric"
-               onComplete={value => login(value)}
+               focusBorderColor="yellow.400"
+               autoFocus
                mask
                manageFocus
                otp
             >
-               <PinInputField />
+               <PinInputField ref={firstInputRef} />
                <PinInputField />
                <PinInputField />
                <PinInputField />
                <PinInputField />
                <PinInputField />
             </PinInput>
+            {isLoading && (
+               <Progress
+                  colorScheme="yellow"
+                  size="xs"
+                  isIndeterminate
+                  w={340}
+                  pos="absolute"
+                  transform="auto"
+                  translateY="3em"
+               />
+            )}
          </Center>
       </>
    )

@@ -30,7 +30,7 @@ axiosClient.interceptors.request.use(
 axiosClient.interceptors.response.use(
    res => res,
    rejection => {
-      if (rejection.message.includes("401")) {
+      if (rejection.response.status === 401) {
          navigate("/login")
       }
       throw rejection.response.data
