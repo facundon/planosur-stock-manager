@@ -3,6 +3,9 @@
 # abort on errors
 set -e
 
+# remove old build
+sudo rm -r dist
+
 # build
 yarn build
 

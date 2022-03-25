@@ -5,7 +5,7 @@ import { useLoginQuery } from "./query"
 
 export function useAuth() {
    const { mutate: requestLogin, data, isError, isLoading } = useLoginQuery()
-   const [isAuth, setIsAuth] = useState<boolean>(false)
+   const [isAuth, setIsAuth] = useState<boolean>()
 
    useEffect(() => {
       const checkAuth = async () => {
