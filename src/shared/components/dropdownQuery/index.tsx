@@ -226,11 +226,7 @@ function DropdownQueryWithoutRef<T extends Record<string, any>>(
                            {d[mapOptionsTo.label]}
                         </DropdownButton>
                      ))
-                  ) : data?.length ? (
-                     <DropdownButton isSelect isFocus={false}>
-                        {data[0][mapOptionsTo.label]}
-                     </DropdownButton>
-                  ) : (
+                  ) : !isLoading ? (
                      <Button
                         leftIcon={<Icon as={X} fontSize={20} />}
                         colorScheme="red"
@@ -243,7 +239,7 @@ function DropdownQueryWithoutRef<T extends Record<string, any>>(
                      >
                         No se encontraron resultados
                      </Button>
-                  )}
+                  ) : null}
                </Box>
             </PopoverContent>
          </Popover>
