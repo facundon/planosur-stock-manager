@@ -17,6 +17,6 @@ git checkout -b master
 git add -A
 git commit -m 'deploy'
 
-git push -f git@me.github.com:facundon/planosur-stock-manager-page.git master:gh-pages
+git push -f git@planosur.github.com:planosur/planosur.github.io.git master
 
 cd -
