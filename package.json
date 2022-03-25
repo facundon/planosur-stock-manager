@@ -14,11 +14,11 @@
       "type": "git",
       "url": "https://github.com/facundon/planosur-stock-manager"
    },
-   "homepage": "https://github.com/facundon/planosur-stock-manager",
+   "homepage": "https://facundon.github.io/planosur-stock-manager-page/",
    "scripts": {
       "dev": "concurrently -k -n vite,tsc -c bgBlue.bold,bgMagenta.bold \"vite --host --clearScreen false\" \"tsc -w --preserveWatchOutput\"",
       "build": "tsc && vite build",
-      "preview": "vite preview"
+      "preview": "vite preview --port 4000"
    },
    "dependencies": {
       "@chakra-ui/react": "^1.8.3",
