@@ -14,7 +14,7 @@
       "type": "git",
       "url": "https://github.com/facundon/planosur-stock-manager"
    },
-   "homepage": "https://github.com/facundon/planosur-stock-manager",
+   "homepage": "https://planosur.github.io",
    "scripts": {
       "dev": "concurrently -k -n vite,tsc -c bgBlue.bold,bgMagenta.bold \"vite --host --clearScreen false\" \"tsc -w --preserveWatchOutput\"",
       "build": "tsc && vite build",
