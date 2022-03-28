@@ -16,13 +16,12 @@ export const AsyncSelect = React.forwardRef<HTMLSelectElement, AsyncSelectProps>
    ) => {
       return (
          <Select
-            {...rest}
             ref={ref}
             isDisabled={isLoading || isDisabled || isError}
             icon={isLoading ? <Spinner /> : isError ? <X /> : undefined}
             placeholder={withEmptyOption ? emptyOptionLabel || "Seleccionar" : undefined}
-            textColor="white"
             css={{ "& > option": { color: "white" } }}
+            {...rest}
          >
             {isLoading ? (
                <option>Cargando...</option>
