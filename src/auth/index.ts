@@ -17,7 +17,7 @@ export function useAuth() {
             if (response?.data) return setIsAuth(true)
             setIsAuth(false)
          } catch (error) {
-            if (!toast.isActive("conn")) {
+            if (!toast.isActive("conn") && error instanceof String) {
                toast({
                   title: error as string,
                   isClosable: false,
@@ -32,7 +32,7 @@ export function useAuth() {
       const token = localStorage.getItem(JWT_KEY)
       if (token) return setIsAuth(true)
       checkAuth()
-   }, [])
+   }, [toast])
 
    useEffect(() => {
       if (data?.access_token) {
