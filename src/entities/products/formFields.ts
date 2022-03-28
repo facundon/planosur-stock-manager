@@ -34,7 +34,7 @@ export function getProductFormFields(props?: {
       [
          {
             initialValue: props?.initialValues?.qty || 1,
-            label: "Cantidad",
+            label: "Contenido",
             name: "qty",
             required: true,
             type: "number",

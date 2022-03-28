@@ -13,7 +13,7 @@ import { SidebarWithHeader } from "../../features/sideMenu"
 const tableColumns: TableColumn<ProductWithProviderAndCategory>[] = [
    { label: "Código", accessor: "code" },
    { label: "Nombre", accessor: "name" },
-   { label: "Cantidad", accessor: "qty" },
+   { label: "Contenido", accessor: "qty" },
    { label: "Unidad", accessor: "unit" },
    { label: "Precio [u$S]", accessor: "price" },
    { label: "Proveedor", accessor: "provider" },
