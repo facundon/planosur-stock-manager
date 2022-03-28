@@ -21,6 +21,8 @@ export const AsyncSelect = React.forwardRef<HTMLSelectElement, AsyncSelectProps>
             isDisabled={isLoading || isDisabled || isError}
             icon={isLoading ? <Spinner /> : isError ? <X /> : undefined}
             placeholder={withEmptyOption ? emptyOptionLabel || "Seleccionar" : undefined}
+            textColor="white"
+            css={{ "& > option": { color: "white" } }}
          >
             {isLoading ? (
                <option>Cargando...</option>
